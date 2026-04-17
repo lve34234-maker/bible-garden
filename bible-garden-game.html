@@ -986,8 +986,9 @@ async function fetchChapter(book, ch) {
   if (!bookNum) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 책을 찾을 수 없어요</div>'; return; }
   try {
     // CORS 프록시 사용해서 getbible.net API 호출
-    const url = `https://getbible.net/v2/kor/${bookNum}/${ch}.json`;
-    const res = await fetch(url);
+    // CORS 프록시로 getbible.net 호출
+    const target = encodeURIComponent(`https://getbible.net/v2/kor/${bookNum}/${ch}.json`);
+    const res = await fetch(`https://corsproxy.io/?${target}`);
     if (!res.ok) throw new Error('API 오류');
     const data = await res.json();
     const verses = Object.values(data.verses).map(v => ({ v: v.verse, text: v.text }));
