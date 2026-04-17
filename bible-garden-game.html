@@ -954,8 +954,41 @@ function renderBookGrid() { document.getElementById('bookGrid').innerHTML = BIBL
 function selectBook(i) { selBk=i; selCh=1; renderBookGrid(); const b=BIBLE[selTes][i]; const sel=document.getElementById('chSel'); sel.innerHTML=Array.from({length:b.ch},(_,j)=>`<option value="${j+1}">${j+1}장</option>`).join(''); sel.value=1; document.getElementById('chNavCard').style.display='block'; document.getElementById('readerCard').style.display='block'; document.getElementById('chTitle').textContent=b.n+' '+selCh+'장'; fetchChapter(b.n,1); }
 function changeChapter(d) { if(selBk===null)return; const b=BIBLE[selTes][selBk]; selCh=Math.max(1,Math.min(b.ch,selCh+d)); document.getElementById('chSel').value=selCh; loadChapter(); }
 function loadChapter() { if(selBk===null)return; selCh=parseInt(document.getElementById('chSel').value); document.getElementById('chTitle').textContent=BIBLE[selTes][selBk].n+' '+selCh+'장'; fetchChapter(BIBLE[selTes][selBk].n,selCh); }
+// getbible.net 무료 API 사용 (API 키 불필요!)
+const BOOK_NUM = {
+  '창세기':1,'출애굽기':2,'레위기':3,'민수기':4,'신명기':5,'여호수아':6,'사사기':7,'룻기':8,
+  '사무엘상':9,'사무엘하':10,'열왕기상':11,'열왕기하':12,'역대상':13,'역대하':14,'에스라':15,
+  '느헤미야':16,'에스더':17,'욥기':18,'시편':19,'잠언':20,'전도서':21,'아가':22,'이사야':23,
+  '예레미야':24,'예레미야애가':25,'에스겔':26,'다니엘':27,'호세아':28,'요엘':29,'아모스':30,
+  '오바댜':31,'요나':32,'미가':33,'나훔':34,'하박국':35,'스바냐':36,'학개':37,'스가랴':38,
+  '말라기':39,'마태복음':40,'마가복음':41,'누가복음':42,'요한복음':43,'사도행전':44,'로마서':45,
+  '고린도전서':46,'고린도후서':47,'갈라디아서':48,'에베소서':49,'빌립보서':50,'골로새서':51,
+  '데살로니가전서':52,'데살로니가후서':53,'디모데전서':54,'디모데후서':55,'디도서':56,'빌레몬서':57,
+  '히브리서':58,'야고보서':59,'베드로전서':60,'베드로후서':61,'요한일서':62,'요한이서':63,
+  '요한삼서':64,'유다서':65,'요한계시록':66
+};
+
 async function fetchChapter(book, ch) {
-  document.getElementById('readerBox').innerHTML = '<div class="loading-txt">📖 준비 중이에요...<br><br>전자 성경 기능은 곧 추가될 예정이에요! 🌿<br>지금은 정원 탭에서 말씀을 읽어봐요!</div>';
+  const key = book + '_' + ch;
+  if (chCache[key]) { renderCh(chCache[key]); return; }
+  document.getElementById('readerBox').innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...</div>';
+  const bookNum = BOOK_NUM[book];
+  if (!bookNum) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 책을 찾을 수 없어요</div>'; return; }
+  try {
+    const res = await fetch(`https://getbible.net/v2/kor/${bookNum}/${ch}.json`);
+    const data = await res.json();
+    const verses = Object.values(data.verses).map(v => ({ v: v.verse, text: v.text }));
+    chCache[key] = verses;
+    renderCh(verses);
+  } catch (e) {
+    // API 실패시 로컬 데이터에서 찾기
+    const local = BIBLE_DATA.find(b => b.ref.startsWith(book));
+    if (local) {
+      document.getElementById('readerBox').innerHTML = `<div style="font-size:1rem;line-height:2;color:#4a3a2a;white-space:pre-wrap">${local.passage}</div>`;
+    } else {
+      document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 불러오기 실패! 인터넷 연결을 확인해요</div>';
+    }
+  }
 }
 function renderCh(verses) { document.getElementById('readerBox').innerHTML = verses.map(v=>`<span class="verse"><span class="verse-num">${v.v}</span>${v.text}</span>`).join(''); }
 
