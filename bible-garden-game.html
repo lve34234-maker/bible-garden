@@ -700,45 +700,34 @@ async function jumpPassage(idx) {
   curPasIdx = idx; renderPNav(dr.completedPassages || []); loadPassage(todayPassages[idx]);
 }
 
-async function loadPassage(pInfo) {
-  document.getElementById('bibleRef').textContent = '로딩 중...';
-  document.getElementById('passageText').innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...</div>';
+function loadPassage(pInfo) {
   document.getElementById('bibleActions').innerHTML = '';
-  try {
-    let passage, questions;
-    if (pInfo.customQuestions && pInfo.customQuestions.length > 0) {
-      const res = await callClaude(`성경 ${pInfo.ref}의 내용을 아이들이 이해하기 쉬운 한국어로 제공해주세요. JSON만: {"passage":"구절 전문"}`);
-      passage = JSON.parse(res).passage;
-      questions = pInfo.customQuestions;
-    } else {
-      const res = await callClaude(`성경 ${pInfo.ref || pInfo.book + ' ' + pInfo.chapter + '장'}의 연속된 구절 4~6개를 쉬운 한국어로 제공하고, 그 구절을 읽어야 답할 수 있는 이해력 퀴즈 3개를 만들어주세요. JSON만: {"ref":"책이름 장:절-절","passage":"구절 전문","questions":[{"q":"질문","opts":["①","②","③","④"],"ans":0}]}`);
-      const parsed = JSON.parse(res);
-      passage = parsed.passage; questions = parsed.questions;
-      if (parsed.ref) pInfo.ref = parsed.ref;
-    }
-    curPassageRef = pInfo.ref || pInfo.book + ' ' + pInfo.chapter + '장';
-    curQList = questions; curQIdx = 0;
-    document.getElementById('bibleRef').textContent = curPassageRef;
-    document.getElementById('passageText').textContent = passage;
-    document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
-  } catch (e) {
-    document.getElementById('passageText').innerHTML = '<div class="loading-txt">⚠️ 실패! 다시 시도해요</div>';
-    document.getElementById('bibleActions').innerHTML = '<button class="next-p-btn" onclick="loadTodayPassages()">🔄 다시 불러오기</button>';
+  let passage, questions;
+  if (pInfo.customQuestions && pInfo.customQuestions.length > 0) {
+    // 관리자가 직접 설정한 문제 사용
+    // 로컬 데이터에서 같은 ref 찾기
+    const local = BIBLE_DATA.find(b => b.ref === pInfo.ref);
+    passage = local ? local.passage : `📖 ${pInfo.ref}\n\n관리자가 설정한 말씀이에요. 아래 퀴즈를 풀어봐요!`;
+    questions = pInfo.customQuestions;
+  } else {
+    // 로컬 데이터에서 ref 매칭 또는 랜덤
+    const local = BIBLE_DATA.find(b => b.ref === pInfo.ref) || getRandomPassage();
+    passage = local.passage;
+    questions = local.questions;
+    pInfo.ref = local.ref;
   }
+  curPassageRef = pInfo.ref || pInfo.book + ' ' + pInfo.chapter + '장';
+  curQList = questions; curQIdx = 0;
+  document.getElementById('bibleRef').textContent = curPassageRef;
+  document.getElementById('passageText').textContent = passage;
+  document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
 }
-async function loadRandomPassage() {
-  const books = ['창세기','시편','잠언','이사야','마태복음','마가복음','누가복음','요한복음','사도행전','로마서','에베소서','빌립보서','야고보서','요한일서'];
-  try {
-    const res = await callClaude(`성경 ${books[Math.floor(Math.random()*books.length)]}에서 연속 구절 4~6개를 쉬운 한국어로 제공하고 이해력 퀴즈 3개를 만들어주세요. JSON만: {"ref":"책이름 장:절-절","passage":"구절 전문","questions":[{"q":"질문","opts":["①","②","③","④"],"ans":0}]}`);
-    const parsed = JSON.parse(res);
-    curPassageRef = parsed.ref; curQList = parsed.questions; curQIdx = 0;
-    document.getElementById('bibleRef').textContent = parsed.ref;
-    document.getElementById('passageText').textContent = parsed.passage;
-    document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
-  } catch (e) {
-    document.getElementById('passageText').innerHTML = '<div class="loading-txt">⚠️ 실패!</div>';
-    document.getElementById('bibleActions').innerHTML = '<button class="next-p-btn" onclick="loadRandomPassage()">🔄 다시</button>';
-  }
+function loadRandomPassage() {
+  const data = getRandomPassage();
+  curPassageRef = data.ref; curQList = data.questions; curQIdx = 0;
+  document.getElementById('bibleRef').textContent = data.ref;
+  document.getElementById('passageText').textContent = data.passage;
+  document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
 }
 function showAllDone() {
   document.getElementById('bibleRef').textContent = '완료 🎉';
@@ -966,13 +955,7 @@ function selectBook(i) { selBk=i; selCh=1; renderBookGrid(); const b=BIBLE[selTe
 function changeChapter(d) { if(selBk===null)return; const b=BIBLE[selTes][selBk]; selCh=Math.max(1,Math.min(b.ch,selCh+d)); document.getElementById('chSel').value=selCh; loadChapter(); }
 function loadChapter() { if(selBk===null)return; selCh=parseInt(document.getElementById('chSel').value); document.getElementById('chTitle').textContent=BIBLE[selTes][selBk].n+' '+selCh+'장'; fetchChapter(BIBLE[selTes][selBk].n,selCh); }
 async function fetchChapter(book, ch) {
-  const key = book + '_' + ch;
-  if (chCache[key]) { renderCh(chCache[key]); return; }
-  document.getElementById('readerBox').innerHTML = '<div class="loading-txt">📖 불러오는 중...</div>';
-  try {
-    const res = await callClaude('성경 ' + book + ' ' + ch + '장의 모든 절을 한국어(개역개정 참고)로 제공해주세요. JSON만: {"verses":[{"v":1,"text":"내용"},...]}');
-    chCache[key] = JSON.parse(res).verses; renderCh(chCache[key]);
-  } catch (e) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 실패!</div>'; }
+  document.getElementById('readerBox').innerHTML = '<div class="loading-txt">📖 준비 중이에요...<br><br>전자 성경 기능은 곧 추가될 예정이에요! 🌿<br>지금은 정원 탭에서 말씀을 읽어봐요!</div>';
 }
 function renderCh(verses) { document.getElementById('readerBox').innerHTML = verses.map(v=>`<span class="verse"><span class="verse-num">${v.v}</span>${v.text}</span>`).join(''); }
 
@@ -1138,15 +1121,123 @@ function switchTab(n, btn) {
   if(n==='bible' && selBk===null) renderBookGrid();
 }
 
-/* ════ CLAUDE API HELPER ════ */
+/* ════ 로컬 성경 데이터 ════ */
+const BIBLE_DATA = [
+  { ref:'창세기 1:1-5', passage:'태초에 하나님이 천지를 창조하시니라\n땅이 혼돈하고 공허하며 흑암이 깊음 위에 있고 하나님의 영은 수면 위에 운행하시니라\n하나님이 이르시되 빛이 있으라 하시니 빛이 있었고\n빛이 하나님이 보시기에 좋았더라 하나님이 빛과 어둠을 나누사\n하나님이 빛을 낮이라 부르시고 어둠을 밤이라 부르시니라 저녁이 되고 아침이 되니 이는 첫째 날이니라',
+    questions:[
+      {q:'하나님이 제일 처음 만드신 것은 무엇인가요?', opts:['①물','②빛','③땅','④하늘'], ans:1},
+      {q:'하나님은 빛을 무엇이라 불렀나요?', opts:['①아침','②저녁','③낮','④밤'], ans:2},
+      {q:'태초에 땅의 상태는 어떠했나요?', opts:['①아름다웠다','②혼돈하고 공허했다','③가득 찼다','④밝았다'], ans:1}
+    ]
+  },
+  { ref:'요한복음 3:16', passage:'하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니\n이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라\n하나님이 그 아들을 세상에 보내신 것은 세상을 심판하려 하심이 아니요\n그로 말미암아 세상이 구원을 받게 하려 하심이라',
+    questions:[
+      {q:'하나님이 세상에 주신 것은 무엇인가요?', opts:['①율법','②독생자','③선물','④성전'], ans:1},
+      {q:'하나님이 아들을 보내신 목적은 무엇인가요?', opts:['①심판하려고','②구원하려고','③가르치려고','④시험하려고'], ans:1},
+      {q:'영생을 얻으려면 어떻게 해야 하나요?', opts:['①착하게 살면','②헌금을 많이 하면','③그를 믿으면','④기도를 많이 하면'], ans:2}
+    ]
+  },
+  { ref:'시편 23:1-4', passage:'여호와는 나의 목자시니 내게 부족함이 없으리로다\n그가 나를 푸른 풀밭에 누이시며 쉴 만한 물 가로 인도하시는도다\n내 영혼을 소생시키시고 자기 이름을 위하여 의의 길로 인도하시는도다\n내가 사망의 음침한 골짜기로 다닐지라도 해를 두려워하지 않을 것은 주께서 나와 함께 하심이라',
+    questions:[
+      {q:'시편 23편에서 여호와는 무엇으로 표현되나요?', opts:['①왕','②목자','③아버지','④선생'], ans:1},
+      {q:'목자는 양을 어디로 인도하나요?', opts:['①광야로','②높은 산으로','③푸른 풀밭으로','④강 건너로'], ans:2},
+      {q:'사망의 골짜기에서도 두려워하지 않는 이유는?', opts:['①힘이 세서','②주께서 함께 하심','③혼자라서','④어둡지 않아서'], ans:1}
+    ]
+  },
+  { ref:'잠언 3:5-6', passage:'너는 마음을 다하여 여호와를 신뢰하고 네 명철을 의지하지 말라\n너는 범사에 그를 인정하라 그리하면 네 길을 지도하시리라\n스스로 지혜롭게 여기지 말며 여호와를 경외하며 악을 떠날지어다\n이것이 네 몸에 양약이 되어 네 골수를 윤택하게 하리라',
+    questions:[
+      {q:'마음을 다하여 무엇을 신뢰하라고 했나요?', opts:['①부모님','②여호와','③친구','④자기 자신'], ans:1},
+      {q:'범사에 그를 인정하면 어떻게 되나요?', opts:['①부자가 된다','②건강해진다','③길을 지도하신다','④지혜로워진다'], ans:2},
+      {q:'자기 골수를 윤택하게 하는 것은 무엇인가요?', opts:['①운동','②여호와 경외와 악을 떠남','③공부','④기도'], ans:1}
+    ]
+  },
+  { ref:'마태복음 5:3-6', passage:'심령이 가난한 자는 복이 있나니 천국이 그들의 것임이요\n애통하는 자는 복이 있나니 그들이 위로를 받을 것임이요\n온유한 자는 복이 있나니 그들이 땅을 기업으로 받을 것임이요\n의에 주리고 목마른 자는 복이 있나니 그들이 배부를 것임이요',
+    questions:[
+      {q:'천국이 그들의 것인 사람은 누구인가요?', opts:['①부자','②심령이 가난한 자','③온유한 자','④강한 자'], ans:1},
+      {q:'온유한 자는 무엇을 기업으로 받나요?', opts:['①하늘','②바다','③땅','④금'], ans:2},
+      {q:'배부를 것이라고 약속받은 사람은?', opts:['①애통하는 자','②온유한 자','③의에 주리고 목마른 자','④심령이 가난한 자'], ans:2}
+    ]
+  },
+  { ref:'로마서 8:28', passage:'우리가 알거니와 하나님을 사랑하는 자 곧 그의 뜻대로 부르심을 입은 자들에게는 모든 것이 합력하여 선을 이루느니라\n하나님이 미리 아신 자들을 또한 그 아들의 형상을 본받게 하기 위하여 미리 정하셨으니\n이는 그로 많은 형제 중에서 맏아들이 되게 하려 하심이니라\n또 미리 정하신 그들을 또한 부르시고 부르신 그들을 또한 의롭다 하시고 의롭다 하신 그들을 또한 영화롭게 하셨느니라',
+    questions:[
+      {q:'하나님을 사랑하는 자에게는 어떻게 된다고 했나요?', opts:['①모든 것이 합력하여 선을 이룬다','②부자가 된다','③병이 낫는다','④오래 산다'], ans:0},
+      {q:'하나님이 미리 아신 자들을 누구의 형상을 본받게 하셨나요?', opts:['①천사','②아들','③선지자','④사도'], ans:1},
+      {q:'부르신 자들을 어떻게 하셨나요?', opts:['①시험하셨다','②의롭다 하셨다','③벌하셨다','④잊으셨다'], ans:1}
+    ]
+  },
+  { ref:'빌립보서 4:6-7', passage:'아무것도 염려하지 말고 다만 모든 일에 기도와 간구로 너희 구할 것을 감사함으로 하나님께 아뢰라\n그리하면 모든 지각에 뛰어난 하나님의 평강이 그리스도 예수 안에서 너희 마음과 생각을 지키시리라\n끝으로 형제들아 무엇이든지 참되며 무엇이든지 경건하며 무엇이든지 옳으며 무엇이든지 정결하며\n무엇이든지 사랑받을 만하며 무엇이든지 칭찬받을 만하며 무슨 덕이 있든지 무슨 기림이 있든지 이것들을 생각하라',
+    questions:[
+      {q:'염려 대신 무엇을 하라고 했나요?', opts:['①일하라','②기도와 간구로 하나님께 아뢰라','③친구에게 말하라','④잠을 자라'], ans:1},
+      {q:'기도하면 무엇이 마음을 지키나요?', opts:['①천사','②하나님의 평강','③성령','④믿음'], ans:1},
+      {q:'생각하라고 한 것 중 맞는 것은?', opts:['①거짓된 것','②참되고 경건한 것','③세상의 즐거움','④나쁜 것'], ans:1}
+    ]
+  },
+  { ref:'요한복음 14:6', passage:'예수께서 이르시되 내가 곧 길이요 진리요 생명이니 나로 말미암지 않고는 아버지께로 올 자가 없느니라\n너희가 나를 알았더라면 내 아버지도 알았으리로다 이제부터는 너희가 그를 알았고 또 보았느니라\n빌립이 이르되 주여 아버지를 우리에게 보여 주옵소서 그리하면 족하겠나이다\n예수께서 이르시되 빌립아 내가 이렇게 오래 너희와 함께 있으되 네가 나를 알지 못하느냐',
+    questions:[
+      {q:'예수님이 "나는 ○○이요"라고 하신 세 가지는?', opts:['①빛, 소금, 사랑','②길, 진리, 생명','③왕, 선지자, 제사장','④처음, 나중, 영원'], ans:1},
+      {q:'아버지께로 올 수 있는 방법은?', opts:['①착하게 살면','②기도를 많이 하면','③예수로 말미암아','④율법을 지키면'], ans:2},
+      {q:'아버지를 보여 달라고 부탁한 제자는?', opts:['①베드로','②요한','③빌립','④도마'], ans:2}
+    ]
+  },
+  { ref:'마가복음 10:13-16', passage:'사람들이 예수께서 만져 주심을 바라고 어린 아이들을 데리고 오매 제자들이 꾸짖거늘\n예수께서 보시고 노하시어 이르시되 어린 아이들이 내게 오는 것을 용납하고 금하지 말라\n하나님의 나라가 이런 자의 것이니라\n내가 진실로 너희에게 이르노니 누구든지 하나님의 나라를 어린 아이와 같이 받들지 않는 자는 결단코 들어가지 못하리라 하시고\n그 어린 아이들을 안고 그들 위에 안수하시고 축복하시니라',
+    questions:[
+      {q:'제자들은 어린 아이들이 오는 것을 어떻게 했나요?', opts:['①환영했다','②꾸짖었다','③도왔다','④무시했다'], ans:1},
+      {q:'예수님은 어린 아이들을 보고 어떻게 하셨나요?', opts:['①외면하셨다','②안고 축복하셨다','③가르치셨다','④보내셨다'], ans:1},
+      {q:'하나님 나라에 들어가려면 어떻게 해야 하나요?', opts:['①돈이 많아야','②어린 아이와 같이 받들어야','③율법을 지켜야','④오래 기도해야'], ans:1}
+    ]
+  },
+  { ref:'이사야 40:31', passage:'오직 여호와를 앙망하는 자는 새 힘을 얻으리니 독수리가 날개치며 올라감 같을 것이요\n달음박질하여도 곤비하지 아니하겠고 걸어가도 피곤하지 아니하리로다\n너희는 알지 못하였느냐 듣지 못하였느냐\n영원하신 하나님 여호와 땅 끝을 창조하신 이는 피곤하지 않으시며 곤비하지 않으시며 명철이 한이 없으시며',
+    questions:[
+      {q:'여호와를 앙망하는 자는 무엇을 얻나요?', opts:['①돈','②명예','③새 힘','④지혜'], ans:2},
+      {q:'새 힘을 얻은 모습이 무엇과 같다고 했나요?', opts:['①사자','②독수리','③비둘기','④말'], ans:1},
+      {q:'여호와는 어떤 분이라고 했나요?', opts:['①피곤하시는 분','②피곤하지 않으신 분','③쉬시는 분','④잠자는 분'], ans:1}
+    ]
+  },
+  { ref:'에베소서 6:1-3', passage:'자녀들아 주 안에서 너희 부모에게 순종하라 이것이 옳으니라\n네 아버지와 어머니를 공경하라 이것은 약속이 있는 첫 계명이니\n이로써 네가 잘 되고 땅에서 장수하리라\n또 아비들아 너희 자녀를 노엽게 하지 말고 오직 주의 교훈과 훈계로 양육하라',
+    questions:[
+      {q:'자녀들에게 주신 첫 번째 명령은?', opts:['①공부하라','②부모에게 순종하라','③기도하라','④교회에 가라'], ans:1},
+      {q:'부모를 공경하면 어떻게 된다고 했나요?', opts:['①부자가 된다','②잘 되고 장수한다','③지혜로워진다','④친구가 많아진다'], ans:1},
+      {q:'아버지들은 자녀를 어떻게 양육해야 하나요?', opts:['①엄하게','②주의 교훈과 훈계로','③자유롭게','④풍요롭게'], ans:1}
+    ]
+  },
+  { ref:'야고보서 1:2-4', passage:'내 형제들아 너희가 여러 가지 시험을 당하거든 온전히 기쁘게 여기라\n이는 너희 믿음의 시련이 인내를 만들어 내는 줄 너희가 앎이라\n인내를 온전히 이루라 이는 너희로 온전하고 구비하여 조금도 부족함이 없게 하려 함이라\n너희 중에 누구든지 지혜가 부족하거든 모든 사람에게 후히 주시고 꾸짖지 아니하시는 하나님께 구하라',
+    questions:[
+      {q:'시험을 당할 때 어떻게 여기라고 했나요?', opts:['①슬프게','②무시하라','③온전히 기쁘게','④두려워하라'], ans:2},
+      {q:'믿음의 시련은 무엇을 만들어 내나요?', opts:['①믿음','②인내','③사랑','④기쁨'], ans:1},
+      {q:'지혜가 부족할 때 어떻게 해야 하나요?', opts:['①책을 읽어라','②친구에게 물어라','③하나님께 구하라','④스스로 생각하라'], ans:2}
+    ]
+  },
+  { ref:'요한일서 4:7-8', passage:'사랑하는 자들아 우리가 서로 사랑하자 사랑은 하나님께 속한 것이니\n사랑하는 자마다 하나님으로부터 나서 하나님을 알고\n사랑하지 아니하는 자는 하나님을 알지 못하나니 이는 하나님은 사랑이심이라\n하나님의 사랑이 우리에게 이렇게 나타난 바 되었으니 하나님이 자기의 독생자를 세상에 보내심은 그로 말미암아 우리를 살리려 하심이라',
+    questions:[
+      {q:'사랑은 어디에 속한 것인가요?', opts:['①사람','②세상','③하나님','④천사'], ans:2},
+      {q:'하나님은 무엇이라고 했나요?', opts:['①빛','②사랑','③진리','④생명'], ans:1},
+      {q:'하나님이 독생자를 보내신 이유는?', opts:['①심판하려고','②가르치려고','③우리를 살리려고','④시험하려고'], ans:2}
+    ]
+  },
+  { ref:'누가복음 15:11-20', passage:'또 이르시되 어떤 사람에게 두 아들이 있는데 그 둘째가 아버지에게 말하되\n아버지여 재산 중에서 내게 돌아올 분깃을 내게 주소서 하는지라 아버지가 그 살림을 각각 나눠 주었더니\n그 후 며칠이 안 되어 둘째 아들이 재물을 다 모아 가지고 먼 나라에 가 거기서 허랑방탕하여 그 재산을 낭비하더니\n다 없앤 후 그 나라에 크게 흉년이 들어 그가 비로소 궁핍한지라\n이에 스스로 돌이켜 이르되 내 아버지에게는 양식이 풍족한 품꾼이 얼마나 많은가 나는 여기서 굶어 죽는구나\n내가 일어나 아버지께 가서 이르기를 아버지 내가 하늘과 아버지께 죄를 지었사오니 지금부터는 아버지의 아들이라 일컬음 받기를 감당하지 못하겠나이다 하고 일어나서 아버지께로 돌아가니라',
+    questions:[
+      {q:'둘째 아들은 아버지에게 무엇을 요구했나요?', opts:['①집','②재산 분깃','③종','④밭'], ans:1},
+      {q:'둘째 아들은 재산을 어떻게 했나요?', opts:['①잘 저축했다','②남에게 줬다','③허랑방탕하여 낭비했다','④잃어버렸다'], ans:2},
+      {q:'궁핍해진 아들은 어떻게 결심했나요?', opts:['①다시 돈을 벌기로','②아버지께 돌아가기로','③친구에게 도움받기로','④다른 나라로 가기로'], ans:1}
+    ]
+  },
+  { ref:'고린도전서 13:4-7', passage:'사랑은 오래 참고 사랑은 온유하며 시기하지 아니하며\n사랑은 자랑하지 아니하며 교만하지 아니하며\n무례히 행하지 아니하며 자기의 유익을 구하지 아니하며\n성내지 아니하며 악한 것을 생각하지 아니하며\n불의를 기뻐하지 아니하며 진리와 함께 기뻐하고\n모든 것을 참으며 모든 것을 믿으며 모든 것을 바라며 모든 것을 견디느니라',
+    questions:[
+      {q:'사랑의 첫 번째 특징은 무엇인가요?', opts:['①온유함','②오래 참음','③시기하지 않음','④자랑하지 않음'], ans:1},
+      {q:'사랑은 무엇을 기뻐하나요?', opts:['①불의','②자랑','③진리','④교만'], ans:2},
+      {q:'사랑은 어떤 것을 하지 않나요?', opts:['①참는 것','②믿는 것','③교만한 것','④견디는 것'], ans:2}
+    ]
+  }
+];
+
+function getRandomPassage() {
+  return BIBLE_DATA[Math.floor(Math.random() * BIBLE_DATA.length)];
+}
+
+// 챕터 내용도 로컬 데이터에서 간단히 처리
 async function callClaude(prompt) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1500, messages: [{role:'user',content:prompt}] })
-  });
-  const data = await res.json();
-  return data.content.map(b=>b.text||'').join('').trim().replace(/```json|```/g,'').trim();
+  // API 없이 로컬 데이터 반환 (성경 리더용 fallback)
+  return JSON.stringify({verses:[{v:1,text:'성경 본문을 불러오려면 API 키가 필요해요. 전자 성경 탭은 준비 중이에요! 📖'}]});
 }
 
 /* ════ UTILS ════ */
