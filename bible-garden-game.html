@@ -641,8 +641,12 @@ async function addPoints(n) {
 /* ════ DAILY RECORD ════ */
 function todayKey() { return new Date().toISOString().slice(0, 10); }
 async function getDailyRecord() {
-  const snap = await db.collection('userDaily').doc(CU.uid + '_' + todayKey()).get();
-  return snap.exists ? snap.data() : { recordingCount: 0, completedPassages: [], meditationDone: false };
+  try {
+    const snap = await db.collection('userDaily').doc(CU.uid + '_' + todayKey()).get();
+    return snap.exists ? snap.data() : { recordingCount: 0, completedPassages: [], meditationDone: false };
+  } catch (e) {
+    return { recordingCount: 0, completedPassages: [], meditationDone: false };
+  }
 }
 async function setDailyField(updates) {
   await db.collection('userDaily').doc(CU.uid + '_' + todayKey()).set(updates, { merge: true });
@@ -675,16 +679,22 @@ async function loadTodayPassages() {
   document.getElementById('passageText').innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...</div>';
   document.getElementById('bibleActions').innerHTML = '';
   document.getElementById('pNavBar').style.display = 'none';
-  const snap = await db.collection('dailyConfig').doc(todayKey()).get();
-  const dr   = await getDailyRecord();
-  const done = dr.completedPassages || [];
-  if (snap.exists && snap.data().passages && snap.data().passages.length > 0) {
-    todayPassages = snap.data().passages;
-    if (todayPassages.length > 1) { document.getElementById('pNavBar').style.display = 'flex'; renderPNav(done); }
-    curPasIdx = todayPassages.findIndex(p => !done.includes(p.ref));
-    if (curPasIdx === -1) { showAllDone(); return; }
-    loadPassage(todayPassages[curPasIdx]);
-  } else {
+  try {
+    const snap = await db.collection('dailyConfig').doc(todayKey()).get();
+    const dr   = await getDailyRecord();
+    const done = dr.completedPassages || [];
+    if (snap.exists && snap.data().passages && snap.data().passages.length > 0) {
+      todayPassages = snap.data().passages;
+      if (todayPassages.length > 1) { document.getElementById('pNavBar').style.display = 'flex'; renderPNav(done); }
+      curPasIdx = todayPassages.findIndex(p => !done.includes(p.ref));
+      if (curPasIdx === -1) { showAllDone(); return; }
+      loadPassage(todayPassages[curPasIdx]);
+    } else {
+      todayPassages = [];
+      loadRandomPassage();
+    }
+  } catch (e) {
+    // Firestore 실패시 로컬 데이터로 대체
     todayPassages = [];
     loadRandomPassage();
   }
@@ -975,18 +985,26 @@ async function fetchChapter(book, ch) {
   const bookNum = BOOK_NUM[book];
   if (!bookNum) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 책을 찾을 수 없어요</div>'; return; }
   try {
-    const res = await fetch(`https://getbible.net/v2/kor/${bookNum}/${ch}.json`);
+    // CORS 프록시 사용해서 getbible.net API 호출
+    const url = `https://getbible.net/v2/kor/${bookNum}/${ch}.json`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('API 오류');
     const data = await res.json();
     const verses = Object.values(data.verses).map(v => ({ v: v.verse, text: v.text }));
     chCache[key] = verses;
     renderCh(verses);
   } catch (e) {
-    // API 실패시 로컬 데이터에서 찾기
+    // API 실패시 로컬 BIBLE_DATA에서 찾기
     const local = BIBLE_DATA.find(b => b.ref.startsWith(book));
     if (local) {
-      document.getElementById('readerBox').innerHTML = `<div style="font-size:1rem;line-height:2;color:#4a3a2a;white-space:pre-wrap">${local.passage}</div>`;
+      const lines = local.passage.split('\n');
+      const verses = lines.map((t, i) => ({ v: i+1, text: t }));
+      renderCh(verses);
     } else {
-      document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 불러오기 실패! 인터넷 연결을 확인해요</div>';
+      document.getElementById('readerBox').innerHTML =
+        '<div class="loading-txt">⚠️ 불러오기 실패!<br><br>' +
+        'GitHub Pages 주소로 접속해야 해요 😊<br>' +
+        '<small style="color:#aaa">lve34234-maker.github.io/bible-garden/bible-garden-game.html</small></div>';
     }
   }
 }
