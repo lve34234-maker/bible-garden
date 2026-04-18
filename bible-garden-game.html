@@ -48,7 +48,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .start-btn:disabled{opacity:0.4;cursor:not-allowed;}
 /* MAIN */
 #screen-main{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;max-width:960px;margin:0 auto;width:100%;}
-.app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 6px;position:sticky;top:0;z-index:50;background:rgba(232,245,255,0.92);backdrop-filter:blur(8px);}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 6px;position:sticky;top:0;z-index:50;background:#e8f5ff;border-bottom:1px solid rgba(0,0,0,0.05);}
 .app-logo{font-size:1.45rem;font-weight:700;color:#4a9a50;}
 .header-right{display:flex;align-items:center;gap:8px;}
 .pts-pill{background:white;border-radius:50px;padding:4px 13px;font-size:1rem;font-weight:700;color:#4a9a50;border:2.5px solid #b8e8a0;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
@@ -65,8 +65,8 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .card-title{font-size:1.05rem;font-weight:700;color:#5a6a4a;display:flex;align-items:center;gap:6px;margin-bottom:11px;}
 /* PET PANEL */
 .garden-layout{display:grid;grid-template-columns:230px 1fr;gap:12px;}
-@media(max-width:640px){.garden-layout{grid-template-columns:1fr;}}
-.pet-panel{background:white;border-radius:22px;padding:16px 13px;box-shadow:0 5px 18px rgba(0,0,0,0.07);display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:56px;height:fit-content;}
+@media(max-width:640px){.garden-layout{grid-template-columns:1fr;}.pet-panel{position:static!important;top:auto!important;}}
+.pet-panel{background:white;border-radius:22px;padding:16px 13px;box-shadow:0 5px 18px rgba(0,0,0,0.07);display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:64px;height:fit-content;z-index:1;}
 .pet-stage-wrap{width:105px;height:105px;display:flex;align-items:center;justify-content:center;background:#e8f5e0;border-radius:50%;border:3px dashed #b8e8a0;margin:5px 0;}
 .pet-emoji{font-size:3.8rem;line-height:1;animation:breath 4s ease-in-out infinite;}
 @keyframes breath{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.07) rotate(2deg)}}
@@ -74,7 +74,39 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 @keyframes petGrow{0%{transform:scale(0.4) rotate(-15deg)}60%{transform:scale(1.2) rotate(4deg)}100%{transform:scale(1) rotate(0deg)}}
 .pet-name-d{font-size:1.25rem;font-weight:700;color:#3a5a3a;}.pet-type-d{font-size:0.82rem;color:#ccc;}
 .pet-status-d{font-size:0.9rem;color:#7aaa70;text-align:center;}
-.lv-row{display:flex;gap:3px;}.lv-star{font-size:0.85rem;opacity:0.2;transition:0.3s;}.lv-star.on{opacity:1;}
+.lv-row{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;max-width:190px;}
+.lv-star{font-size:0.85rem;opacity:0.2;transition:0.3s;}
+.lv-star.on{opacity:1;}
+.lv-star.hidden{filter:grayscale(1);opacity:0.35;}
+.unlock-banner{margin-top:6px;background:linear-gradient(135deg,#ffe28a,#ffbe3a);border-radius:14px;padding:7px 10px;font-size:0.82rem;font-weight:700;color:#6a4a10;text-align:center;box-shadow:0 3px 10px rgba(255,190,58,0.35);cursor:pointer;animation:glow 1.6s ease-in-out infinite;}
+@keyframes glow{0%,100%{box-shadow:0 3px 10px rgba(255,190,58,0.35)}50%{box-shadow:0 3px 16px rgba(255,190,58,0.7)}}
+.pet-switcher{display:flex;gap:4px;width:100%;margin-bottom:4px;}
+.pet-slot-btn{flex:1;background:#f5f5f5;border:2px solid #e0e0e0;border-radius:10px;padding:4px;font-size:0.85rem;color:#888;transition:all 0.2s;}
+.pet-slot-btn.active{background:#e8f5e0;border-color:#4a9a50;color:#3a5a3a;font-weight:700;}
+.self-reset-btn{background:white;border:1.5px solid #f0c0c0;border-radius:50px;padding:3px 10px;font-size:0.72rem;color:#d07070;margin-top:6px;transition:all 0.2s;cursor:pointer;}
+.self-reset-btn:hover{background:#fff0f0;}
+/* Church Attendance */
+.church-card{margin-top:12px;}
+.month-nav{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;}
+.month-nav button{background:white;border:2px solid #c8e8b0;border-radius:50%;width:30px;height:30px;font-size:0.9rem;color:#4a9a50;cursor:pointer;}
+.month-nav button:hover{background:#e8f5e0;}
+.month-lbl{font-size:1rem;font-weight:700;color:#3a5a3a;min-width:110px;text-align:center;}
+.cal-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;}
+.cal-hdr div{text-align:center;font-size:0.78rem;font-weight:700;color:#aaa;padding:4px 0;}
+.cal-hdr div.sun{color:#e07070;}.cal-hdr div.sat{color:#5a8acc;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-empty{height:38px;}
+.cal-day{position:relative;height:38px;background:white;border:1.5px solid #e8e8e8;border-radius:8px;font-size:0.88rem;color:#555;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+.cal-day:hover{background:#f5f5f5;}
+.cal-day.wed{border-color:#c8d8f0;color:#3a5a9a;}
+.cal-day.attended{background:linear-gradient(135deg,#d4f5d0,#a8e090);border-color:#6cc86a;color:#1a5a1a;font-weight:700;}
+.cal-day.attended.wed{background:linear-gradient(135deg,#d0e0ff,#a0c0ee);border-color:#60a0dd;color:#1a3a7a;}
+.cal-day .count-badge{position:absolute;top:-5px;right:-5px;background:#ff6060;color:white;border-radius:50%;width:16px;height:16px;font-size:0.66rem;display:flex;align-items:center;justify-content:center;border:1.5px solid white;}
+.church-legend{font-size:0.78rem;color:#aaa;text-align:center;margin-top:6px;}
+/* Pet select modal (for unlocking 2nd pet) */
+.pet-unlock-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9500;display:none;align-items:center;justify-content:center;padding:16px;}
+.pet-unlock-modal.open{display:flex;}
+.pet-unlock-box{background:white;border-radius:24px;padding:20px;max-width:420px;width:100%;max-height:90vh;overflow-y:auto;}
 .stats-box{width:100%;margin:4px 0;}
 .sg{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:0.82rem;}
 .si{width:18px;text-align:center;}.st{flex:1;height:9px;background:#efefef;border-radius:5px;overflow:hidden;}
@@ -195,6 +227,12 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .pet-badge{background:#e8f5e0;border-radius:7px;padding:1px 7px;font-size:0.78rem;color:#4a8a4a;font-weight:700;}
 .del-btn{background:#fff0f0;border:1.5px solid #f0c0c0;border-radius:7px;padding:2px 8px;font-size:0.78rem;color:#d05050;transition:all 0.2s;}
 .del-btn:hover{background:#ffe0e0;}
+.danger-zone{margin-top:18px;padding:14px;background:#fff5f5;border:2px dashed #f0b0b0;border-radius:16px;}
+.danger-title{font-size:1rem;font-weight:700;color:#c04040;margin-bottom:4px;}
+.danger-desc{font-size:0.85rem;color:#a07070;margin-bottom:10px;line-height:1.5;}
+.danger-btn{background:linear-gradient(135deg,#ff8080,#c04040);color:white;border:none;border-radius:50px;padding:10px 22px;font-size:1rem;font-weight:700;box-shadow:0 3px 10px rgba(192,64,64,0.35);transition:all 0.2s;}
+.danger-btn:hover{transform:translateY(-1px);}
+.danger-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 /* DAILY PASSAGE CONFIG */
 .add-passage-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:10px;}
 .add-passage-row select{border:2px solid #c8e8b0;border-radius:10px;padding:7px 10px;font-size:0.9rem;outline:none;background:white;}
@@ -239,6 +277,19 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 <div class="clouds"><div class="cloud c1" style="left:-200px"></div><div class="cloud c2" style="left:-150px"></div></div>
 <div id="toast-wrap"></div>
 <div id="lightbox" onclick="this.classList.remove('open')"><img id="lb-img" src="" alt=""></div>
+<div id="petUnlockModal" class="pet-unlock-modal">
+  <div class="pet-unlock-box">
+    <div style="font-size:1.3rem;font-weight:700;color:#4a9a50;text-align:center;margin-bottom:6px">🏆 새로운 친구 해금!</div>
+    <div style="font-size:0.95rem;color:#7a7a7a;text-align:center;margin-bottom:14px">숨겨진 별 5개까지 모두 채웠어요!<br>새로운 친구 하나를 더 선택해요 🎉</div>
+    <div class="companions-grid" id="unlockGrid"></div>
+    <div class="name-sec" id="unlockNameSec" style="display:none;margin-top:12px">
+      <div style="font-size:1rem;font-weight:700;color:#5a6a4a;text-align:center" id="unlockNameLbl">이름을 지어줘요!</div>
+      <input class="name-inp" id="unlockNameInp" type="text" maxlength="10" placeholder="이름 입력" oninput="checkUnlockStart()">
+      <button class="start-btn" id="unlockStartBtn" onclick="createBonusPet()" disabled>🌱 친구 추가하기!</button>
+    </div>
+    <button style="background:none;border:none;color:#aaa;margin-top:10px;width:100%;font-size:0.9rem;cursor:pointer" onclick="document.getElementById('petUnlockModal').classList.remove('open')">나중에 할게요</button>
+  </div>
+</div>
 <div id="splash"><div class="splash-icon">🌿</div><p style="font-size:1.2rem;color:#7aaa70">성경 정원 열리는 중...</p></div>
 
 <!-- AUTH -->
@@ -298,6 +349,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     <div class="garden-layout">
       <div class="pet-panel">
         <div style="font-size:0.8rem;color:#ccc;font-weight:700">내 친구</div>
+        <div class="pet-switcher" id="petSwitcher" style="display:none"></div>
         <div class="pet-stage-wrap"><div class="pet-emoji" id="petEmoji">🌱</div></div>
         <div class="pet-name-d" id="petNameD"></div>
         <div class="pet-type-d" id="petTypeD"></div>
@@ -305,6 +357,8 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
         <div class="pet-status-d" id="petStatusD"></div>
         <div class="stats-box" id="statsBox"></div>
         <div class="care-btns" id="careBtns"></div>
+        <div id="unlockSlot"></div>
+        <button class="self-reset-btn" onclick="resetSelfData()">🔄 내 데이터 초기화</button>
       </div>
       <div class="bible-panel">
         <div class="bible-hdr">
@@ -334,7 +388,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
           <label class="photo-upload-label" for="photoInput" id="photoLabel">
             <span style="font-size:2rem">📸</span><span>묵상 노트 사진을 찍어요</span>
           </label>
-          <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="onPhotoSelected(event)">
+          <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="onPhotoSelected(event)">
           <div id="photoPreviewWrap" style="display:none;width:100%">
             <img id="photoPreview" class="photo-preview" src="" alt="">
             <div style="display:flex;gap:7px;margin-top:8px">
@@ -345,6 +399,17 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
           <div id="medStatusMsg"></div>
         </div>
       </div>
+    </div>
+    <div class="card church-card">
+      <div class="card-title">⛪ 교회 출석</div>
+      <div style="font-size:0.86rem;color:#aaa;margin-bottom:8px">교회에 간 날을 눌러 기록해요! 하루 +2점 (수요일은 최대 2번)</div>
+      <div class="month-nav">
+        <button onclick="changeMonth(-1)">◀</button>
+        <span class="month-lbl" id="monthLbl"></span>
+        <button onclick="changeMonth(1)">▶</button>
+      </div>
+      <div id="churchCal"></div>
+      <div class="church-legend">💡 수요일은 클릭할 때마다 1회 → 2회 → 0회 순서로 바뀌어요</div>
     </div>
   </div>
 
@@ -395,6 +460,11 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
           <thead><tr><th>아이디</th><th>친구</th><th>이름</th><th>레벨</th><th>포인트</th><th>총퀴즈</th><th>정답률</th><th>가입일</th><th></th></tr></thead>
           <tbody id="admTbody"><tr><td colspan="9" class="empty-txt">로딩 중...</td></tr></tbody>
         </table>
+      </div>
+      <div class="danger-zone">
+        <div class="danger-title">⚠️ 전체 데이터 초기화</div>
+        <div class="danger-desc">모든 회원의 친구(펫)·포인트·성경읽기 인증·묵상사진·퀴즈 기록을 삭제합니다.<br>회원 계정과 관리자 데이터는 그대로 유지돼요. <b>되돌릴 수 없어요!</b></div>
+        <button class="danger-btn" id="resetBtn" onclick="resetAllUserData()">🔄 모든 회원 데이터 초기화</button>
       </div>
     </div>
     <div class="admin-section" id="adm-daily">
@@ -564,10 +634,10 @@ async function createPet() {
 
 /* ════ COMPANION DATA ════ */
 const COMP = {
-  plant:{ label:'식물', stages:['🌱','🌿','🌸','🌺','🌻'], names:['새싹','잎새','꽃봉오리','활짝꽃','해님꽃'], statuses:['막 싹을 틔웠어요!','쑥쑥 자라요!','꽃봉오리예요!','예쁘게 피었어요!','눈부신 꽃 ✨'], stats:[['💧','water',30,'fw'],['☀️','sun',40,'fh']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:28,grow:7}], growPts:[0,14,30,52,78] },
-  tree:{  label:'나무',  stages:['🪴','🌲','🌳','🎄','🌴'], names:['묘목','꼬마나무','튼튼나무','웅장나무','왕나무'], statuses:['작은 나무예요!','조금씩 자라요!','꽤 커졌어요!','웅장해요!','숲의 왕 ✨'], stats:[['💧','water',20,'fw'],['🌿','growth',15,'fg']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:26,grow:5},{id:'fertilize',label:'🌿 비료',cls:'e',cost:3,stat:'growth',add:22,grow:8}], growPts:[0,18,38,64,94] },
-  dog:{   label:'강아지', stages:['🐶','🐕','🦮','🐩','🐕‍🦺'], names:['강아지','복실이','복슬이','뽀삐','왕복슬'], statuses:['꼬리를 흔들어요!','밥 먹고 싶어요!','산책가요!','너무 행복해요!','전설 강아지 ✨'], stats:[['🍖','food',25,'ff'],['😊','happy',30,'fh'],['⚡','energy',20,'fe']], actions:[{id:'feed',label:'🍖 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'walk',label:'🦮 산책',cls:'e',cost:3,stat:'energy',add:35,grow:8}], growPts:[0,14,30,52,78] },
-  cat:{   label:'고양이', stages:['🐱','😺','😸','🐈','🐈‍⬛'], names:['고양이','나비','야옹이','냐옹','왕냐옹'], statuses:['그루밍 중!','간식 먹고 싶어요!','놀고 싶어요!','냥냥 행복!','전설 고양이 ✨'], stats:[['🐟','food',30,'ff'],['😸','happy',35,'fh']], actions:[{id:'feed',label:'🐟 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'play',label:'🧶 놀아주기',cls:'h',cost:3,stat:'happy',add:35,grow:8}], growPts:[0,15,32,55,80] }
+  plant:{ label:'식물', stages:['🌱','🌿','🌸','🌺','🌻','🌷','🪷','🌹','💐','🏵️'], names:['새싹','잎새','꽃봉오리','활짝꽃','해님꽃','튤립','연꽃','장미','꽃다발','황금꽃'], statuses:['막 싹을 틔웠어요!','쑥쑥 자라요!','꽃봉오리예요!','예쁘게 피었어요!','눈부신 꽃 ✨','튤립이 피었어요!','연꽃이 되었어요!','장미로 변신!','꽃다발이에요!','황금꽃 👑'], stats:[['💧','water',30,'fw'],['☀️','sun',40,'fh']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:28,grow:7}], growPts:[0,14,30,52,78,110,148,192,242,298] },
+  tree:{  label:'나무',  stages:['🪴','🌲','🌳','🎄','🌴','🌵','🎍','🍀','🌾','🪵'], names:['묘목','꼬마나무','튼튼나무','웅장나무','왕나무','선인장','대나무','네잎','황금벼','전설목'], statuses:['작은 나무예요!','조금씩 자라요!','꽤 커졌어요!','웅장해요!','숲의 왕 ✨','선인장이에요!','대나무로 변신!','행운의 네잎!','황금빛 벼!','전설의 나무 👑'], stats:[['💧','water',20,'fw'],['🌿','growth',15,'fg']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:26,grow:5},{id:'fertilize',label:'🌿 비료',cls:'e',cost:3,stat:'growth',add:22,grow:8}], growPts:[0,18,38,64,94,130,172,220,274,334] },
+  dog:{   label:'강아지', stages:['🐶','🐕','🦮','🐩','🐕‍🦺','🐺','🦊','🦴','👑','🏆'], names:['강아지','복실이','복슬이','뽀삐','왕복슬','늑대왕','여우','황금뼈','왕자','전설'], statuses:['꼬리를 흔들어요!','밥 먹고 싶어요!','산책가요!','너무 행복해요!','전설 강아지 ✨','늑대처럼 강해요!','여우처럼 지혜로워요!','보물을 찾았어요!','왕자가 되었어요!','전설의 전당 👑'], stats:[['🍖','food',25,'ff'],['😊','happy',30,'fh'],['⚡','energy',20,'fe']], actions:[{id:'feed',label:'🍖 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'walk',label:'🦮 산책',cls:'e',cost:3,stat:'energy',add:35,grow:8}], growPts:[0,14,30,52,78,110,148,192,242,298] },
+  cat:{   label:'고양이', stages:['🐱','😺','😸','🐈','🐈‍⬛','🦁','🐯','🐅','🐆','👑'], names:['고양이','나비','야옹이','냐옹','왕냐옹','사자','호랑이','맹호','표범','황제'], statuses:['그루밍 중!','간식 먹고 싶어요!','놀고 싶어요!','냥냥 행복!','전설 고양이 ✨','사자처럼 용감!','호랑이로 변신!','맹호 포효!','표범처럼 빨라요!','황제 냥 👑'], stats:[['🐟','food',30,'ff'],['😸','happy',35,'fh']], actions:[{id:'feed',label:'🐟 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'play',label:'🧶 놀아주기',cls:'h',cost:3,stat:'happy',add:35,grow:8}], growPts:[0,15,32,55,80,112,150,194,244,300] }
 };
 
 /* ════ PET ════ */
@@ -588,10 +658,91 @@ function renderPet() {
   document.getElementById('petNameD').textContent   = p.name;
   document.getElementById('petTypeD').textContent   = c.label;
   document.getElementById('petStatusD').textContent = c.statuses[lv];
-  document.getElementById('lvRow').innerHTML = c.stages.map((_,i) => `<span class="lv-star ${i<=lv?'on':''}">⭐</span>`).join('');
+  // 10단 별 (앞 5개는 기본, 뒤 5개는 숨겨진 별)
+  document.getElementById('lvRow').innerHTML = c.stages.map((_,i) => {
+    const achieved = i <= lv;
+    const isHidden = i >= 5;
+    if (achieved) return '<span class="lv-star on">⭐</span>';
+    if (isHidden) return '<span class="lv-star hidden">❓</span>';
+    return '<span class="lv-star">⭐</span>';
+  }).join('');
   document.getElementById('statsBox').innerHTML = c.stats.map(([ico,k,,fill]) =>
     `<div class="sg"><span class="si">${ico}</span><div class="st"><div class="sf ${fill}" style="width:${Math.min(100,p.stats[k]||0)}%"></div></div></div>`
   ).join('');
+  renderPetSwitcher();
+  renderUnlockSlot();
+}
+
+function renderPetSwitcher() {
+  const el = document.getElementById('petSwitcher');
+  if (!UD.bonusPet) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  el.style.display = 'flex';
+  const cur = UD.pet, bon = UD.bonusPet;
+  el.innerHTML =
+    `<button class="pet-slot-btn active">${COMP[cur.type].stages[cur.level]} ${cur.name}</button>` +
+    `<button class="pet-slot-btn" onclick="switchPet()">${COMP[bon.type].stages[bon.level]} ${bon.name}</button>`;
+}
+
+function renderUnlockSlot() {
+  const slot = document.getElementById('unlockSlot');
+  const p = UD.pet; if (!p) { slot.innerHTML=''; return; }
+  const c = COMP[p.type], maxLv = c.stages.length - 1;
+  if (p.level >= maxLv && !UD.bonusPet) {
+    slot.innerHTML = '<div class="unlock-banner" onclick="openUnlockModal()">🏆 새 친구 해금! 탭하기</div>';
+  } else {
+    slot.innerHTML = '';
+  }
+}
+
+async function switchPet() {
+  if (!UD.bonusPet) return;
+  const tmp = UD.pet;
+  UD.pet = UD.bonusPet;
+  UD.bonusPet = tmp;
+  await db.collection('users').doc(CU.uid).update({ pet: UD.pet, bonusPet: UD.bonusPet });
+  renderPet(); buildCareBtns(); updatePtsDisplay();
+  toast('🔄 친구 전환!');
+}
+
+function openUnlockModal() {
+  const grid = document.getElementById('unlockGrid');
+  const currentType = UD.pet?.type;
+  grid.innerHTML = Object.entries(COMP).filter(([t]) => t !== currentType).map(([t,c]) =>
+    `<button class="companion-btn" onclick="selUnlockComp('${t}',this)"><div class="cmp-icon">${c.stages[0]}</div><div class="cmp-title">${c.label}</div><div class="cmp-desc">새 친구</div></button>`
+  ).join('');
+  document.getElementById('unlockNameSec').style.display = 'none';
+  document.getElementById('unlockNameInp').value = '';
+  _unlockType = null;
+  document.getElementById('petUnlockModal').classList.add('open');
+}
+
+let _unlockType = null;
+function selUnlockComp(type, btn) {
+  _unlockType = type;
+  document.querySelectorAll('#unlockGrid .companion-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById('unlockNameSec').style.display = 'flex';
+  document.getElementById('unlockNameLbl').textContent = COMP[type].stages[0] + ' ' + COMP[type].label + '의 이름을 지어줘요!';
+  document.getElementById('unlockStartBtn').disabled = true;
+  document.getElementById('unlockNameInp').value = '';
+}
+function checkUnlockStart() {
+  document.getElementById('unlockStartBtn').disabled = !(document.getElementById('unlockNameInp').value.trim() && _unlockType);
+}
+async function createBonusPet() {
+  const name = document.getElementById('unlockNameInp').value.trim();
+  if (!name || !_unlockType) return;
+  const stats = {};
+  COMP[_unlockType].stats.forEach(r => { stats[r[1]] = r[2]; });
+  const newPet = { type: _unlockType, name, level: 0, growScore: 0, stats, pts: UD.pet.pts || 0 };
+  // 기존 친구는 bonusPet으로 이동, 새 친구가 활성
+  UD.bonusPet = UD.pet;
+  UD.pet = newPet;
+  await db.collection('users').doc(CU.uid).update({ pet: UD.pet, bonusPet: UD.bonusPet });
+  document.getElementById('petUnlockModal').classList.remove('open');
+  toast('🎉 새 친구 등록 완료!');
+  particles(window.innerWidth/2, window.innerHeight/3, ['🎉','✨','🌟','💫'], 16);
+  renderPet(); buildCareBtns(); updatePtsDisplay();
 }
 function buildCareBtns() {
   if (!UD.pet) return;
@@ -620,11 +771,18 @@ function checkGrowth() {
   if (p.level < max && p.growScore >= c.growPts[p.level + 1]) {
     p.level++; savePet(); renderPet();
     setTimeout(() => { toast('🌟 ' + p.name + '이(가) ' + c.names[p.level] + '(으)로 성장!'); particles(window.innerWidth/2, window.innerHeight/3, ['🌟','✨','🎉','💫','⭐','🎊'], 16); }, 300);
+    if (p.level === max && !UD.bonusPet) {
+      setTimeout(() => { toast('🏆 숨겨진 별 완성! 새 친구 해금!'); openUnlockModal(); }, 1200);
+    }
   }
 }
-async function savePet() {
+async function savePet(extra) {
   if (!CU || !UD?.pet) return;
-  await db.collection('users').doc(CU.uid).update({ pet: UD.pet });
+  if (UD.bonusPet) UD.bonusPet.pts = UD.pet.pts || 0;
+  const update = { pet: UD.pet };
+  if (UD.bonusPet) update.bonusPet = UD.bonusPet;
+  if (extra) Object.assign(update, extra);
+  await db.collection('users').doc(CU.uid).update(update);
 }
 function updatePtsDisplay() {
   const el = document.getElementById('ptsNum');
@@ -656,6 +814,106 @@ async function setDailyField(updates) {
 async function initGarden() {
   updateActivityUI();
   loadTodayPassages();
+  renderChurch();
+}
+
+/* ════ CHURCH ATTENDANCE ════ */
+let _churchViewMonth = null;
+function renderChurch() {
+  if (!_churchViewMonth) _churchViewMonth = new Date();
+  const d = _churchViewMonth;
+  const y = d.getFullYear(), m = d.getMonth();
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  const church = UD.church || {};
+  document.getElementById('monthLbl').textContent = y + '년 ' + (m + 1) + '월';
+  let html = '<div class="cal-hdr"><div class="sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div class="sat">토</div></div>';
+  html += '<div class="cal-grid">';
+  for (let i = 0; i < firstDay; i++) html += '<div class="cal-empty"></div>';
+  for (let day = 1; day <= daysInMonth; day++) {
+    const mm = String(m + 1).padStart(2, '0'), dd = String(day).padStart(2, '0');
+    const dateKey = y + '-' + mm + '-' + dd;
+    const count = church[dateKey] || 0;
+    const dow = new Date(y, m, day).getDay();
+    const isWed = dow === 3;
+    html += '<button class="cal-day ' + (count > 0 ? 'attended ' : '') + (isWed ? 'wed' : '') + '" onclick="toggleChurch(\'' + dateKey + '\',' + (isWed ? 1 : 0) + ')">' +
+      '<span>' + day + '</span>' +
+      (count > 0 ? '<span class="count-badge">' + count + '</span>' : '') +
+      '</button>';
+  }
+  html += '</div>';
+  document.getElementById('churchCal').innerHTML = html;
+}
+function changeMonth(delta) {
+  if (!_churchViewMonth) _churchViewMonth = new Date();
+  _churchViewMonth = new Date(_churchViewMonth.getFullYear(), _churchViewMonth.getMonth() + delta, 1);
+  renderChurch();
+}
+async function toggleChurch(dateKey, isWed) {
+  if (!UD.pet) { toast('먼저 친구를 골라주세요'); return; }
+  const church = UD.church || {};
+  const current = church[dateKey] || 0;
+  const max = isWed ? 2 : 1;
+  const next = (current + 1) > max ? 0 : current + 1;
+  const diff = next - current;
+  const cost = diff * 2;
+  if (cost < 0 && (UD.pet.pts || 0) < Math.abs(cost)) {
+    toast('😅 포인트가 부족해 취소할 수 없어요!');
+    return;
+  }
+  if (next === 0) delete church[dateKey]; else church[dateKey] = next;
+  UD.church = church;
+  UD.pet.pts = (UD.pet.pts || 0) + cost;
+  await savePet({ church: UD.church });
+  updatePtsDisplay();
+  renderChurch();
+  if (diff > 0) { toast('⛪ 출석 +2점!'); particles(window.innerWidth/2, 200, ['⛪','✨','🌟'], 6); }
+  else if (diff < 0) toast('취소 -2점');
+}
+
+/* ════ 개인 초기화 ════ */
+async function resetSelfData() {
+  if (!confirm('내 친구·포인트·인증 기록·출석을 모두 지우고 처음부터 시작할까요?\n(내 계정은 유지돼요)')) return;
+  if (!confirm('되돌릴 수 없어요! 정말 진행할까요?')) return;
+  try {
+    const b1 = db.batch();
+    const recSnap = await db.collection('recordings').where('uid','==',CU.uid).get();
+    recSnap.docs.forEach(d => b1.delete(d.ref));
+    await b1.commit();
+    const b2 = db.batch();
+    const medSnap = await db.collection('meditations').where('uid','==',CU.uid).get();
+    medSnap.docs.forEach(d => b2.delete(d.ref));
+    await b2.commit();
+    const b3 = db.batch();
+    const udSnap = await db.collection('userDaily').get();
+    udSnap.docs.forEach(d => { if (d.id.startsWith(CU.uid + '_')) b3.delete(d.ref); });
+    await b3.commit();
+    const b4 = db.batch();
+    const qhSnap = await db.collection('quizHistory').doc(CU.uid).collection('records').get();
+    qhSnap.docs.forEach(d => b4.delete(d.ref));
+    await b4.commit();
+    await db.collection('users').doc(CU.uid).update({
+      pet: null, bonusPet: null, totalQuizzes: 0, correctCount: 0, church: {}
+    });
+    UD.pet = null; UD.bonusPet = null; UD.totalQuizzes = 0; UD.correctCount = 0; UD.church = {};
+    document.getElementById('ptsNum').textContent = '0';
+    resetPetSelectState();
+    showScreen('select');
+    toast('✅ 초기화 완료! 친구를 다시 골라요');
+  } catch (e) {
+    toast('⚠️ 실패: ' + e.message);
+  }
+}
+
+function resetPetSelectState() {
+  selType = null;
+  const nameSec = document.getElementById('nameSec');
+  if (nameSec) nameSec.style.display = 'none';
+  const nameInp = document.getElementById('nameInp');
+  if (nameInp) nameInp.value = '';
+  document.querySelectorAll('#screen-select .companion-btn').forEach(b => b.classList.remove('sel'));
+  const startBtn = document.getElementById('startBtn');
+  if (startBtn) startBtn.disabled = true;
 }
 async function updateActivityUI() {
   const dr = await getDailyRecord();
@@ -964,7 +1222,7 @@ function renderBookGrid() { document.getElementById('bookGrid').innerHTML = BIBL
 function selectBook(i) { selBk=i; selCh=1; renderBookGrid(); const b=BIBLE[selTes][i]; const sel=document.getElementById('chSel'); sel.innerHTML=Array.from({length:b.ch},(_,j)=>`<option value="${j+1}">${j+1}장</option>`).join(''); sel.value=1; document.getElementById('chNavCard').style.display='block'; document.getElementById('readerCard').style.display='block'; document.getElementById('chTitle').textContent=b.n+' '+selCh+'장'; fetchChapter(b.n,1); }
 function changeChapter(d) { if(selBk===null)return; const b=BIBLE[selTes][selBk]; selCh=Math.max(1,Math.min(b.ch,selCh+d)); document.getElementById('chSel').value=selCh; loadChapter(); }
 function loadChapter() { if(selBk===null)return; selCh=parseInt(document.getElementById('chSel').value); document.getElementById('chTitle').textContent=BIBLE[selTes][selBk].n+' '+selCh+'장'; fetchChapter(BIBLE[selTes][selBk].n,selCh); }
-// getbible.net 무료 API 사용 (API 키 불필요!)
+// getbible.net 한글 성경 데이터 (무료 공개, API 키 불필요)
 const BOOK_NUM = {
   '창세기':1,'출애굽기':2,'레위기':3,'민수기':4,'신명기':5,'여호수아':6,'사사기':7,'룻기':8,
   '사무엘상':9,'사무엘하':10,'열왕기상':11,'열왕기하':12,'역대상':13,'역대하':14,'에스라':15,
@@ -978,34 +1236,47 @@ const BOOK_NUM = {
   '요한삼서':64,'유다서':65,'요한계시록':66
 };
 
+let _koBibleData = null;
+let _koBibleLoading = null;
+async function loadKoBible() {
+  if (_koBibleData) return _koBibleData;
+  if (_koBibleLoading) return _koBibleLoading;
+  _koBibleLoading = fetch('https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/ko/ko.json')
+    .then(r => { if (!r.ok) throw new Error('다운로드 실패'); return r.json(); })
+    .then(d => { _koBibleData = d; return d; })
+    .catch(e => { _koBibleLoading = null; throw e; });
+  return _koBibleLoading;
+}
+
 async function fetchChapter(book, ch) {
   const key = book + '_' + ch;
   if (chCache[key]) { renderCh(chCache[key]); return; }
-  document.getElementById('readerBox').innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...</div>';
+  const readerBox = document.getElementById('readerBox');
+  readerBox.innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...<br><small style="color:#bbb">(처음 1회만 전체 다운로드, 잠시만 기다려주세요)</small></div>';
   const bookNum = BOOK_NUM[book];
-  if (!bookNum) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 책을 찾을 수 없어요</div>'; return; }
+  if (!bookNum) { readerBox.innerHTML = '<div class="loading-txt">⚠️ 책을 찾을 수 없어요</div>'; return; }
+
   try {
-    // CORS 프록시 사용해서 getbible.net API 호출
-    // CORS 프록시로 getbible.net 호출
-    const target = encodeURIComponent(`https://getbible.net/v2/kor/${bookNum}/${ch}.json`);
-    const res = await fetch(`https://corsproxy.io/?${target}`);
-    if (!res.ok) throw new Error('API 오류');
-    const data = await res.json();
-    const verses = Object.values(data.verses).map(v => ({ v: v.verse, text: v.text }));
+    const data = await loadKoBible();
+    const bookData = data[bookNum - 1];
+    if (!bookData || !bookData.chapters || !bookData.chapters[ch - 1]) {
+      readerBox.innerHTML = '<div class="loading-txt">⚠️ 해당 장을 찾을 수 없어요</div>';
+      return;
+    }
+    const verseArr = bookData.chapters[ch - 1];
+    const verses = verseArr.map((text, i) => ({ v: i + 1, text: text }));
     chCache[key] = verses;
     renderCh(verses);
   } catch (e) {
-    // API 실패시 로컬 BIBLE_DATA에서 찾기
     const local = BIBLE_DATA.find(b => b.ref.startsWith(book));
     if (local) {
       const lines = local.passage.split('\n');
       const verses = lines.map((t, i) => ({ v: i+1, text: t }));
       renderCh(verses);
     } else {
-      document.getElementById('readerBox').innerHTML =
-        '<div class="loading-txt">⚠️ 불러오기 실패!<br><br>' +
-        'GitHub Pages 주소로 접속해야 해요 😊<br>' +
-        '<small style="color:#aaa">lve34234-maker.github.io/bible-garden/bible-garden-game.html</small></div>';
+      readerBox.innerHTML =
+        '<div class="loading-txt">⚠️ 불러오기 실패<br><br>' +
+        '<small style="color:#aaa">인터넷 연결을 확인해주세요</small></div>';
     }
   }
 }
@@ -1053,6 +1324,54 @@ async function loadAdminUsers() {
 }
 async function delUser(uid, name) { if(!confirm('"'+name+'" 삭제?'))return; try{await db.collection('users').doc(uid).delete();toast('✅ 삭제 완료');loadAdminUsers();}catch(e){toast('삭제 실패!');} }
 
+async function resetAllUserData() {
+  if (!isAdmin) { toast('관리자만 가능해요'); return; }
+  if (!confirm('⚠️ 관리자 포함 모든 회원의 친구·포인트·사진·기록을 전부 삭제합니다.\n회원 계정은 유지돼요.\n\n정말 진행할까요?')) return;
+  if (!confirm('되돌릴 수 없어요!\n다시 한 번 확인합니다. 계속할까요?')) return;
+  const btn = document.getElementById('resetBtn');
+  btn.disabled = true; btn.textContent = '초기화 중...';
+  try {
+    const BATCH = 400;
+    const deleteAll = async (col) => {
+      const snap = await db.collection(col).get();
+      for (let i = 0; i < snap.docs.length; i += BATCH) {
+        const b = db.batch();
+        snap.docs.slice(i, i + BATCH).forEach(d => b.delete(d.ref));
+        await b.commit();
+      }
+    };
+    // 1) 관련 컬렉션 전체 삭제 (관리자 데이터도 포함)
+    await deleteAll('recordings');
+    await deleteAll('meditations');
+    await deleteAll('userDaily');
+
+    // 2) 모든 사용자 quizHistory 삭제 + pet/stats 초기화 (관리자 포함)
+    const usersSnap = await db.collection('users').get();
+    for (const userDoc of usersSnap.docs) {
+      const uid = userDoc.id;
+      const qhSnap = await db.collection('quizHistory').doc(uid).collection('records').get();
+      for (let i = 0; i < qhSnap.docs.length; i += BATCH) {
+        const b = db.batch();
+        qhSnap.docs.slice(i, i + BATCH).forEach(d => b.delete(d.ref));
+        await b.commit();
+      }
+      await db.collection('users').doc(uid).update({
+        pet: null, bonusPet: null, totalQuizzes: 0, correctCount: 0, church: {}
+      });
+    }
+    // 3) 현재 로그인한 관리자 로컬 상태도 즉시 반영
+    if (UD) { UD.pet = null; UD.bonusPet = null; UD.totalQuizzes = 0; UD.correctCount = 0; UD.church = {}; }
+    document.getElementById('ptsNum').textContent = '0';
+    toast('✅ 초기화 완료! 친구를 다시 골라요');
+    resetPetSelectState();
+    showScreen('select');
+  } catch (e) {
+    toast('⚠️ 실패: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '🔄 모든 회원 데이터 초기화';
+  }
+}
+
 /* ── 오늘의 말씀 설정 ── */
 let dpList = [];
 async function initDailyConfig() {
@@ -1090,7 +1409,7 @@ function renderDpList() {
         <span class="dp-ref-tag">📖 ${p.ref}</span>
         <button class="dp-remove" onclick="removeDp(${i})">✕</button>
       </div>
-      <div style="font-size:0.82rem;color:#aaa;margin-bottom:4px">${p.customQuestions?.length?'✅ 문제 '+p.customQuestions.length+'개 설정됨 (직접 제작)':'자동 생성 (AI)'}</div>
+      <div style="font-size:0.82rem;color:#aaa;margin-bottom:4px">${p.customQuestions?.length?'✅ 문제 '+p.customQuestions.length+'개 설정됨 (직접 제작)':'기본 문제 사용'}</div>
       <button class="dp-toggle-btn" onclick="toggleQForm(${i})" id="qfbtn-${i}">❓ ${p.customQuestions?.length?'문제 수정':'문제 직접 추가'}</button>
       <div id="qf-${i}" style="display:none"></div>
     </div>`).join('');
@@ -1284,12 +1603,6 @@ const BIBLE_DATA = [
 
 function getRandomPassage() {
   return BIBLE_DATA[Math.floor(Math.random() * BIBLE_DATA.length)];
-}
-
-// 챕터 내용도 로컬 데이터에서 간단히 처리
-async function callClaude(prompt) {
-  // API 없이 로컬 데이터 반환 (성경 리더용 fallback)
-  return JSON.stringify({verses:[{v:1,text:'성경 본문을 불러오려면 API 키가 필요해요. 전자 성경 탭은 준비 중이에요! 📖'}]});
 }
 
 /* ════ UTILS ════ */
