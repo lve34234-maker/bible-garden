@@ -122,6 +122,9 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .cb.f{border-color:#ffc87a}.cb.f:hover:not(:disabled){background:#fff5e8}
 .cb.h{border-color:#ff9ad8}.cb.h:hover:not(:disabled){background:#fff0f8}
 .cb.e{border-color:#b4f074}.cb.e:hover:not(:disabled){background:#f2ffe8}
+.cb.s{border-color:#ffd56a}.cb.s:hover:not(:disabled){background:#fff8e0}
+.pet-max-img{width:88px;height:88px;object-fit:cover;border-radius:50%;box-shadow:0 0 0 3px #fff, 0 0 16px rgba(255,200,80,0.8);animation:breath 4s ease-in-out infinite;}
+.pet-max-img-sm{width:20px;height:20px;object-fit:cover;border-radius:50%;vertical-align:middle;margin-right:2px;}
 .cost-tag{font-size:0.68rem;background:#f0f0f0;border-radius:8px;padding:1px 4px;color:#999;}
 /* BIBLE PANEL */
 .bible-panel{background:white;border-radius:22px;padding:18px;box-shadow:0 5px 18px rgba(0,0,0,0.07);display:flex;flex-direction:column;gap:12px;}
@@ -633,28 +636,68 @@ async function createPet() {
 }
 
 /* ════ COMPANION DATA ════ */
+/* ══ 레벨 10(숨겨진 별 모두 모았을 때) 이미지 URL ══
+   원하는 인터넷 이미지 주소로 바꾸면 바로 반영돼요!              */
+const MAX_IMG = {
+  plant: 'https://www.google.com/imgres?q=%EC%8A%88%ED%8D%BC%EC%8B%9D%EB%AC%BC%20%EC%BC%80%EB%A6%AD%ED%84%B0&imgurl=https%3A%2F%2Fi.namu.wiki%2Fi%2FLYRdBIAqk2zeuMoIvpc_wuMb9-9pMVD2uemYb93510mhPlc3BaF8dXuF92ws0qaTW97nu2BZTQsiD8WHLAbkhA.webp&imgrefurl=https%3A%2F%2Fnamu.wiki%2Fw%2F%25EC%2599%2584%25EB%2591%2590%25EC%25BD%25A9%2520%25EC%258A%2588%25ED%2584%25B0%3Fuuid%3Df4171498-fc60-448e-881c-7bc97bffb89f&docid=Xt44VqgOZEarwM&tbnid=UCYnwRYTlZn1bM&vet=12ahUKEwiVvqPDy_iTAxWznq8BHRY6KUgQnPAOegQIGxAB..i&w=1000&h=1120&hcb=2&itg=1&ved=2ahUKEwiVvqPDy_iTAxWznq8BHRY6KUgQnPAOegQIGxAB',
+  tree:  'https://www.google.com/imgres?q=%EA%B7%B8%EB%A3%A8%ED%8A%B8&imgurl=https%3A%2F%2Fcdn.sortiraparis.com%2Fimages%2F1001%2F98390%2F934396-je-s-appelle-groot-une-bande-annonce-pour-la-saison-2-disponible-en-septembre-sur-disney.jpg&imgrefurl=https%3A%2F%2Fwww.sortiraparis.com%2Fko%2Fpalieseo-hal-il%2Fyeonghwa-silijeu-chugje%2Farticles%2F297888-nae-ileum-eun-geuluteu-sijeun-2-yegopyeon-eun-9wol-dijeuni-eseo-gong-gaedoel-yejeong-ibnida&docid=hRiaY7be64dDIM&tbnid=uXQ-xhslMlSvwM&vet=12ahUKEwjLgfLazPiTAxV5k68BHXXmGp8QnPAOegQIcBAB..i&w=824&h=549&hcb=2&ved=2ahUKEwjLgfLazPiTAxV5k68BHXXmGp8QnPAOegQIcBAB',
+  dog:   'https://www.google.com/imgres?q=%EA%B0%95%EC%95%84%EC%A7%80%20%EC%8A%88%ED%8D%BC&imgurl=https%3A%2F%2Fpds.joongang.co.kr%2Fnews%2Fcomponent%2Fhtmlphoto_mmdata%2F202507%2F15%2F936167c4-5cb1-4219-aa35-a404e30cb2e1.jpg&imgrefurl=https%3A%2F%2Fwww.joongang.co.kr%2Farticle%2F25351616&docid=pVa941ul0uuQ-M&tbnid=OAChKCNrWjnheM&vet=12ahUKEwjFqdnOzPiTAxWeafUHHWCuFFkQnPAOegQIFxAB..i&w=559&h=435&hcb=2&ved=2ahUKEwjFqdnOzPiTAxWeafUHHWCuFFkQnPAOegQIFxAB',
+  cat:   'https://www.google.com/imgres?q=%EC%97%84%EC%B2%AD%20%EA%B7%80%EC%97%AC%EC%9A%B4%20%EA%B3%A0%EC%96%91%EC%9D%B4%20%EC%82%AC%EC%A7%84&imgurl=https%3A%2F%2Fmarketplace.canva.com%2FFIC7s%2FMAEJvuFIC7s%2F1%2Ftl%2Fcanva-cute-british-shorthair-kitten--MAEJvuFIC7s.png&imgrefurl=https%3A%2F%2Fwww.canva.com%2Fko_kr%2Fphotos%2Fs%2Fcute-cat%2F&docid=Jp9owGRP6-PA8M&tbnid=ED2iFW8HkmNOTM&vet=12ahUKEwjz653EzPiTAxUGj68BHTZ3ObUQnPAOegQIIBAB..i&w=367&h=550&hcb=2&ved=2ahUKEwjz653EzPiTAxUGj68BHTZ3ObUQnPAOegQIIBAB'
+};
+
 const COMP = {
-  plant:{ label:'식물', stages:['🌱','🌿','🌸','🌺','🌻','🌷','🪷','🌹','💐','🏵️'], names:['새싹','잎새','꽃봉오리','활짝꽃','해님꽃','튤립','연꽃','장미','꽃다발','황금꽃'], statuses:['막 싹을 틔웠어요!','쑥쑥 자라요!','꽃봉오리예요!','예쁘게 피었어요!','눈부신 꽃 ✨','튤립이 피었어요!','연꽃이 되었어요!','장미로 변신!','꽃다발이에요!','황금꽃 👑'], stats:[['💧','water',30,'fw'],['☀️','sun',40,'fh']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:28,grow:7}], growPts:[0,14,30,52,78,110,148,192,242,298] },
-  tree:{  label:'나무',  stages:['🪴','🌲','🌳','🎄','🌴','🌵','🎍','🍀','🌾','🪵'], names:['묘목','꼬마나무','튼튼나무','웅장나무','왕나무','선인장','대나무','네잎','황금벼','전설목'], statuses:['작은 나무예요!','조금씩 자라요!','꽤 커졌어요!','웅장해요!','숲의 왕 ✨','선인장이에요!','대나무로 변신!','행운의 네잎!','황금빛 벼!','전설의 나무 👑'], stats:[['💧','water',20,'fw'],['🌿','growth',15,'fg']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:26,grow:5},{id:'fertilize',label:'🌿 비료',cls:'e',cost:3,stat:'growth',add:22,grow:8}], growPts:[0,18,38,64,94,130,172,220,274,334] },
-  dog:{   label:'강아지', stages:['🐶','🐕','🦮','🐩','🐕‍🦺','🐺','🦊','🦴','👑','🏆'], names:['강아지','복실이','복슬이','뽀삐','왕복슬','늑대왕','여우','황금뼈','왕자','전설'], statuses:['꼬리를 흔들어요!','밥 먹고 싶어요!','산책가요!','너무 행복해요!','전설 강아지 ✨','늑대처럼 강해요!','여우처럼 지혜로워요!','보물을 찾았어요!','왕자가 되었어요!','전설의 전당 👑'], stats:[['🍖','food',25,'ff'],['😊','happy',30,'fh'],['⚡','energy',20,'fe']], actions:[{id:'feed',label:'🍖 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'walk',label:'🦮 산책',cls:'e',cost:3,stat:'energy',add:35,grow:8}], growPts:[0,14,30,52,78,110,148,192,242,298] },
-  cat:{   label:'고양이', stages:['🐱','😺','😸','🐈','🐈‍⬛','🦁','🐯','🐅','🐆','👑'], names:['고양이','나비','야옹이','냐옹','왕냐옹','사자','호랑이','맹호','표범','황제'], statuses:['그루밍 중!','간식 먹고 싶어요!','놀고 싶어요!','냥냥 행복!','전설 고양이 ✨','사자처럼 용감!','호랑이로 변신!','맹호 포효!','표범처럼 빨라요!','황제 냥 👑'], stats:[['🐟','food',30,'ff'],['😸','happy',35,'fh']], actions:[{id:'feed',label:'🐟 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'play',label:'🧶 놀아주기',cls:'h',cost:3,stat:'happy',add:35,grow:8}], growPts:[0,15,32,55,80,112,150,194,244,300] }
+  plant:{ label:'식물', stages:['🌱','🌿','🌸','🌺','🌻','🌷','🪷','🌹','💐','🏵️'], names:['새싹','잎새','꽃봉오리','활짝꽃','해님꽃','튤립','연꽃','장미','꽃다발','잭과 콩나무'], statuses:['막 싹을 틔웠어요!','쑥쑥 자라요!','꽃봉오리예요!','예쁘게 피었어요!','눈부신 꽃 ✨','튤립이 피었어요!','연꽃이 되었어요!','장미로 변신!','꽃다발이에요!','잭과 콩나무 👑'], stats:[['💧','water',30,'fw'],['☀️','sun',40,'fh']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:28,grow:7},{id:'photo',label:'☀️ 광합성',cls:'s',cost:2,stat:'sun',add:32,grow:7}], growPts:[0,14,30,52,78,110,148,192,242,298] },
+  tree:{  label:'나무',  stages:['🪴','🌲','🌳','🎄','🌴','🌵','🎍','🍀','🌾','🪵'], names:['묘목','꼬마나무','튼튼나무','웅장나무','왕나무','선인장','대나무','네잎','황금벼','그루트'], statuses:['작은 나무예요!','조금씩 자라요!','꽤 커졌어요!','웅장해요!','숲의 왕 ✨','선인장이에요!','대나무로 변신!','행운의 네잎!','황금빛 벼!','그루트 👑'], stats:[['💧','water',20,'fw'],['🌿','growth',15,'fg']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:26,grow:5},{id:'fertilize',label:'🌿 비료',cls:'e',cost:3,stat:'growth',add:22,grow:8}], growPts:[0,18,38,64,94,130,172,220,274,334] },
+  dog:{   label:'강아지', stages:['🐶','🐕','🦮','🐩','🐕‍🦺','🐺','🦊','🦴','👑','🏆'], names:['강아지','복실이','복슬이','뽀삐','왕복슬','늑대왕','여우','황금뼈','왕자','슈퍼강아지'], statuses:['꼬리를 흔들어요!','밥 먹고 싶어요!','산책가요!','너무 행복해요!','전설 강아지 ✨','늑대처럼 강해요!','여우처럼 지혜로워요!','보물을 찾았어요!','왕자가 되었어요!','슈퍼강아지 👑'], stats:[['🍖','food',25,'ff'],['😊','happy',30,'fh'],['⚡','energy',20,'fe']], actions:[{id:'feed',label:'🍖 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'walk',label:'🦮 산책',cls:'e',cost:3,stat:'energy',add:35,grow:8}], growPts:[0,14,30,52,78,110,148,192,242,298] },
+  cat:{   label:'고양이', stages:['🐱','😺','😸','🐈','🐈‍⬛','🦁','🐯','🐅','🐆','👑'], names:['고양이','나비','야옹이','냐옹','왕냐옹','사자','호랑이','맹호','표범','귀요미'], statuses:['그루밍 중!','간식 먹고 싶어요!','놀고 싶어요!','냥냥 행복!','전설 고양이 ✨','사자처럼 용감!','호랑이로 변신!','맹호 포효!','표범처럼 빨라요!','귀여운 고양이 👑'], stats:[['🐟','food',30,'ff'],['😸','happy',35,'fh']], actions:[{id:'feed',label:'🐟 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'play',label:'🧶 놀아주기',cls:'h',cost:3,stat:'happy',add:35,grow:8}], growPts:[0,15,32,55,80,112,150,194,244,300] }
 };
 
 /* ════ PET ════ */
+const DECAY_HOURS = 12;
+const DECAY_AMOUNT = 5;
+function applyTimeDecay() {
+  const now = Date.now();
+  let changed = false;
+  [UD?.pet, UD?.bonusPet].forEach(p => {
+    if (!p) return;
+    if (!p.lastDecay) { p.lastDecay = now; changed = true; return; }
+    const msPer = DECAY_HOURS * 3600 * 1000;
+    const intervals = Math.floor((now - p.lastDecay) / msPer);
+    if (intervals <= 0) return;
+    const dec = intervals * DECAY_AMOUNT;
+    COMP[p.type].stats.forEach(r => {
+      p.stats[r[1]] = Math.max(0, (p.stats[r[1]] || 0) - dec);
+    });
+    p.lastDecay = p.lastDecay + intervals * msPer;
+    changed = true;
+  });
+  if (changed) { savePet(); renderPet(); }
+}
 function loadPetState() {
   renderPet(); buildCareBtns();
   document.getElementById('ptsNum').textContent = UD.pet?.pts || 0;
-  setInterval(() => {
-    if (!UD.pet) return;
-    COMP[UD.pet.type].stats.forEach(r => { UD.pet.stats[r[1]] = Math.max(0, (UD.pet.stats[r[1]] || 0) - 1.5); });
-    renderPet();
-  }, 10000);
+  applyTimeDecay();
+  setInterval(applyTimeDecay, 5 * 60 * 1000);
 }
 function renderPet() {
   const p = UD.pet; if (!p) return;
   const c = COMP[p.type], lv = p.level;
-  const ee = document.getElementById('petEmoji'), ne = c.stages[lv];
-  if (ee.textContent !== ne) { ee.textContent = ne; ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow'); }
+  const ee = document.getElementById('petEmoji');
+  const isMax = lv === c.stages.length - 1 && MAX_IMG[p.type];
+  if (isMax) {
+    const cur = ee.querySelector('img');
+    if (!cur || cur.src !== MAX_IMG[p.type]) {
+      ee.innerHTML = '<img class="pet-max-img" src="' + MAX_IMG[p.type] + '" alt="">';
+      ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow');
+    }
+  } else {
+    const ne = c.stages[lv];
+    if (ee.textContent !== ne || ee.querySelector('img')) {
+      ee.innerHTML = '';
+      ee.textContent = ne;
+      ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow');
+    }
+  }
   document.getElementById('petNameD').textContent   = p.name;
   document.getElementById('petTypeD').textContent   = c.label;
   document.getElementById('petStatusD').textContent = c.statuses[lv];
@@ -673,14 +716,21 @@ function renderPet() {
   renderUnlockSlot();
 }
 
+function petIcon(pet) {
+  const c = COMP[pet.type];
+  if (pet.level === c.stages.length - 1 && MAX_IMG[pet.type]) {
+    return '<img class="pet-max-img-sm" src="' + MAX_IMG[pet.type] + '" alt="">';
+  }
+  return c.stages[pet.level];
+}
 function renderPetSwitcher() {
   const el = document.getElementById('petSwitcher');
   if (!UD.bonusPet) { el.style.display = 'none'; el.innerHTML = ''; return; }
   el.style.display = 'flex';
   const cur = UD.pet, bon = UD.bonusPet;
   el.innerHTML =
-    `<button class="pet-slot-btn active">${COMP[cur.type].stages[cur.level]} ${cur.name}</button>` +
-    `<button class="pet-slot-btn" onclick="switchPet()">${COMP[bon.type].stages[bon.level]} ${bon.name}</button>`;
+    `<button class="pet-slot-btn active">${petIcon(cur)} ${cur.name}</button>` +
+    `<button class="pet-slot-btn" onclick="switchPet()">${petIcon(bon)} ${bon.name}</button>`;
 }
 
 function renderUnlockSlot() {
@@ -1154,10 +1204,17 @@ function resetRec() {
 let selectedPhotoFile = null;
 function onPhotoSelected(e) {
   const file = e.target.files[0]; if (!file) return;
+  if (!file.type.startsWith('image/')) { toast('⚠️ 이미지 파일만 가능해요'); return; }
   selectedPhotoFile = file;
-  document.getElementById('photoPreview').src = URL.createObjectURL(file);
-  document.getElementById('photoLabel').style.display = 'none';
-  document.getElementById('photoPreviewWrap').style.display = 'block';
+  const preview = document.getElementById('photoPreview');
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    preview.src = ev.target.result;
+    document.getElementById('photoLabel').style.display = 'none';
+    document.getElementById('photoPreviewWrap').style.display = 'block';
+  };
+  reader.onerror = () => { toast('⚠️ 사진을 읽을 수 없어요'); resetPhoto(); };
+  reader.readAsDataURL(file);
 }
 function resetPhoto() {
   selectedPhotoFile = null;
@@ -1190,23 +1247,30 @@ async function submitMeditation() {
   } catch (e) { btn.disabled = false; btn.textContent = '✅ 제출하기 (+10점)'; toast('오류: ' + e.message); }
 }
 
-// 이미지 압축 함수 (canvas 사용)
+// 이미지 압축 함수 (FileReader + canvas, iOS 카메라/HEIC 호환 강화)
 function compressImage(file, maxWidth, quality) {
   return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      const ratio = Math.min(maxWidth / img.width, maxWidth / img.height, 1);
-      const w = Math.round(img.width * ratio);
-      const h = Math.round(img.height * ratio);
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL('image/jpeg', quality));
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const ratio = Math.min(maxWidth / img.width, maxWidth / img.height, 1);
+          const w = Math.max(1, Math.round(img.width * ratio));
+          const h = Math.max(1, Math.round(img.height * ratio));
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        } catch (err) {
+          reject(new Error('사진 처리 중 오류: ' + err.message));
+        }
+      };
+      img.onerror = () => reject(new Error('사진 형식을 읽을 수 없어요 (HEIC 등 지원 안 함). 설정에서 "가장 호환성 좋음(JPEG)"으로 바꿔서 찍어보세요'));
+      img.src = ev.target.result;
     };
-    img.onerror = reject;
-    img.src = url;
+    reader.onerror = () => reject(new Error('파일을 읽을 수 없어요'));
+    reader.readAsDataURL(file);
   });
 }
 
