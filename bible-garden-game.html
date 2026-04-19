@@ -1085,14 +1085,35 @@ async function jumpPassage(idx) {
   curPasIdx = idx; renderPNav(dr.completedPassages || []); loadPassage(todayPassages[idx]);
 }
 
-function loadPassage(pInfo) {
+async function fetchBookChapterText(book, ch) {
+  const bookNum = BOOK_NUM[book];
+  if (!bookNum) return null;
+  try {
+    const data = await loadKoBible();
+    const bookData = data[bookNum - 1];
+    if (bookData && bookData.chapters && bookData.chapters[ch - 1]) {
+      return bookData.chapters[ch - 1].map((v, i) => (i + 1) + ' ' + v).join('\n');
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function loadPassage(pInfo) {
   document.getElementById('bibleActions').innerHTML = '';
   let passage, questions;
   if (pInfo.customQuestions && pInfo.customQuestions.length > 0) {
     // 관리자가 직접 설정한 문제 사용
-    // 로컬 데이터에서 같은 ref 찾기
     const local = BIBLE_DATA.find(b => b.ref === pInfo.ref);
-    passage = local ? local.passage : `📖 ${pInfo.ref}\n\n관리자가 설정한 말씀이에요. 아래 퀴즈를 풀어봐요!`;
+    if (local) {
+      passage = local.passage;
+    } else if (pInfo.book && pInfo.chapter) {
+      document.getElementById('bibleRef').textContent = pInfo.ref;
+      document.getElementById('passageText').textContent = '📖 말씀 불러오는 중...';
+      const fetched = await fetchBookChapterText(pInfo.book, pInfo.chapter);
+      passage = fetched || `📖 ${pInfo.ref}\n\n말씀을 불러올 수 없어요. 아래 퀴즈를 풀어봐요!`;
+    } else {
+      passage = `📖 ${pInfo.ref}\n\n관리자가 설정한 말씀이에요. 아래 퀴즈를 풀어봐요!`;
+    }
     questions = pInfo.customQuestions;
   } else {
     // 로컬 데이터에서 ref 매칭 또는 랜덤
