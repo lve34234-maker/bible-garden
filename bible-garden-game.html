@@ -852,22 +852,43 @@ function updateCareBtns() {
     if (b) b.disabled = (UD.pet.pts || 0) < a.cost;
   });
 }
+const FULL_MSGS = {
+  water:  ['💧 물배가 불러요!','💧 더는 못 마셔요~','💧 물이 넘쳐흘러요!','💦 이제 목 안 말라요!'],
+  sun:    ['☀️ 햇빛 충분해요!','☀️ 너무 뜨거워요~','☀️ 그늘에서 쉴래요!','🥵 더우면 시들어요!'],
+  food:   ['🍖 배가 불러요~','🍖 더는 못 먹어요!','🍖 배불러서 못 움직여요','🤤 꺼억~ 잘 먹었어요!'],
+  happy:  ['😊 이미 너무 행복해요!','😊 충분히 놀았어요~','😆 행복이 넘쳐요!','🥰 이제 쉴래요!'],
+  energy: ['⚡ 너무 지쳤어요~','⚡ 다리 아파요!','😴 쉬고 싶어요!','🐾 발바닥이 아야해요!'],
+  growth: ['🌿 영양 충분해요!','🌿 이제 됐어요~','🌱 비료 과잉이에요!','✨ 더는 필요 없어요!']
+};
 async function docare(id) {
   const p = UD.pet; if (!p) return;
   const a = COMP[p.type].actions.find(x => x.id === id);
-  if (!a || (p.pts || 0) < a.cost) { toast('😅 포인트 부족! 퀴즈를 풀거나 인증해요!'); return; }
-  p.pts -= a.cost; p.stats[a.stat] = Math.min(100, (p.stats[a.stat] || 0) + a.add); p.growScore = (p.growScore || 0) + a.grow;
+  if (!a) return;
+  // 이미 꽉 찬 바에 액션하려 하면 포인트 차감 없이 랜덤 거부 문구
+  if ((p.stats[a.stat] || 0) >= 100) {
+    const msgs = FULL_MSGS[a.stat] || ['😅 너무 힘들어요!'];
+    toast(msgs[Math.floor(Math.random() * msgs.length)]);
+    return;
+  }
+  if ((p.pts || 0) < a.cost) { toast('😅 포인트 부족! 퀴즈를 풀거나 인증해요!'); return; }
+  p.pts -= a.cost;
+  p.stats[a.stat] = Math.min(100, (p.stats[a.stat] || 0) + a.add);
   await savePet(); updatePtsDisplay(); renderPet(); updateCareBtns(); toast(a.label + ' 했어요!'); checkGrowth();
 }
 function checkGrowth() {
   const p = UD.pet; if (!p) return;
   const c = COMP[p.type], max = c.stages.length - 1;
-  if (p.level < max && p.growScore >= c.growPts[p.level + 1]) {
-    p.level++; savePet(); renderPet();
-    setTimeout(() => { toast('🌟 ' + p.name + '이(가) ' + c.names[p.level] + '(으)로 성장!'); particles(window.innerWidth/2, window.innerHeight/3, ['🌟','✨','🎉','💫','⭐','🎊'], 16); }, 300);
-    if (p.level === max && !UD.bonusPet) {
-      setTimeout(() => { toast('🏆 숨겨진 별 완성! 새 친구 해금!'); openUnlockModal(); }, 1200);
-    }
+  if (p.level >= max) return;
+  // 모든 바가 100이면 레벨업
+  const allFull = c.stats.every(r => (p.stats[r[1]] || 0) >= 100);
+  if (!allFull) return;
+  p.level++;
+  // 다음 레벨을 위해 스탯을 시작값으로 리셋
+  c.stats.forEach(r => { p.stats[r[1]] = r[2]; });
+  savePet(); renderPet();
+  setTimeout(() => { toast('🌟 ' + p.name + '이(가) ' + c.names[p.level] + '(으)로 성장!'); particles(window.innerWidth/2, window.innerHeight/3, ['🌟','✨','🎉','💫','⭐','🎊'], 16); }, 300);
+  if (p.level === max && !UD.bonusPet) {
+    setTimeout(() => { toast('🏆 숨겨진 별 완성! 새 친구 해금!'); openUnlockModal(); }, 1200);
   }
 }
 async function savePet(extra) {
