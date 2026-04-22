@@ -427,6 +427,10 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
   <div class="tab-content" id="tab-bible">
     <div class="card">
       <div class="card-title">📖 전자 성경</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+        <label style="font-size:0.88rem;color:#5a6a4a;font-weight:700">번역본:</label>
+        <select id="translationSel" onchange="changeTranslation(this.value)" style="border:2px solid #c8e8b0;border-radius:10px;padding:5px 9px;font-size:0.9rem;outline:none;background:white;color:#3a5a3a"></select>
+      </div>
       <div class="testament-tabs">
         <button class="t-tab active" onclick="setTestament('old',this)">구약</button>
         <button class="t-tab" onclick="setTestament('new',this)">신약</button>
@@ -439,6 +443,14 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
         <span class="ch-title" id="chTitle"></span>
         <select class="chapter-sel" id="chSel" onchange="loadChapter()"></select>
         <button class="ch-arr" onclick="changeChapter(1)">▶</button>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;justify-content:center;margin-top:10px;font-size:0.88rem;flex-wrap:wrap">
+        <span style="color:#7a8a6a">절:</span>
+        <input type="number" id="verseStart" min="1" placeholder="시작" style="width:64px;border:2px solid #c8e8b0;border-radius:8px;padding:4px 8px;font-size:0.88rem;outline:none">
+        <span style="color:#aaa">~</span>
+        <input type="number" id="verseEnd" min="1" placeholder="끝" style="width:64px;border:2px solid #c8e8b0;border-radius:8px;padding:4px 8px;font-size:0.88rem;outline:none">
+        <button onclick="applyVerseFilter()" style="background:#e8f5e0;border:2px solid #a8d890;border-radius:50px;padding:3px 12px;font-size:0.82rem;color:#3a7a3a;cursor:pointer">적용</button>
+        <button onclick="clearVerseFilter()" style="background:white;border:2px solid #ddd;border-radius:50px;padding:3px 12px;font-size:0.82rem;color:#888;cursor:pointer">전체</button>
       </div>
     </div>
     <div class="card" id="readerCard" style="display:none">
@@ -1052,6 +1064,8 @@ async function updateActivityUI() {
 
 /* ════ TODAY PASSAGES ════ */
 let todayPassages = [], curPasIdx = 0, curQList = [], curQIdx = 0, curPassageRef = '';
+let curPointsPerAnswer = 2;
+const MAX_DAILY_PASSAGES = 3;
 
 async function loadTodayPassages() {
   document.getElementById('bibleRef').textContent = '로딩 중...';
@@ -1063,7 +1077,8 @@ async function loadTodayPassages() {
     const dr   = await getDailyRecord();
     const done = dr.completedPassages || [];
     if (snap.exists && snap.data().passages && snap.data().passages.length > 0) {
-      todayPassages = snap.data().passages;
+      // 하루 최대 MAX_DAILY_PASSAGES개만 노출
+      todayPassages = snap.data().passages.slice(0, MAX_DAILY_PASSAGES);
       if (todayPassages.length > 1) { document.getElementById('pNavBar').style.display = 'flex'; renderPNav(done); }
       curPasIdx = todayPassages.findIndex(p => !done.includes(p.ref));
       if (curPasIdx === -1) { showAllDone(); return; }
@@ -1110,6 +1125,7 @@ async function fetchBookChapterText(book, ch, startV, endV) {
 
 async function loadPassage(pInfo) {
   document.getElementById('bibleActions').innerHTML = '';
+  curPointsPerAnswer = 3; // 관리자 등록 말씀: 정답당 3점
   let passage, questions;
   if (pInfo.customQuestions && pInfo.customQuestions.length > 0) {
     // 관리자가 직접 설정한 문제 사용
@@ -1147,6 +1163,7 @@ async function loadPassage(pInfo) {
   document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
 }
 function loadRandomPassage() {
+  curPointsPerAnswer = 2; // 랜덤 폴백 말씀: 정답당 2점
   const data = getRandomPassage();
   const seen = new Set();
   const questions = (data.questions || []).filter(q => {
@@ -1187,9 +1204,9 @@ async function answerQ(idx, btn) {
   const ok = idx === q.ans;
   const res = document.getElementById('qRes');
   if (ok) {
-    btn.classList.add('correct'); await addPoints(2);
+    btn.classList.add('correct'); await addPoints(curPointsPerAnswer);
     const r = btn.getBoundingClientRect(); particles(r.left + r.width/2, r.top, ['✨','🌟','💫','⭐'], 8);
-    res.textContent = '🎉 정답이에요! +2점!'; res.className = 'quiz-result ok';
+    res.textContent = '🎉 정답이에요! +' + curPointsPerAnswer + '점!'; res.className = 'quiz-result ok';
   } else {
     btn.classList.add('wrong');
     res.textContent = '❌ 아쉬워요! 정답은 "' + q.opts[q.ans] + '"예요!'; res.className = 'quiz-result fail';
@@ -1394,6 +1411,43 @@ const BIBLE = {
 };
 let selTes = 'old', selBk = null, selCh = 1;
 const chCache = {};
+let _verseFilterStart = null, _verseFilterEnd = null;
+
+function initTranslationDropdown() {
+  const sel = document.getElementById('translationSel');
+  if (!sel || sel.options.length > 0) return;
+  sel.innerHTML = Object.entries(TRANSLATIONS).map(([k, v]) =>
+    '<option value="' + k + '"' + (k === _currentTranslation ? ' selected' : '') + '>' + v.label + '</option>'
+  ).join('');
+}
+
+function changeTranslation(key) {
+  if (!TRANSLATIONS[key]) return;
+  _currentTranslation = key;
+  // 번역본 바뀌면 장 캐시 무효화
+  Object.keys(chCache).forEach(k => delete chCache[k]);
+  if (selBk !== null) fetchChapter(BIBLE[selTes][selBk].n, selCh);
+}
+
+function applyVerseFilter() {
+  const s = parseInt(document.getElementById('verseStart').value);
+  const e = parseInt(document.getElementById('verseEnd').value);
+  _verseFilterStart = s > 0 ? s : null;
+  _verseFilterEnd = e > 0 ? e : null;
+  if (selBk !== null) {
+    const key = _currentTranslation + '|' + BIBLE[selTes][selBk].n + '_' + selCh;
+    if (chCache[key]) renderCh(chCache[key]);
+  }
+}
+function clearVerseFilter() {
+  _verseFilterStart = _verseFilterEnd = null;
+  document.getElementById('verseStart').value = '';
+  document.getElementById('verseEnd').value = '';
+  if (selBk !== null) {
+    const key = _currentTranslation + '|' + BIBLE[selTes][selBk].n + '_' + selCh;
+    if (chCache[key]) renderCh(chCache[key]);
+  }
+}
 function setTestament(t, btn) { selTes=t; selBk=null; selCh=1; document.querySelectorAll('.t-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.getElementById('chNavCard').style.display='none'; document.getElementById('readerCard').style.display='none'; renderBookGrid(); }
 function renderBookGrid() { document.getElementById('bookGrid').innerHTML = BIBLE[selTes].map((b,i)=>`<button class="book-btn ${selBk===i?'ab':''}" onclick="selectBook(${i})">${b.n}</button>`).join(''); }
 function selectBook(i) { selBk=i; selCh=1; renderBookGrid(); const b=BIBLE[selTes][i]; const sel=document.getElementById('chSel'); sel.innerHTML=Array.from({length:b.ch},(_,j)=>`<option value="${j+1}">${j+1}장</option>`).join(''); sel.value=1; document.getElementById('chNavCard').style.display='block'; document.getElementById('readerCard').style.display='block'; document.getElementById('chTitle').textContent=b.n+' '+selCh+'장'; fetchChapter(b.n,1); }
@@ -1413,44 +1467,62 @@ const BOOK_NUM = {
   '요한삼서':64,'유다서':65,'요한계시록':66
 };
 
-let _koBibleData = null;
-let _koBibleLoading = null;
 function decodeHtml(s) {
   if (!s) return s;
   const ta = document.createElement('textarea');
   ta.innerHTML = s;
   return ta.value;
 }
-async function loadKoBible() {
-  if (_koBibleData) return _koBibleData;
-  if (_koBibleLoading) return _koBibleLoading;
-  _koBibleLoading = fetch('https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/ko/ko.json')
+
+/* ══ 번역본 설정 — 원하면 URL 추가/변경 가능 ══
+   개역개정·쉬운성경은 한국성서공회 저작권으로 공개 URL이 없어요.
+   합법적 데이터 소스가 있으면 아래 URL을 교체해서 쓰세요.           */
+const TRANSLATIONS = {
+  'ko':     { label: '한글 (개역)', url: 'https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/ko/ko.json' },
+  'en-kjv': { label: 'English KJV', url: 'https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/en/kjv.json' },
+  'en-bbe': { label: 'English BBE', url: 'https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/en/bbe.json' }
+  // 예: 'ko-nkrv': { label: '개역개정', url: '직접-호스팅한-URL.json' },
+};
+
+let _currentTranslation = 'ko';
+const _bibleDataCache = {};    // { translationKey: data }
+const _bibleLoadingCache = {}; // { translationKey: promise }
+
+async function loadBibleData(key) {
+  if (_bibleDataCache[key]) return _bibleDataCache[key];
+  if (_bibleLoadingCache[key]) return _bibleLoadingCache[key];
+  const t = TRANSLATIONS[key];
+  if (!t) throw new Error('없는 번역본: ' + key);
+  const p = fetch(t.url)
     .then(r => { if (!r.ok) throw new Error('다운로드 실패'); return r.json(); })
     .then(d => {
-      // HTML 엔티티(&#x27; 등) 한 번에 디코딩
       d.forEach(book => {
         if (!book.chapters) return;
         book.chapters.forEach((ch, ci) => {
           book.chapters[ci] = ch.map(v => decodeHtml(v));
         });
       });
-      _koBibleData = d;
+      _bibleDataCache[key] = d;
+      delete _bibleLoadingCache[key];
       return d;
     })
-    .catch(e => { _koBibleLoading = null; throw e; });
-  return _koBibleLoading;
+    .catch(err => { delete _bibleLoadingCache[key]; throw err; });
+  _bibleLoadingCache[key] = p;
+  return p;
 }
+// 기존 함수 호환(관리자 말씀 기능이 사용): 항상 한글 데이터 반환
+async function loadKoBible() { return loadBibleData('ko'); }
 
 async function fetchChapter(book, ch) {
-  const key = book + '_' + ch;
+  const key = _currentTranslation + '|' + book + '_' + ch;
   if (chCache[key]) { renderCh(chCache[key]); return; }
   const readerBox = document.getElementById('readerBox');
-  readerBox.innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...<br><small style="color:#bbb">(처음 1회만 전체 다운로드, 잠시만 기다려주세요)</small></div>';
+  readerBox.innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...<br><small style="color:#bbb">(번역본 처음 1회 다운로드, 잠시만 기다려주세요)</small></div>';
   const bookNum = BOOK_NUM[book];
   if (!bookNum) { readerBox.innerHTML = '<div class="loading-txt">⚠️ 책을 찾을 수 없어요</div>'; return; }
 
   try {
-    const data = await loadKoBible();
+    const data = await loadBibleData(_currentTranslation);
     const bookData = data[bookNum - 1];
     if (!bookData || !bookData.chapters || !bookData.chapters[ch - 1]) {
       readerBox.innerHTML = '<div class="loading-txt">⚠️ 해당 장을 찾을 수 없어요</div>';
@@ -1473,7 +1545,16 @@ async function fetchChapter(book, ch) {
     }
   }
 }
-function renderCh(verses) { document.getElementById('readerBox').innerHTML = verses.map(v=>`<span class="verse"><span class="verse-num">${v.v}</span>${v.text}</span>`).join(''); }
+function renderCh(verses) {
+  let filtered = verses;
+  if (_verseFilterStart || _verseFilterEnd) {
+    const s = _verseFilterStart || 1;
+    const e = _verseFilterEnd || verses.length;
+    filtered = verses.filter(v => v.v >= s && v.v <= e);
+    if (filtered.length === 0) filtered = verses;
+  }
+  document.getElementById('readerBox').innerHTML = filtered.map(v=>`<span class="verse"><span class="verse-num">${v.v}</span>${v.text}</span>`).join('');
+}
 
 /* ════ HISTORY ════ */
 async function loadHistory() {
@@ -1709,7 +1790,7 @@ function switchTab(n, btn) {
   document.getElementById('tab-'+n).classList.add('active'); btn.classList.add('active');
   if(n==='history') loadHistory();
   if(n==='admin') { loadAdminUsers(); initDailyConfig(); }
-  if(n==='bible' && selBk===null) renderBookGrid();
+  if(n==='bible') { initTranslationDropdown(); if(selBk===null) renderBookGrid(); }
 }
 
 /* ════ 로컬 성경 데이터 ════ */
