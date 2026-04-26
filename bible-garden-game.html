@@ -475,6 +475,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
       <button class="a-tab active" onclick="switchAdminTab('users',this)">👥 회원</button>
       <button class="a-tab" onclick="switchAdminTab('daily',this)">📅 오늘말씀</button>
       <button class="a-tab" onclick="switchAdminTab('meds',this)">📷 묵상확인</button>
+      <button class="a-tab" onclick="switchAdminTab('qr',this)">📱 출석QR</button>
     </div>
     <div class="admin-section active" id="adm-users">
       <div class="a-table-wrap">
@@ -510,6 +511,14 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     <div class="admin-section" id="adm-meds">
       <div style="font-size:1.1rem;font-weight:700;color:#5a6a4a;margin-bottom:10px">📷 묵상 사진 확인</div>
       <div id="medsList"><div class="empty-txt">제출된 묵상 사진이 없어요</div></div>
+    </div>
+    <div class="admin-section" id="adm-qr">
+      <div class="card">
+        <div class="card-title">📱 출석 QR 코드</div>
+        <div style="font-size:0.88rem;color:#888;margin-bottom:10px;line-height:1.5">예배 입구나 화면에 QR을 띄워두면, 회원이 핸드폰 카메라로 스캔하는 즉시 출석이 기록되고 +2점이 지급돼요.<br><b>자정 지나면 만료</b>되니 매일/예배마다 새로 생성하세요.</div>
+        <button class="add-p-btn" onclick="generateQrToday()" style="font-size:1rem;padding:10px 20px">🔄 오늘의 QR 새로 생성</button>
+        <div id="qrDisplay" style="margin-top:14px"></div>
+      </div>
     </div>
   </div>
 
@@ -547,6 +556,8 @@ let CU = null, UD = null, isAdmin = false;
 
 /* ── Firebase는 모든 스크립트 로드 완료 후 초기화 ── */
 window.addEventListener('load', function () {
+  // QR 출석 토큰을 URL에서 잡아 localStorage에 임시 저장
+  if (typeof checkAttendQR === 'function') checkAttendQR();
   if (typeof firebase === 'undefined') {
     document.getElementById('splash').innerHTML =
       '<div style="text-align:center;padding:40px"><div style="font-size:3rem">⚠️</div>' +
@@ -629,6 +640,8 @@ async function loadUserDoc(uid) {
   if (isAdmin) document.getElementById('adminNavBtn').classList.remove('hidden');
   if (!UD.pet) { showScreen('select'); }
   else { showScreen('main'); loadPetState(); initGarden(); }
+  // 로그인 후 보류 중이던 QR 출석 처리
+  if (UD.pet) processStoredAttendQR();
 }
 
 /* ════ PET SELECT ════ */
@@ -1065,7 +1078,7 @@ async function updateActivityUI() {
 /* ════ TODAY PASSAGES ════ */
 let todayPassages = [], curPasIdx = 0, curQList = [], curQIdx = 0, curPassageRef = '';
 let curPointsPerAnswer = 2;
-const MAX_DAILY_PASSAGES = 3;
+const MAX_DAILY_PASSAGES = 999; // 사실상 제한 없음 (관리자가 등록한 만큼 다 풀 수 있음)
 
 async function loadTodayPassages() {
   document.getElementById('bibleRef').textContent = '로딩 중...';
@@ -1211,7 +1224,10 @@ async function loadRandomPassage() {
 function showAllDone() {
   document.getElementById('bibleRef').textContent = '완료 🎉';
   document.getElementById('passageText').innerHTML = '';
-  document.getElementById('bibleActions').innerHTML = '<div class="all-done-banner"><div style="font-size:2.5rem">🎉</div><p style="font-size:1.1rem;color:#4a7a4a;margin-top:6px">오늘의 말씀을 모두 읽었어요!<br>내일 또 만나요 🌿</p></div>';
+  document.getElementById('bibleActions').innerHTML =
+    '<div class="all-done-banner"><div style="font-size:2.5rem">🎉</div>' +
+    '<p style="font-size:1.05rem;color:#4a7a4a;margin:6px 0 10px">오늘의 말씀을 모두 풀었어요!</p>' +
+    '<button class="next-p-btn" onclick="loadRandomPassage()" style="font-size:1rem;padding:8px 18px">📖 더 풀기 (랜덤 말씀 +2점)</button></div>';
 }
 
 /* ════ QUIZ ════ */
@@ -1617,6 +1633,7 @@ function switchAdminTab(n, btn) {
   if(n==='users') loadAdminUsers();
   if(n==='daily') initDailyConfig();
   if(n==='meds')  loadMeditations();
+  if(n==='qr')    loadCurrentQr();
 }
 async function loadAdminUsers() {
   try {
@@ -1630,6 +1647,100 @@ async function loadAdminUsers() {
   } catch (e) { document.getElementById('admTbody').innerHTML='<tr><td colspan="9" class="empty-txt">⚠️ 실패</td></tr>'; }
 }
 async function delUser(uid, name) { if(!confirm('"'+name+'" 삭제?'))return; try{await db.collection('users').doc(uid).delete();toast('✅ 삭제 완료');loadAdminUsers();}catch(e){toast('삭제 실패!');} }
+
+/* ════ 출석 QR ════ */
+function buildQrUrl(token) {
+  const base = window.location.origin + window.location.pathname;
+  return base + '?attend=' + encodeURIComponent(token);
+}
+async function generateQrToday() {
+  if (!isAdmin) { toast('관리자만 가능해요'); return; }
+  const today = todayKey();
+  const secret = Math.random().toString(36).slice(2, 12) + Math.random().toString(36).slice(2, 8);
+  try {
+    await db.collection('attendanceTokens').doc(today).set({
+      secret, createdBy: UD.username,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showQrDisplay(today, secret);
+    toast('✅ 새 QR 생성 완료');
+  } catch (e) { toast('⚠️ 생성 실패: ' + e.message); }
+}
+async function loadCurrentQr() {
+  const today = todayKey();
+  try {
+    const snap = await db.collection('attendanceTokens').doc(today).get();
+    if (snap.exists && snap.data().secret) {
+      showQrDisplay(today, snap.data().secret);
+    } else {
+      document.getElementById('qrDisplay').innerHTML =
+        '<div style="text-align:center;padding:18px;color:#aaa;font-size:0.95rem">아직 오늘의 QR이 없어요. 위 버튼을 눌러 생성하세요!</div>';
+    }
+  } catch (e) {
+    document.getElementById('qrDisplay').innerHTML = '<div style="color:#aaa;text-align:center;padding:14px">⚠️ 불러오기 실패</div>';
+  }
+}
+function showQrDisplay(date, secret) {
+  const token = date + '_' + secret;
+  const url = buildQrUrl(token);
+  const qrSrc = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(url);
+  document.getElementById('qrDisplay').innerHTML =
+    '<div style="text-align:center;padding:14px;background:#f8fff5;border-radius:14px;border:2px solid #c8e8b0">' +
+    '<img src="' + qrSrc + '" alt="QR" style="max-width:280px;width:100%;border-radius:12px;background:white;padding:8px">' +
+    '<div style="font-size:1rem;font-weight:700;color:#4a9a50;margin-top:10px">📅 ' + date + ' 출석 QR</div>' +
+    '<div style="font-size:0.78rem;color:#aaa;margin-top:4px">자정 지나면 만료돼요. 새 QR 생성 필요!</div>' +
+    '<details style="margin-top:10px;font-size:0.78rem;color:#888"><summary style="cursor:pointer">URL 보기</summary>' +
+    '<div style="word-break:break-all;padding:8px;background:white;border-radius:8px;margin-top:6px">' + url + '</div></details>' +
+    '</div>';
+}
+
+async function processAttendQR(token) {
+  if (!CU || !UD) return;
+  if (!UD.pet) { toast('⚠️ 친구를 먼저 골라주세요!'); return; }
+  const parts = (token || '').split('_');
+  if (parts.length !== 2) { toast('⚠️ 잘못된 출석 QR'); return; }
+  const [date, secret] = parts;
+  if (date !== todayKey()) { toast('⚠️ 만료된 QR (' + date + ')'); return; }
+  try {
+    const snap = await db.collection('attendanceTokens').doc(date).get();
+    if (!snap.exists || snap.data().secret !== secret) { toast('⚠️ 잘못된 QR이에요'); return; }
+  } catch (e) { toast('⚠️ 검증 실패'); return; }
+  const dow = new Date().getDay();
+  const isWed = dow === 3;
+  const max = isWed ? 2 : 1;
+  const church = UD.church || {};
+  const current = church[date] || 0;
+  if (current >= max) {
+    toast(isWed ? '오늘 이미 2번 출석!' : '오늘 이미 출석 완료!');
+    return;
+  }
+  church[date] = current + 1;
+  UD.church = church;
+  UD.pet.pts = (UD.pet.pts || 0) + 2;
+  await savePet({ church: UD.church });
+  updatePtsDisplay();
+  if (typeof renderChurch === 'function') renderChurch();
+  toast('⛪ QR 출석 완료! +2점');
+  particles(window.innerWidth/2, 200, ['⛪','✨','🌟','🎉'], 12);
+}
+
+function checkAttendQR() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('attend');
+  if (!token) return;
+  // URL 정리 (재실행 방지)
+  const u = new URL(window.location);
+  u.searchParams.delete('attend');
+  window.history.replaceState({}, '', u);
+  // 로그인 안 됐으면 localStorage에 저장 후 로그인 후 처리
+  localStorage.setItem('pendingAttend', token);
+}
+async function processStoredAttendQR() {
+  const token = localStorage.getItem('pendingAttend');
+  if (!token) return;
+  localStorage.removeItem('pendingAttend');
+  await processAttendQR(token);
+}
 
 async function resetAllUserData() {
   if (!isAdmin) { toast('관리자만 가능해요'); return; }
