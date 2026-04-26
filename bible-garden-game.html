@@ -1148,11 +1148,13 @@ async function loadPassage(pInfo) {
     questions = local.questions;
     pInfo.ref = local.ref;
   }
-  // 같은 질문 텍스트가 중복되면 1개만 사용
+  // 같은 질문 텍스트가 중복되면 1개만 사용 + 오늘 이미 답한 문제는 제외
+  const dr = await getDailyRecord();
+  const answeredToday = new Set((dr.answeredQuestions || []).map(s => (s || '').trim()));
   const seen = new Set();
   questions = (questions || []).filter(q => {
     const key = (q.q || '').trim();
-    if (!key || seen.has(key)) return false;
+    if (!key || seen.has(key) || answeredToday.has(key)) return false;
     seen.add(key);
     return true;
   });
@@ -1160,21 +1162,50 @@ async function loadPassage(pInfo) {
   curQList = questions; curQIdx = 0;
   document.getElementById('bibleRef').textContent = curPassageRef;
   document.getElementById('passageText').textContent = passage;
+  if (questions.length === 0) {
+    // 이 구절의 모든 문제를 오늘 이미 풀었음 → 자동 완료 처리
+    if (todayPassages.length > 0) {
+      await setDailyField({ completedPassages: firebase.firestore.FieldValue.arrayUnion(curPassageRef) });
+      const ddr = await getDailyRecord();
+      const done = ddr.completedPassages || [];
+      const nextIdx = todayPassages.findIndex((p, i) => i > curPasIdx && !done.includes(p.ref));
+      if (nextIdx !== -1) {
+        document.getElementById('bibleActions').innerHTML = '<button class="next-p-btn" onclick="(async()=>{curPasIdx=' + nextIdx + ';renderPNav((await getDailyRecord()).completedPassages||[]);loadPassage(todayPassages[' + nextIdx + ']);})()">📖 다음 말씀: ' + todayPassages[nextIdx].ref + ' →</button>';
+      } else {
+        document.getElementById('bibleActions').innerHTML = '<div class="all-done-banner"><div style="font-size:2rem">✅</div><p style="font-size:1rem;color:#4a7a4a;margin-top:6px">오늘 이 말씀의 문제를 모두 풀었어요!</p></div>';
+      }
+    } else {
+      document.getElementById('bibleActions').innerHTML = '<div class="all-done-banner"><div style="font-size:2rem">✅</div><p style="font-size:1rem;color:#4a7a4a;margin-top:6px">오늘 이 말씀의 문제를 모두 풀었어요!</p></div>';
+    }
+    return;
+  }
   document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
 }
-function loadRandomPassage() {
+async function loadRandomPassage() {
   curPointsPerAnswer = 2; // 랜덤 폴백 말씀: 정답당 2점
-  const data = getRandomPassage();
+  // 오늘 모든 문제를 풀지 않은 BIBLE_DATA 항목을 우선 탐색
+  const dr = await getDailyRecord();
+  const answeredToday = new Set((dr.answeredQuestions || []).map(s => (s || '').trim()));
+  const candidates = BIBLE_DATA.filter(item =>
+    (item.questions || []).some(q => !answeredToday.has((q.q || '').trim()))
+  );
+  const data = candidates.length > 0
+    ? candidates[Math.floor(Math.random() * candidates.length)]
+    : getRandomPassage();
   const seen = new Set();
   const questions = (data.questions || []).filter(q => {
     const key = (q.q || '').trim();
-    if (!key || seen.has(key)) return false;
+    if (!key || seen.has(key) || answeredToday.has(key)) return false;
     seen.add(key);
     return true;
   });
   curPassageRef = data.ref; curQList = questions; curQIdx = 0;
   document.getElementById('bibleRef').textContent = data.ref;
   document.getElementById('passageText').textContent = data.passage;
+  if (questions.length === 0) {
+    document.getElementById('bibleActions').innerHTML = '<div class="all-done-banner"><div style="font-size:2rem">✅</div><p style="font-size:1rem;color:#4a7a4a;margin-top:6px">오늘 모든 문제를 다 풀었어요!<br>내일 또 만나요 🌿</p></div>';
+    return;
+  }
   document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
 }
 function showAllDone() {
@@ -1251,6 +1282,8 @@ async function saveQuizRecord(q, userAns, ok) {
     });
     UD.totalQuizzes = (UD.totalQuizzes || 0) + 1;
     if (ok) UD.correctCount = (UD.correctCount || 0) + 1;
+    // 오늘 답한 문제 텍스트를 누적 (같은 날 반복 방지용)
+    await setDailyField({ answeredQuestions: firebase.firestore.FieldValue.arrayUnion((q.q || '').trim()) });
   } catch (e) {}
 }
 
