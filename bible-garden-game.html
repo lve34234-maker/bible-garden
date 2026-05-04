@@ -29,6 +29,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .auth-field{margin-bottom:12px;}.auth-field label{display:block;font-size:1rem;color:#777;margin-bottom:4px;}
 .auth-input{width:100%;border:2.5px solid #e0e8d0;border-radius:14px;padding:10px 14px;font-size:1.15rem;color:#333;outline:none;background:#fafafa;transition:border-color 0.2s;}
 .auth-input:focus{border-color:#4a9a50;background:white;}
+.auth-hint{font-size:0.78rem;color:#aaa;margin-top:3px;line-height:1.4;}
 .auth-submit{width:100%;background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:50px;padding:12px;font-size:1.2rem;font-weight:700;box-shadow:0 5px 16px rgba(74,154,80,0.4);transition:all 0.2s;margin-top:4px;}
 .auth-submit:hover{transform:translateY(-2px);}
 .auth-err{color:#e05050;font-size:0.9rem;text-align:center;margin-top:6px;min-height:18px;}
@@ -54,7 +55,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .pts-pill{background:white;border-radius:50px;padding:4px 13px;font-size:1rem;font-weight:700;color:#4a9a50;border:2.5px solid #b8e8a0;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
 .pts-num{display:inline-block;transition:transform 0.3s;}.pts-num.bump{animation:numBump 0.4s ease;}
 @keyframes numBump{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
-.user-chip{font-size:0.85rem;color:#aaa;}
+.user-chip{font-size:0.92rem;color:#5a7a5a;font-weight:700;}
 .logout-btn{background:white;border:2px solid #f0d0d0;border-radius:50px;padding:4px 11px;font-size:0.88rem;color:#d07070;transition:all 0.2s;}
 .logout-btn:hover{background:#fff0f0;}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:white;border-top:2px solid #e8f0e0;display:flex;box-shadow:0 -4px 16px rgba(0,0,0,0.07);}
@@ -99,13 +100,13 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .cal-hdr div.sun{color:#e07070;}.cal-hdr div.sat{color:#5a8acc;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
 .cal-empty{height:38px;}
-.cal-day{position:relative;height:38px;background:white;border:1.5px solid #e8e8e8;border-radius:8px;font-size:0.88rem;color:#555;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
-.cal-day:hover{background:#f5f5f5;}
+.cal-day{position:relative;height:38px;background:white;border:1.5px solid #e8e8e8;border-radius:8px;font-size:0.88rem;color:#555;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
 .cal-day.wed{border-color:#c8d8f0;color:#3a5a9a;}
 .cal-day.attended{background:linear-gradient(135deg,#d4f5d0,#a8e090);border-color:#6cc86a;color:#1a5a1a;font-weight:700;}
 .cal-day.attended.wed{background:linear-gradient(135deg,#d0e0ff,#a0c0ee);border-color:#60a0dd;color:#1a3a7a;}
 .cal-day .count-badge{position:absolute;top:-5px;right:-5px;background:#ff6060;color:white;border-radius:50%;width:16px;height:16px;font-size:0.66rem;display:flex;align-items:center;justify-content:center;border:1.5px solid white;}
 .church-legend{font-size:0.78rem;color:#aaa;text-align:center;margin-top:6px;}
+.qr-only-banner{background:linear-gradient(135deg,#fff8e0,#ffe8c0);border-radius:12px;padding:9px 12px;font-size:0.88rem;color:#8a6a20;border:2px dashed #e0c060;margin-bottom:8px;text-align:center;font-weight:700;}
 /* Pet select modal (for unlocking 2nd pet) */
 .pet-unlock-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9500;display:none;align-items:center;justify-content:center;padding:16px;}
 .pet-unlock-modal.open{display:flex;}
@@ -220,13 +221,34 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .h-q{font-size:0.96rem;font-weight:700;color:#3a3a5a;word-break:keep-all;}.h-ans{font-size:0.83rem;color:#888;}
 .h-ans .ok{color:#4a8a4a;font-weight:700;}.h-ans .ng{color:#c05050;text-decoration:line-through;}
 .h-date{font-size:0.74rem;color:#ccc;margin-top:2px;}
+/* RANK / SCOREBOARD */
+.rank-tabs{display:flex;gap:8px;margin-bottom:14px;justify-content:center;}
+.rank-tab{background:white;border:2.5px solid #d0d8e8;border-radius:50px;padding:8px 20px;font-size:1rem;color:#7a8aaa;transition:all 0.2s;cursor:pointer;font-weight:700;}
+.rank-tab.active{background:linear-gradient(135deg,#a0c8ff,#6898ee);border-color:#6898ee;color:white;box-shadow:0 4px 12px rgba(100,150,240,0.4);}
+.rank-period-info{font-size:0.85rem;color:#aaa;text-align:center;margin-bottom:12px;}
+.rank-podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:16px;min-height:140px;}
+.rank-podium-slot{flex:1;max-width:110px;text-align:center;}
+.rank-podium-icon{font-size:2.5rem;line-height:1;margin-bottom:4px;}
+.rank-podium-name{font-size:0.92rem;font-weight:700;color:#3a3a5a;word-break:keep-all;line-height:1.2;margin-bottom:3px;}
+.rank-podium-pts{font-size:0.85rem;color:#888;}
+.rank-podium-base{border-radius:14px 14px 0 0;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;color:white;box-shadow:0 -3px 12px rgba(0,0,0,0.1);}
+.rank-podium-base.gold{background:linear-gradient(135deg,#ffd700,#ffaa30);height:90px;}
+.rank-podium-base.silver{background:linear-gradient(135deg,#c8c8c8,#a8a8a8);height:70px;}
+.rank-podium-base.bronze{background:linear-gradient(135deg,#cd7f32,#a05a20);height:55px;}
+.rank-item{background:white;border-radius:16px;padding:10px 14px;box-shadow:0 2px 8px rgba(0,0,0,0.05);display:flex;align-items:center;gap:10px;margin-bottom:6px;animation:fadeUp 0.3s ease;}
+.rank-item.me{background:linear-gradient(135deg,#fff8d0,#fff0a0);border:2px solid #f0c060;}
+.rank-num{font-size:1.2rem;font-weight:700;min-width:32px;text-align:center;color:#999;}
+.rank-info{flex:1;min-width:0;}
+.rank-name{font-size:1rem;font-weight:700;color:#3a3a5a;}
+.rank-id{font-size:0.74rem;color:#bbb;}
+.rank-points{font-size:1.05rem;font-weight:700;color:#4a9a50;background:#e8f5e0;border-radius:50px;padding:3px 12px;white-space:nowrap;}
 /* ADMIN */
-.admin-subtabs{display:flex;background:#fff5f5;border-radius:14px;padding:4px;margin-bottom:14px;}
-.a-tab{flex:1;padding:7px;border:none;background:transparent;font-size:0.9rem;font-weight:700;color:#ccc;border-radius:10px;transition:all 0.2s;}
+.admin-subtabs{display:flex;background:#fff5f5;border-radius:14px;padding:4px;margin-bottom:14px;flex-wrap:wrap;}
+.a-tab{flex:1;padding:7px;border:none;background:transparent;font-size:0.85rem;font-weight:700;color:#ccc;border-radius:10px;transition:all 0.2s;min-width:60px;}
 .a-tab.active{background:white;color:#c05050;box-shadow:0 2px 6px rgba(0,0,0,0.08);}
 .admin-section{display:none;}.admin-section.active{display:block;}
 .a-table-wrap{background:white;border-radius:18px;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,0.07);overflow-x:auto;}
-.a-table{width:100%;border-collapse:collapse;min-width:580px;}
+.a-table{width:100%;border-collapse:collapse;min-width:680px;}
 .a-table th{background:#fff5f5;padding:9px 12px;font-size:0.82rem;color:#c07070;text-align:left;border-bottom:2px solid #ffe0e0;white-space:nowrap;}
 .a-table td{padding:9px 12px;font-size:0.88rem;color:#3a3a3a;border-bottom:1px solid #f5f5f5;vertical-align:middle;}
 .a-table tr:hover td{background:#fafafa;}
@@ -270,6 +292,13 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 #lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;display:none;align-items:center;justify-content:center;cursor:pointer;}
 #lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;}
 #lightbox.open{display:flex;}
+/* QR SHARE BUTTONS */
+.qr-share-row{display:flex;gap:6px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+.qr-share-btn{background:white;border:2px solid #c8e8b0;border-radius:50px;padding:8px 14px;font-size:0.88rem;color:#4a9a50;text-decoration:none;transition:all 0.2s;cursor:pointer;font-family:inherit;font-weight:700;display:inline-flex;align-items:center;gap:4px;}
+.qr-share-btn:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,0.12);}
+.qr-share-btn.email{background:#fff3e0;border-color:#ffc080;color:#aa6020;}
+.qr-share-btn.copy{background:#e8f0ff;border-color:#a0c0ee;color:#3a6aaa;}
+.qr-share-btn.share{background:#f0e8ff;border-color:#c0a0ee;color:#6a3aaa;}
 /* TOAST / PARTICLES */
 #toast-wrap{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:9998;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:7px;}
 .toast{background:rgba(30,30,30,0.9);color:white;padding:8px 20px;border-radius:50px;font-size:1rem;animation:toastLife 2.5s forwards;white-space:nowrap;}
@@ -314,6 +343,11 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     </div>
     <div id="form-signup" class="hidden">
       <div class="auth-field"><label>아이디 (영문/숫자)</label><input class="auth-input" id="sid" type="text" placeholder="아이디" maxlength="20"></div>
+      <div class="auth-field">
+        <label>닉네임 <span style="color:#e07050;font-weight:700">⚠️ 본명을 한글로 적어주세요!</span></label>
+        <input class="auth-input" id="srn" type="text" placeholder="예: 홍길동" maxlength="10">
+        <div class="auth-hint">📌 출석 점수 보기·랭킹·관리자 확인용이에요. 꼭 <b>본명(한글)</b>으로 적어주세요!</div>
+      </div>
       <div class="auth-field"><label>비밀번호 (6자 이상)</label><input class="auth-input" id="spw" type="password" placeholder="비밀번호"></div>
       <div class="auth-field"><label>비밀번호 확인</label><input class="auth-input" id="spw2" type="password" placeholder="비밀번호 확인" onkeydown="if(event.key==='Enter')doSignup()"></div>
       <button class="auth-submit" onclick="doSignup()">✨ 회원가입</button>
@@ -412,14 +446,14 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     </div>
     <div class="card church-card">
       <div class="card-title">⛪ 교회 출석</div>
-      <div style="font-size:0.86rem;color:#aaa;margin-bottom:8px">교회에 간 날을 눌러 기록해요! 하루 +2점 (수요일은 최대 2번)</div>
+      <div class="qr-only-banner">📱 출석은 <b>QR 코드 스캔</b>으로만 인정돼요!<br>예배 입구 QR을 핸드폰으로 찍어요 (+2점)</div>
       <div class="month-nav">
         <button onclick="changeMonth(-1)">◀</button>
         <span class="month-lbl" id="monthLbl"></span>
         <button onclick="changeMonth(1)">▶</button>
       </div>
       <div id="churchCal"></div>
-      <div class="church-legend">💡 수요일은 클릭할 때마다 1회 → 2회 → 0회 순서로 바뀌어요</div>
+      <div class="church-legend">💡 수요일은 QR 스캔할 때마다 1회 → 2회 누적돼요</div>
     </div>
   </div>
 
@@ -465,6 +499,19 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     <div id="histList"><div class="empty-txt">📖 퀴즈를 풀면 여기에 기록돼요!</div></div>
   </div>
 
+  <!-- 랭킹 탭 -->
+  <div class="tab-content" id="tab-rank">
+    <div style="font-size:1.2rem;font-weight:700;color:#3a5a3a;padding:0 0 10px">🏆 명예의 전당</div>
+    <div class="rank-tabs">
+      <button class="rank-tab active" id="rt-week" onclick="switchRankPeriod('week',this)">📅 주간</button>
+      <button class="rank-tab" id="rt-month" onclick="switchRankPeriod('month',this)">🗓️ 월간</button>
+    </div>
+    <div class="rank-period-info" id="rankPeriodInfo"></div>
+    <div id="rankPodium" class="rank-podium"></div>
+    <div id="rankList"><div class="empty-txt">📊 불러오는 중...</div></div>
+    <div style="font-size:0.78rem;color:#aaa;text-align:center;margin-top:14px;line-height:1.5">💡 점수는 퀴즈 정답·성경 읽기·묵상 인증·교회 출석으로 쌓여요!</div>
+  </div>
+
   <!-- 어드민 탭 -->
   <div class="tab-content" id="tab-admin">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
@@ -480,13 +527,13 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     <div class="admin-section active" id="adm-users">
       <div class="a-table-wrap">
         <table class="a-table">
-          <thead><tr><th>아이디</th><th>친구</th><th>이름</th><th>레벨</th><th>포인트</th><th>총퀴즈</th><th>정답률</th><th>가입일</th><th></th></tr></thead>
-          <tbody id="admTbody"><tr><td colspan="9" class="empty-txt">로딩 중...</td></tr></tbody>
+          <thead><tr><th>아이디</th><th>본명</th><th>친구</th><th>이름</th><th>레벨</th><th>포인트</th><th>총퀴즈</th><th>정답률</th><th>가입일</th><th></th></tr></thead>
+          <tbody id="admTbody"><tr><td colspan="10" class="empty-txt">로딩 중...</td></tr></tbody>
         </table>
       </div>
       <div class="danger-zone">
         <div class="danger-title">⚠️ 전체 데이터 초기화</div>
-        <div class="danger-desc">모든 회원의 친구(펫)·포인트·성경읽기 인증·묵상사진·퀴즈 기록을 삭제합니다.<br>회원 계정과 관리자 데이터는 그대로 유지돼요. <b>되돌릴 수 없어요!</b></div>
+        <div class="danger-desc">모든 회원의 친구(펫)·포인트·성경읽기 인증·묵상사진·퀴즈 기록·랭킹을 삭제합니다.<br>회원 계정과 관리자 데이터는 그대로 유지돼요. <b>되돌릴 수 없어요!</b></div>
         <button class="danger-btn" id="resetBtn" onclick="resetAllUserData()">🔄 모든 회원 데이터 초기화</button>
       </div>
     </div>
@@ -515,7 +562,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     <div class="admin-section" id="adm-qr">
       <div class="card">
         <div class="card-title">📱 출석 QR 코드</div>
-        <div style="font-size:0.88rem;color:#888;margin-bottom:10px;line-height:1.5">예배 입구나 화면에 QR을 띄워두면, 회원이 핸드폰 카메라로 스캔하는 즉시 출석이 기록되고 +2점이 지급돼요.<br><b>자정 지나면 만료</b>되니 매일/예배마다 새로 생성하세요.</div>
+        <div style="font-size:0.88rem;color:#888;margin-bottom:10px;line-height:1.5">예배 입구나 화면에 QR을 띄워두면, 회원이 핸드폰 카메라로 스캔하는 즉시 출석이 기록되고 +2점이 지급돼요.<br><b>자정 지나면 만료</b>되니 매일/예배마다 새로 생성하세요.<br>📧 생성 후 <b>이메일·복사·공유</b>로 회원들에게 보낼 수 있어요!</div>
         <button class="add-p-btn" onclick="generateQrToday()" style="font-size:1rem;padding:10px 20px">🔄 오늘의 QR 새로 생성</button>
         <div id="qrDisplay" style="margin-top:14px"></div>
       </div>
@@ -526,18 +573,17 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     <button class="nav-btn active" onclick="switchTab('garden',this)"><span class="ni">🌿</span><span>정원</span></button>
     <button class="nav-btn" onclick="switchTab('bible',this)"><span class="ni">📖</span><span>성경</span></button>
     <button class="nav-btn" onclick="switchTab('history',this)"><span class="ni">📝</span><span>기록</span></button>
+    <button class="nav-btn" onclick="switchTab('rank',this)"><span class="ni">🏆</span><span>명예의 전당</span></button>
     <button class="nav-btn hidden" id="adminNavBtn" onclick="switchTab('admin',this)"><span class="ni">👑</span><span>어드민</span></button>
   </nav>
 </div>
 
-<!-- Firebase 9.23.0 compat - 안정 버전 -->
+<!-- Firebase 9.23.0 compat -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-/* ════════════════════════════════════
-   🔥 Firebase 설정 — 본인 것으로 바꿔주세요!
-════════════════════════════════════ */
+/* 🔥 Firebase 설정 */
 const firebaseConfig = {
   apiKey:            "AIzaSyB9lu2eBbDGCv2as81b3mWdzi-n_SSoN0g",
   authDomain:        "tjdrud-749bf.firebaseapp.com",
@@ -547,16 +593,12 @@ const firebaseConfig = {
   appId:             "1:653650623003:web:178681a6a87e91968d56be",
   measurementId:     "G-S5X5VZRM8B"
 };
-
-/* ── 전역 변수 (Firebase 초기화 전에 선언) ── */
 const DOMAIN   = '@biblegarden.app';
 const ADMIN_ID = 'onchurch';
 let auth, db;
 let CU = null, UD = null, isAdmin = false;
 
-/* ── Firebase는 모든 스크립트 로드 완료 후 초기화 ── */
 window.addEventListener('load', function () {
-  // QR 출석 토큰을 URL에서 잡아 localStorage에 임시 저장
   if (typeof checkAttendQR === 'function') checkAttendQR();
   if (typeof firebase === 'undefined') {
     document.getElementById('splash').innerHTML =
@@ -565,17 +607,18 @@ window.addEventListener('load', function () {
       '<small>인터넷 연결 확인 후 새로고침 해주세요</small></p></div>';
     return;
   }
-  try { firebase.initializeApp(firebaseConfig); } catch (e) { /* 이미 초기화됨 */ }
+  try { firebase.initializeApp(firebaseConfig); } catch (e) {}
   auth    = firebase.auth();
   db      = firebase.firestore();
 
-  /* ── Auth 상태 감지 ── */
   auth.onAuthStateChanged(async function (user) {
     if (user) {
       CU = user;
       await loadUserDoc(user.uid);
     } else {
-      CU = null; UD = null;
+      CU = null; UD = null; isAdmin = false;
+      // 🔒 보안: 로그아웃 시 어드민 탭 강제 숨김
+      document.getElementById('adminNavBtn').classList.add('hidden');
       showScreen('auth');
     }
     hideSplash();
@@ -612,11 +655,14 @@ async function doLogin() {
 }
 async function doSignup() {
   const id  = document.getElementById('sid').value.trim().toLowerCase();
+  const realName = document.getElementById('srn').value.trim();
   const pw  = document.getElementById('spw').value;
   const pw2 = document.getElementById('spw2').value;
   const err = document.getElementById('serr');
   if (!id || !pw) { err.textContent = '아이디와 비밀번호를 입력해요!'; return; }
   if (!/^[a-z0-9_]{2,20}$/.test(id)) { err.textContent = '아이디는 영문/숫자/밑줄 2~20자!'; return; }
+  if (!realName) { err.textContent = '닉네임(본명)을 입력해주세요!'; return; }
+  if (!/^[가-힣\s]{2,10}$/.test(realName)) { err.textContent = '본명은 한글 2~10자로 적어주세요!'; return; }
   if (pw.length < 6) { err.textContent = '비밀번호는 6자 이상!'; return; }
   if (pw !== pw2)    { err.textContent = '비밀번호가 일치하지 않아요!'; return; }
   const snap = await db.collection('users').where('username', '==', id).get();
@@ -624,23 +670,32 @@ async function doSignup() {
   try {
     const cred = await auth.createUserWithEmailAndPassword(id + DOMAIN, pw);
     await db.collection('users').doc(cred.user.uid).set({
-      username: id, email: id + DOMAIN, isAdmin: id === ADMIN_ID,
+      username: id, realName: realName, email: id + DOMAIN,
+      isAdmin: id === ADMIN_ID,
       pet: null, totalQuizzes: 0, correctCount: 0,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
   } catch (e) { err.textContent = '오류: ' + e.message; }
 }
-async function doLogout() { await auth.signOut(); showScreen('auth'); }
+async function doLogout() {
+  await auth.signOut();
+  // 🔒 보안: 로그아웃 즉시 어드민 탭 숨김 + 변수 리셋
+  document.getElementById('adminNavBtn').classList.add('hidden');
+  isAdmin = false;
+  showScreen('auth');
+}
 
 async function loadUserDoc(uid) {
   const snap = await db.collection('users').doc(uid).get();
   if (!snap.exists) { showScreen('auth'); return; }
   UD = snap.data(); isAdmin = UD.isAdmin || false;
-  document.getElementById('userChip').textContent = UD.username;
-  if (isAdmin) document.getElementById('adminNavBtn').classList.remove('hidden');
+  document.getElementById('userChip').textContent = UD.realName || UD.username;
+  // 🔒 보안: 명시적으로 어드민 탭 toggle (무조건 isAdmin 값으로)
+  const adminBtn = document.getElementById('adminNavBtn');
+  if (isAdmin) adminBtn.classList.remove('hidden');
+  else adminBtn.classList.add('hidden');
   if (!UD.pet) { showScreen('select'); }
   else { showScreen('main'); loadPetState(); initGarden(); }
-  // 로그인 후 보류 중이던 QR 출석 처리
   if (UD.pet) processStoredAttendQR();
 }
 
@@ -667,19 +722,12 @@ async function createPet() {
   await db.collection('users').doc(CU.uid).update({ pet });
   UD.pet = pet;
   showScreen('main');
-  if (isAdmin) document.getElementById('adminNavBtn').classList.remove('hidden');
+  // 🔒 어드민 권한이 있을 때만 탭 표시
+  const adminBtn = document.getElementById('adminNavBtn');
+  if (isAdmin) adminBtn.classList.remove('hidden');
+  else adminBtn.classList.add('hidden');
   loadPetState(); initGarden();
 }
-
-/* ════ COMPANION DATA ════ */
-/* ══ 레벨 10(숨겨진 별 모두 모았을 때) 이미지 URL ══
-   원하는 인터넷 이미지 주소로 바꾸면 바로 반영돼요!              */
-const MAX_IMG = {
-  plant: 'data:image/jpeg;base64,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',
-  tree:  'data:image/jpeg;base64,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',
-  dog:   'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEhUSExIVFRUXFxUYFxUYFxUVFxUYFxUWFxUVFxUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGhAQGy0lHx8tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLf/AABEIAMYA/wMBIgACEQEDEQH/xAAcAAACAgMBAQAAAAAAAAAAAAADBAIFAAEGBwj/xAA8EAABAwIDBAkDAgUEAgMAAAABAAIRAyEEEjEFQVFxBhMiYYGRobHRMsHwQlIHFHKS4RUjYvEzs0NTsv/EABoBAAMBAQEBAAAAAAAAAAAAAAECAwAEBQb/xAArEQACAgICAQIGAQUBAAAAAAAAAQIRAxIhMQRBYQUTFFFxoTIigZHR4RX/2gAMAwEAAhEDEQA/AO5ds7sgtv2RbwSdGjJXQUPpbyHsq2qwNcR4+a64uzgkqF+qiUrF0y55Q+rTikIVnQoSAkGhW2GrANCVmC9VAUKrZaUpUxLs99OCNRrIUzWhRj4CUrGSm6w7RStRiYCAsCZZTQWJvDP3LIJtgtCA1l00NVGrTRYAzDLVX1G3VhhTuQq1PtT4oGEcqt2UQ6mq6qzfxT2z63ZhBhRWVGQYKJTbZWGKw2a41QW0SNQtaDQsWpZ6tHYYnQG6DW2a8bkG0ZRbEAFPq96MzDkCSEZtKRoigEsEy0qDpm6scLhyG6KdTZubfHqg5xXYyxyfSKwweaWqK2dso/vCBU2UeM+CHzI/cPypr0KxwUAE3UwxG5Cc1N2KBIUQxFIRWU7IUCzoKH0t5D2S20qdg7hryTVD6W8h7LVUSI3JIuijVlFqVt8iyJ1WV0cCpbRbBBVbJAKWqcwb93ckWlEoPhwWMGxhggqVW0d9hzQ8ebIFepmcBMQAfE/gRBYdrs11Olhy50RZZSomSRcOuOe8e/krXAttP53hRyZKRfHjt8lRiMGWz3eyhRYrvEtt+bjf2VYxvahHFPZAzQUXwRywVOuETEM0Ki8WVCQvSdBWsVW4KD+C11ZKJglJmZvIprBYdQwbd3FWRAa3v4qOXJqqLYcezJsoAIzaaqKGKJeW5uJ5AWg96tWFcm7Z2/LS6DBkblFxUH4gDUqD6wiUNjUbfSB1ErTKLRaFBta10B+KE2KKkwaoFt/Fvp0nOpuYHAT2s0Abz2RNguKd0zcAZeCRcEEGeQVz0k22ynSq5nAHKWwf3PBDLHS5XhtOu6bE2SVZRHsGF6caZojiD9/ldDg+ktJ0SS2d9iPNeEUHOmQbq6wGIJAG8E6LdGo9xLmP3A9//SWxOFbuHkuQ6M7QcOwZjdw8Phdjh6+bmqQyNEsmNMTOCUciuC2ySdTuV2RlZwTjTHKH0t5D2UiFCj9LeQ9lMpEUEMcy4d+SEpjagcB3KyxTZBbxEjmFVU2KsScuwICi0o72QhObABTCsJiHy3mEmwb1xnSP+IApu6qgxtTLZz3E5e8NA15roujHSGhiQ1xORxA7BO/QgHek+dC6ssvFy1tR1eyqhsN1we7ePv5q3p+XFKYUsiAUy0a2XHkdyOrGqiK42p6A+pSbPqCYxe/wS1LULowfwOXyP5juWQk6joCeYLJTEMvzVESaEWneju0Q6zLpimy4TXQEN7Oo7ymK7deS3Tt4KTz7Lz5y2lZ6WOGsaORwdYnGua0kg/VaMhbqCSb2LYsuj2jjmUmlznZQBJO4DiUsKUVHOEyQBE25xxS23tkddSc0kz6SpFSkd0xw1R2Vj3SYLczHsDu9pcBmGmnFdRgn9YwGLWPwvOdidBqrsQ11Ws57WEfVmPZAIDQZ7IAXqLKYpsDQLBEDKbbmMLGnu1XO7O2/QFTquvYX725hOp1HGIsus2xhBWpObvIteL814c/o3i6VfqnUicujgGxxD8w3773lMlYrZ2/8QqRqYcvpwbtDrXgOBaSd0GfNeZUaBnmdF7FhY6vK8A2g21B1XP7G6P5qzwWiBawsd7SPRZugpWU+zejL3APItw+e5dXsro60QSI+y6TZeByCPyFZDDjcsoORpTUSnp7EGoTLQ5pgqzo8FurTGkKnyeOCPzueQtF8tBQagupU7WUqjF0Q4XJzZeW6AbMrZqbeIAHpZNEqs2aQGNd3CfJWCZoWwWMNgRuKr9CrKsJaR+WXmP8AEPpLXw9anSouyjq8z7DMcznAQ7d9J81nNQjbHx4nknqjuqtpXBfxB6U5WHC0ndp3/keP0tI+gHiRr3c1yWO24HMDzUc95/S5xcQd8zouedXJMrmfkSmqSo9N+DiwSTc9n7dGVArnYr4YPH/9FUwKstlVBdviPv8AZc8+jt8OVZUzt9i9Lq1AgGKjP2v1H9L9W+o7l6HsXphhq4Az9W/9tSB4B+h914wGEo7GlS+Y0elk8DHm5qn90e9VqYgnuSVOncLyrZm28RRtTquDf2E5m/2mw8FbDpjitxp/2/5XTi8qMVyeV5HwLO5f0NNf4PSmIFfVecv6X4z94HJjT9krW6TYw/8AynwawfZP9ZD7Ml/4HkP1j+/9HopbJT2HpQZPgvHMRtnEH6q1T+4+wK9L6E0njDio+2aMoJkhoAu4/uJv5IPyt1SRLN8JfjJSlK3+C/e4DUqJqJd9QuOsBDq1wBbjClYiNMrgOJOtxyunGEOtMLldo4ktc4jiD6Kz2Liw5uYm5t4IWai9DQNAFU7V2kGWzAFMYnGhttSdwv5ryLp9jsVSxEU35WOEl0gSB9Qv9kVzwB8HoOA2pmMFwMmydxFAG4ufP1XhWzOktYVWC50Ftf8AK9swGLL6bXXuBbgqa0JditJuZwjjHLuKtdn4FrDI3pRgmoCN5v8AKthqnhBSf4J5cjguPUNlWzosctDQq6ikcrm2AY45+5MNPaKUr7ijUTxVGhEw4ZeVMuhQJUXFKMU+D+kDuHsrPDPkRwt8Kvw4hreQ9kxRfDvQp3yhR4BeIfxg7OPDR/8ART/9lVe5ALltudA8Li8QcTXNRzi1rcgflYA2YjKA7eTrvUZptUXwzUJWz59cVppnS/K6+iKXRjCUT/t4Wk3vyBx/udJTRpBoMADkAEqwX6lJeUvRHzl1L/2u/tPwspvcwh0ERxBE9y+h+skEcB7LWSbFN9N7gXmNO0v2eP4KuHNDgZB/ITjXLuulPR81qXW02/7lMGw1e3UjmNR4rgGrzc2LSVH2Pw7zFnxKXr6jTSitcEmFMFQo9K7HOsWdcEpdMYBlPODVLsguQ0S53/EaRPFADbSujpujOwm1h1tUf7c9kXBfGpnc3d3rsMLtGm4ZaRBY3sgj6bbm8R8LhNsdJS+n1VJnU04gkkSWgRltZo8SqnYu2nGoKNE5ptc5Wi94O8p8TlZ4fm4pTi8maWv2R6fVxQ0BVc7Fl9QNb9LTJO6w9LkKdPoyXMBqVnB8GwiACNO/VMu2YzD0bOk2lxgTr5K87S4PGVWVuOaDcXlC2e0tNjy+5WYKs1wLRJnM5p3QTfyMrdCpBuhF7KwPh0VG2drVaYqBziSxlSoSHAOcKeUlsi9w6bR9JuuL6S7VdUc6i8SbiYsIGoG78757/pHTaKlGpAy5gHSJGVwLX239lzlw+2NnH+ZeCO0C/wBj8po9ja2im2ExgeDebRxHeBzC9Q2FiKhaAbHeO7efuvOsHsh/WNdkIAzw6DMmGAD+9x8F6xsPBgC9pCt6EWqdFvhaEHMnabgVXYfMAWumxIm1xMjTnHgmsM666sUEo2cWaTcq+w2VJoWlJoTCC9Rnoos1TD0GoYuihGqJPdcBBbXuWnchipLgULGNh88UyQbCmlDQdxAnuMexUH8FYUxLAP8AiPZJVaZBjy5cEIs0kOYZ8tE6ooN0nSqRCPN0GgpmYmnaVX1ArOv9JVbW1RgCQp1ZBRGCDCniNfL2Ua7IAd4eScQtKcZR+XXnXSvow5rnVqLZaSS9jRdp3loGre4actO8w9WWrCVz5MKmqZ2eL5k/GntH+6+54y0IrW7l68cBSdd1Km48SxpPmQt/yrGjssa3+kAey8+Xj6vs+lx/HU48Q/f/AA8rpbNrO0pVDzaWjzdA9VKrs6o36gG+p9LL0fEtXPbXooLEkSy/GM8+I0vwcHtKiT2bnn+Qum/hnsNxqdaTAbIAjXvn7pNmDLngRMn04r1bYeAbRphrRz/Aq1XCPMnOU3cnbGi0NCqtoVmOBZE5hGllY4oLmNt1yzUgE+g334wlkBFJiw0R1cB1EkDWLnttdz94KLTx7attHcOHBUZqnrX5XXJIk74tJ9Cka1V/WOzNLRbLBmD/AMTw7lzQUsV2+Crqf5Oy2w01aUNs9o7MxquG2jtetReHVcK5xJJzZrXO5wGncfNW+xNrHMabnzNgTqZ/Ai7b2nTaIs48NQONvD2V4yXYvK4K/YmNq16mZ7MlMXDQbyO/eug2LtlznuzdmDYTNvlc03actgMyTz0TeCfcXBnff5VyL5Z6S12ZsomGMOVZsV5iDwVhMeYXVhlao488alZawtgLAsciIQqhV+JfdWTlX4ll00RZCzXEaa7kzVcCAf1b0Ok3eiGmSnYg5T+lvIeyi9sqNJ3ZbyHsitU0Oxd7YuiB1u9aquQWu3JhRwGW8xCrKwunqb4geP2KTxP1FaPYX0BqlFq3EfmiGmGU5kDhA807YKIUtBG+3iPkJinRkzuWUMKW/V3EcwiuqQubLlrhHRiwXzIkWoLyh1cRcDipE+a5Ls7UqA1Kcqk25StZdC7RVO1aUhYBS7EwWeq20weQHMr0JggLnejuFyydTx4K/wByxiFd24LmukOCzNzAjvmNF0D2Tc6X8lXYumMpEcfFAJ5qRlq2tb2tfwAXQYGmHFzYEmAHd/AdxuPJUm0WBtSxFpied1YYDH9q28ge1/dCavgKZKrsNwmo1u/WBr3HiqTFYAUyXO7JEQDfNfTuMb11eP6QOALWiDNydCdAY3zr4ritovc+p2iSdZPNThjdmcib3g3AMqx2Phs1iLSg4DCSQCuro7PDWAk5QNR/ldDYqQfYxLDB03HuV48eqqMHTI3yLd8K4IkCFbC6ZDPG42WFE2HJbJQaDux3iVjnkAcFb1Ob0CVN3NBxTdFt1axaeFjxUMVUHZ7wmS5Fb4BNbNkabkIQdAzIdOrdN2IZhqvZbPAeyKayWbSOUch7LUELJBCOqLbTaRuQXBbo1IKZgG88w4bilq5klEAgmND6LeGwjn33b/kJbUeWMk3wjMBh8xvuVsGBtghNysEBSc9ceTJs/Y7cePVe4OoZKRr1gJ1tb/Hemie5LFg1PP8AyosugQpSc1505I7aca+qjRxANxpdVuOxDyTaw3b/ACWUX2gbLqyxfXB080tiWSufbtYZiwSCJ7J9ZVngsd1gPaBIMRwHesmFouMCYECysS2RCrsDuAVqxYBCFV4+gTeFbvQqgELAPKumGCc1xcN9xzGoSGy8YI00jmux6c0iKYy0y4AgkxovOaPZeDu480ezHRbVrhoDtztFV0Wl5sJO5Q25i5DQI7P+Fa9EMRSN3Htd8eiHQ1F1sbZJs5w007yrp2DFiZMaN4+CJQqn9IkeicpGRKAQGGwoGghWeHYAEvTOltUdrrjxRsWhxqi+nISz8S0SZsLeKlSxIc2QQRJuO7VFSpgcU1QpiKZHZMcR8JVzyYB3JyliM8seIcNCAYPAt8/dK16cOXdiyKX5OHLj1fsY6pIAQmm6IKJUjh+/0VeCI/SEsb/SPYIVWmgUK5yNHcPZb64pEmFmiIkbigimSYAlFe8omHqhoLiYWnLWNjQjtKh2jSDAJEu81rE42AZEABc+3pAxxcGkuvc3DQB7qqFariHl05aWkjeAdPFcDlKTPQUYwRc4PHGs4uEhgtPHjCv2uEBc9hSGgNaIA0Hd+e6sW4oRCq8LUfcis6cvYYr15toOKr61clxH6Yjn/hZiH30ngl3Om0HjYfZHH47buRsnkJKojuCIcQPBb6gTmJ8CEDCNMyP+vy6X25jsjTGqrmnouCWCGz5PPOlOLczFVCw2LiQnej+1IPNx8iqfbgzOnj3yldnYl1JwcPKx91w9noUe1bLOh46K2mVzGw8Znph033nv4eHcr+mbC6YQaCG8wtdas70AGESLjXcVyPSXohTqtzUAGvG7RpvPDVdeWysciY8W2n0cxDabnvploBaGgxmdJAs3Xf6I+x+ij2ljqgIB/SNQOJO5eqY1jXABwzEGRO4qsdVg38k8MTmLPKoEKFLIABYARxU2Yg37jblA+90XrAQDFyPJJ4miWzGhkjuP5KWeKUA48sZlhTqGJ7h6oj6pkAW48oP+EnhCXCdOHkflOEhoki60YOXCDOairZzPSrZlWpQeab3McDmbE+IIGshcBszpbiKbqdChWfY5XCoA+XScxjUXtE7l7CX6qsxOxKTy57GMp1nD/wAwptzSP3GxcOIJVfp2lwQ+pi3yc90e6WHO5tSlVY45jJb2AAZjMT3rs21MwD+IB8wuZ2d0W6ut1zyDIcHMBdkzWhzWusOPNdFT7IEQALAdwVMGNrlk8+RSVIbw4JvCI+oZ0/wlm48BsAQfTmlM511n1XRVs5mN4enLW8h7I3UomDb2W8h7JrKk2G1srqtJBIVhVopV1AhMmmDorn4SnfsC+7dbuUHcBpwT72JR9O9llCK6QznJrlgXGIhPUKIc0JXJJ70zTa6nwIsmYlm8kEAmUPPex3wpOqg/m9ZhxqeCWb1i2NCO0qJurQLeJGi5HbDjUJG7xXRYrEgCDZc/iqdR8mkxzhMSIAnmV5zbkekko9HKbRbLo4JQt911mF6JVXHM7KJ/SDJ5uOgTDeiIz30HFbVjbIF0TrnOzWIMDdJ/VG86DzXodN6oMHg6dKA0aBWznx9lVYZEJZ4jWcAT+X0+ykyr9lWnEyAPMJqlVAjgAkljkux45Iy6HesjzC2kqmJBcL2RaVQ3G9CUWuwxkpdEnieGv5Crto4U/UBZPNDgS4i269iYiYWOBPZKOObi7BkhsqKpzppg722PI6fZSp1MwiFPEsDJGUmdeXyhUKgGl+C7+JRODmLGXEMFkCo4krdS4UGO4oQgo9BnNy7Cs0jvlEYosIRAxOTZupTkSPzilKjU9SMLdalvhBMxVuapiyO+mguYmQtlxhR2G8h7IrUHC2a3+keyjWxACguS74GSEtiK7BYm/BJ4jGE74HBJF6dRFchipXnRLVAVMGEemARMSnuhUrE8qmcQ4w3cFvFmBYILHQVuwNUwxvqiOdlAHG8dy1hWhzoOiW2zMzpcAfaVy+TPjU6vGhzsJmmK9TJu1dG4awrJ1QMgN+kCMu4hV3RwAPce6/iPwJ7FUoMjQoeNFcsbyZPhGPdF2kxuP2PeiuxuZsOF9xSjXRY6fl1ohdiSOPkZotDjBMcEd7+wWn6mG3LRK0oRQ4nXdofsswIG95JnzR8PQe4SNOPFKyQU3g67m6GRwWfXBlwQexzSC4QmsPiJN98JzKHhL1Nn/tMKUkpKmVhJxdosK4kBLVzlIEeK27EQ2/6fCYUMVVaWm/A68iuBqnR6KdqyOIGZveFWNI4QnW1w6plGoE+FwFW4o9t3Mrs8Z8UcfkJbIYa6VIiEnTqQjvq5vldBAZyWt5qdF55hBbW3DRac+BHHX4S0Bljhi109y26le0hL4StkHaGp1Vg14OhlI+ApIA6lKg/DBNLFtmHVFc3EQwch7JWrVnVbnstHcPZAcCnSpCt2ac5RzKXV9xUTTRMTLpCHQrlveE1h2AWK1WwgBkFA10K1qpN0Fj0xVw/AoGRYyG8FWgnkue25tnM7LMCTAGpIGp8j6K3AhDGCpZ8/VtzcdVz5cTlK0dOLKoxph9g4YtZf6nX5CLAp2rQIF4vuQwC2626qfqV4Q0VIjObnKwTsG4bisLSB2m9n1Cf/AJzisq1rRNjqEbYtFcBwuPXyRsOyTzU34Q2IUevI4TxTAMxlEt1148R8oAep4rFOfYmyAEUCi0wuKIHH3VjTqAiQqahBtGnBWFK2h9IU5IKbQTHYYVabmTEtIDtcpIsVV7R2K45RTqFu4zcRBiBzjerGtUOqX/nHDeDz+VJ4lIrHK10R2JgsoFR4IquaA6+gBJAjje6r8af9x/8AUfdWrNoN/UCPVVuJbme5zTIJnv8AJUhHXgWctuRYI1HghkLGuhUFG3CFtlSIJEjgoPqyEbBFsw4Tw+OaABioHPYCG77RwuNFmGdlEzHH4TrWhoAbokcVdxSp3waSoM+uTy4IjMVAuqxhh0ydNLRz5/Kyu9NqhdmIs2i2BZ2g4cOaawmPp6kO8h8rSxTcnRVRVjn+pU/2u8h8pOpj6d7O8h8rFiCbC4oTqbTbwd6fK1/qjeDvT5WLE2zBqhinj2EXDvT5S1XFtB0PkPlYsWtm1Rjsc3g7yHyotxzeDvT5WLFrNqht+ObH6vT5Q349sCzvIfKxYipMOqNvxzTBh3p8rTdpNG53kPlYsW2ZtUWmF2uwi7XeQ+UrjqzLkBw8B8rFiTZ2ZxVFd/PNB0PkPlZ/PM4HyHysWKmzBqg1LaDeDvT5TDdqN4O9PlYsQbNqgp2ow7neQ+VA7SZwd5D5WLELNQvUx1P9p9PlAbjG/wDLyHytLEdmHVBximHXN5D5Qn4po4+Q+VixC2bVGxjGxPa8h8rf+oN4O9PlYsR2YNUM0tt7oJgzu5cUV20Wk6Ov3D5WLEGzKKB4nHMEwHajcOHNKt2i0m4d6fKxYipOjOKs/9k=',
-  cat:   'data:image/jpeg;base64,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'
-};
 
 const COMP = {
   plant:{ label:'식물', stages:['🌱','🌿','🌸','🌺','🌻','🌷','🪷','🌹','💐','🏵️'], names:['새싹','잎새','꽃봉오리','활짝꽃','해님꽃','튤립','연꽃','장미','꽃다발','잭과 콩나무'], statuses:['막 싹을 틔웠어요!','쑥쑥 자라요!','꽃봉오리예요!','예쁘게 피었어요!','눈부신 꽃 ✨','튤립이 피었어요!','연꽃이 되었어요!','장미로 변신!','꽃다발이에요!','잭과 콩나무 👑'], stats:[['💧','water',30,'fw'],['☀️','sun',40,'fh']], actions:[{id:'water',label:'💧 물주기',cls:'w',cost:2,stat:'water',add:28,grow:7},{id:'photo',label:'☀️ 광합성',cls:'s',cost:2,stat:'sun',add:32,grow:7}], growPts:[0,14,30,52,78,110,148,192,242,298] },
@@ -713,7 +761,6 @@ function loadPetState() {
   renderPet(); buildCareBtns();
   document.getElementById('ptsNum').textContent = UD.pet?.pts || 0;
   applyTimeDecay();
-  // 로드 시점에 이미 모든 바가 꽉 찬 경우 자동으로 레벨업(스탯 리셋) 처리
   checkGrowth();
   setInterval(applyTimeDecay, 5 * 60 * 1000);
 }
@@ -721,34 +768,14 @@ function renderPet() {
   const p = UD.pet; if (!p) return;
   const c = COMP[p.type], lv = p.level;
   const ee = document.getElementById('petEmoji');
-  const isMax = lv === c.stages.length - 1 && MAX_IMG[p.type];
-  if (isMax) {
-    let img = ee.querySelector('img');
-    const desiredSrc = MAX_IMG[p.type];
-    if (!img) {
-      while (ee.firstChild) ee.removeChild(ee.firstChild);
-      img = document.createElement('img');
-      img.className = 'pet-max-img';
-      img.alt = '';
-      img.onerror = function() { ee.textContent = c.stages[lv] + '⚠️'; };
-      ee.appendChild(img);
-      ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow');
-    }
-    if (img.getAttribute('src') !== desiredSrc) {
-      img.setAttribute('src', desiredSrc);
-    }
-  } else {
-    const ne = c.stages[lv];
-    if (ee.textContent !== ne || ee.querySelector('img')) {
-      while (ee.firstChild) ee.removeChild(ee.firstChild);
-      ee.textContent = ne;
-      ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow');
-    }
+  const ne = c.stages[lv];
+  if (ee.textContent !== ne) {
+    ee.textContent = ne;
+    ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow');
   }
   document.getElementById('petNameD').textContent   = p.name;
   document.getElementById('petTypeD').textContent   = c.label;
   document.getElementById('petStatusD').textContent = c.statuses[lv];
-  // 10단 별 (앞 5개는 기본, 뒤 5개는 숨겨진 별)
   document.getElementById('lvRow').innerHTML = c.stages.map((_,i) => {
     const achieved = i <= lv;
     const isHidden = i >= 5;
@@ -757,13 +784,12 @@ function renderPet() {
     return '<span class="lv-star">⭐</span>';
   }).join('');
   document.getElementById('statsBox').innerHTML = c.stats.map(([ico,k,,fill]) =>
-    `<div class="sg"><span class="si">${ico}</span><div class="st"><div class="sf ${fill}" style="width:${Math.min(100,p.stats[k]||0)}%"></div></div></div>`
+    '<div class="sg"><span class="si">' + ico + '</span><div class="st"><div class="sf ' + fill + '" style="width:' + Math.min(100,p.stats[k]||0) + '%"></div></div></div>'
   ).join('');
   renderPetSwitcher();
   renderUnlockSlot();
   renderAdminLvControl();
 }
-
 function renderAdminLvControl() {
   const ctrl = document.getElementById('adminPetControls');
   if (!ctrl) return;
@@ -776,7 +802,6 @@ function renderAdminLvControl() {
     return '<option value="' + i + '"' + (i === UD.pet.level ? ' selected' : '') + '>' + (i + 1) + '★ ' + c.names[i] + hidden + '</option>';
   }).join('');
 }
-
 async function adminSetLevel(lv) {
   if (!isAdmin || !UD.pet) return;
   const n = parseInt(lv);
@@ -788,14 +813,9 @@ async function adminSetLevel(lv) {
   renderPet();
   buildCareBtns();
   toast('⭐ ' + (n + 1) + '단계로 설정');
-  if (n === c.stages.length - 1) particles(window.innerWidth / 2, window.innerHeight / 3, ['🏆','✨','🌟'], 10);
 }
-
 function petIcon(pet) {
   const c = COMP[pet.type];
-  if (pet.level === c.stages.length - 1 && MAX_IMG[pet.type]) {
-    return '<img class="pet-max-img-sm" src="' + MAX_IMG[pet.type] + '" alt="">';
-  }
   return c.stages[pet.level];
 }
 function renderPetSwitcher() {
@@ -804,10 +824,9 @@ function renderPetSwitcher() {
   el.style.display = 'flex';
   const cur = UD.pet, bon = UD.bonusPet;
   el.innerHTML =
-    `<button class="pet-slot-btn active">${petIcon(cur)} ${cur.name}</button>` +
-    `<button class="pet-slot-btn" onclick="switchPet()">${petIcon(bon)} ${bon.name}</button>`;
+    '<button class="pet-slot-btn active">' + petIcon(cur) + ' ' + cur.name + '</button>' +
+    '<button class="pet-slot-btn" onclick="switchPet()">' + petIcon(bon) + ' ' + bon.name + '</button>';
 }
-
 function renderUnlockSlot() {
   const slot = document.getElementById('unlockSlot');
   const p = UD.pet; if (!p) { slot.innerHTML=''; return; }
@@ -818,7 +837,6 @@ function renderUnlockSlot() {
     slot.innerHTML = '';
   }
 }
-
 async function switchPet() {
   if (!UD.bonusPet) return;
   const tmp = UD.pet;
@@ -828,19 +846,17 @@ async function switchPet() {
   renderPet(); buildCareBtns(); updatePtsDisplay();
   toast('🔄 친구 전환!');
 }
-
 function openUnlockModal() {
   const grid = document.getElementById('unlockGrid');
   const currentType = UD.pet?.type;
   grid.innerHTML = Object.entries(COMP).filter(([t]) => t !== currentType).map(([t,c]) =>
-    `<button class="companion-btn" onclick="selUnlockComp('${t}',this)"><div class="cmp-icon">${c.stages[0]}</div><div class="cmp-title">${c.label}</div><div class="cmp-desc">새 친구</div></button>`
+    '<button class="companion-btn" onclick="selUnlockComp(\'' + t + '\',this)"><div class="cmp-icon">' + c.stages[0] + '</div><div class="cmp-title">' + c.label + '</div><div class="cmp-desc">새 친구</div></button>'
   ).join('');
   document.getElementById('unlockNameSec').style.display = 'none';
   document.getElementById('unlockNameInp').value = '';
   _unlockType = null;
   document.getElementById('petUnlockModal').classList.add('open');
 }
-
 let _unlockType = null;
 function selUnlockComp(type, btn) {
   _unlockType = type;
@@ -860,7 +876,6 @@ async function createBonusPet() {
   const stats = {};
   COMP[_unlockType].stats.forEach(r => { stats[r[1]] = r[2]; });
   const newPet = { type: _unlockType, name, level: 0, growScore: 0, stats, pts: UD.pet.pts || 0 };
-  // 기존 친구는 bonusPet으로 이동, 새 친구가 활성
   UD.bonusPet = UD.pet;
   UD.pet = newPet;
   await db.collection('users').doc(CU.uid).update({ pet: UD.pet, bonusPet: UD.bonusPet });
@@ -872,7 +887,7 @@ async function createBonusPet() {
 function buildCareBtns() {
   if (!UD.pet) return;
   document.getElementById('careBtns').innerHTML = COMP[UD.pet.type].actions.map(a =>
-    `<button class="cb ${a.cls}" id="cb-${a.id}" onclick="docare('${a.id}')">${a.label}<span class="cost-tag">${a.cost}점</span></button>`
+    '<button class="cb ' + a.cls + '" id="cb-' + a.id + '" onclick="docare(\'' + a.id + '\')">' + a.label + '<span class="cost-tag">' + a.cost + '점</span></button>'
   ).join('');
   updateCareBtns();
 }
@@ -895,7 +910,6 @@ async function docare(id) {
   const p = UD.pet; if (!p) return;
   const a = COMP[p.type].actions.find(x => x.id === id);
   if (!a) return;
-  // 이미 꽉 찬 바에 액션하려 하면 포인트 차감 없이 랜덤 거부 문구
   if ((p.stats[a.stat] || 0) >= 100) {
     const msgs = FULL_MSGS[a.stat] || ['😅 너무 힘들어요!'];
     toast(msgs[Math.floor(Math.random() * msgs.length)]);
@@ -910,11 +924,9 @@ function checkGrowth() {
   const p = UD.pet; if (!p) return;
   const c = COMP[p.type], max = c.stages.length - 1;
   if (p.level >= max) return;
-  // 모든 바가 100이면 레벨업
   const allFull = c.stats.every(r => (p.stats[r[1]] || 0) >= 100);
   if (!allFull) return;
   p.level++;
-  // 다음 레벨을 위해 스탯을 시작값으로 리셋
   c.stats.forEach(r => { p.stats[r[1]] = r[2]; });
   savePet(); renderPet();
   setTimeout(() => { toast('🌟 ' + p.name + '이(가) ' + c.names[p.level] + '(으)로 성장!'); particles(window.innerWidth/2, window.innerHeight/3, ['🌟','✨','🎉','💫','⭐','🎊'], 16); }, 300);
@@ -936,9 +948,26 @@ function updatePtsDisplay() {
   el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), 400);
   updateCareBtns();
 }
-async function addPoints(n) {
+
+/* 🏆 점수 적립 + 랭킹용 로그 기록 */
+async function logPoints(n, reason) {
+  if (!CU || !UD || n <= 0) return;
+  try {
+    await db.collection('pointLog').add({
+      uid: CU.uid,
+      username: UD.username,
+      realName: UD.realName || UD.username,
+      points: n,
+      reason: reason || '',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch (e) {}
+}
+async function addPoints(n, reason) {
   UD.pet.pts = (UD.pet.pts || 0) + n;
-  await savePet(); updatePtsDisplay();
+  await savePet();
+  await logPoints(n, reason);
+  updatePtsDisplay();
   particles(window.innerWidth / 2, 200, ['✨','🌟','💫'], 8);
 }
 
@@ -956,14 +985,13 @@ async function setDailyField(updates) {
   await db.collection('userDaily').doc(CU.uid + '_' + todayKey()).set(updates, { merge: true });
 }
 
-/* ════ GARDEN INIT ════ */
 async function initGarden() {
   updateActivityUI();
   loadTodayPassages();
   renderChurch();
 }
 
-/* ════ CHURCH ATTENDANCE ════ */
+/* ════ CHURCH — QR 전용 (캘린더는 보기만) ════ */
 let _churchViewMonth = null;
 function renderChurch() {
   if (!_churchViewMonth) _churchViewMonth = new Date();
@@ -982,10 +1010,11 @@ function renderChurch() {
     const count = church[dateKey] || 0;
     const dow = new Date(y, m, day).getDay();
     const isWed = dow === 3;
-    html += '<button class="cal-day ' + (count > 0 ? 'attended ' : '') + (isWed ? 'wed' : '') + '" onclick="toggleChurch(\'' + dateKey + '\',' + (isWed ? 1 : 0) + ')">' +
+    // div로 변경 (클릭 시 안내만)
+    html += '<div class="cal-day ' + (count > 0 ? 'attended ' : '') + (isWed ? 'wed' : '') + '" onclick="qrOnlyAlert()">' +
       '<span>' + day + '</span>' +
       (count > 0 ? '<span class="count-badge">' + count + '</span>' : '') +
-      '</button>';
+      '</div>';
   }
   html += '</div>';
   document.getElementById('churchCal').innerHTML = html;
@@ -995,41 +1024,21 @@ function changeMonth(delta) {
   _churchViewMonth = new Date(_churchViewMonth.getFullYear(), _churchViewMonth.getMonth() + delta, 1);
   renderChurch();
 }
-async function toggleChurch(dateKey, isWed) {
-  if (!UD.pet) { toast('먼저 친구를 골라주세요'); return; }
-  const church = UD.church || {};
-  const current = church[dateKey] || 0;
-  const max = isWed ? 2 : 1;
-  const next = (current + 1) > max ? 0 : current + 1;
-  const diff = next - current;
-  const cost = diff * 2;
-  if (cost < 0 && (UD.pet.pts || 0) < Math.abs(cost)) {
-    toast('😅 포인트가 부족해 취소할 수 없어요!');
-    return;
-  }
-  if (next === 0) delete church[dateKey]; else church[dateKey] = next;
-  UD.church = church;
-  UD.pet.pts = (UD.pet.pts || 0) + cost;
-  await savePet({ church: UD.church });
-  updatePtsDisplay();
-  renderChurch();
-  if (diff > 0) { toast('⛪ 출석 +2점!'); particles(window.innerWidth/2, 200, ['⛪','✨','🌟'], 6); }
-  else if (diff < 0) toast('취소 -2점');
+function qrOnlyAlert() {
+  toast('📱 출석은 QR 코드 스캔으로만 가능해요!');
 }
 
-/* ════ 개인 초기화 ════ */
 async function resetSelfData() {
   if (!confirm('내 친구·포인트·인증 기록·출석을 모두 지우고 처음부터 시작할까요?\n(내 계정은 유지돼요)')) return;
   if (!confirm('되돌릴 수 없어요! 정말 진행할까요?')) return;
   try {
-    const b1 = db.batch();
-    const recSnap = await db.collection('recordings').where('uid','==',CU.uid).get();
-    recSnap.docs.forEach(d => b1.delete(d.ref));
-    await b1.commit();
-    const b2 = db.batch();
-    const medSnap = await db.collection('meditations').where('uid','==',CU.uid).get();
-    medSnap.docs.forEach(d => b2.delete(d.ref));
-    await b2.commit();
+    const colsToDelByUid = ['recordings','meditations','pointLog'];
+    for (const col of colsToDelByUid) {
+      const b = db.batch();
+      const s = await db.collection(col).where('uid','==',CU.uid).get();
+      s.docs.forEach(d => b.delete(d.ref));
+      await b.commit();
+    }
     const b3 = db.batch();
     const udSnap = await db.collection('userDaily').get();
     udSnap.docs.forEach(d => { if (d.id.startsWith(CU.uid + '_')) b3.delete(d.ref); });
@@ -1050,7 +1059,6 @@ async function resetSelfData() {
     toast('⚠️ 실패: ' + e.message);
   }
 }
-
 function resetPetSelectState() {
   selType = null;
   const nameSec = document.getElementById('nameSec');
@@ -1074,985 +1082,1026 @@ async function updateActivityUI() {
   if (dr.meditationDone)
     document.getElementById('medArea').innerHTML = '<div class="med-approved">✅ 오늘 묵상 인증 완료!</div>';
 }
-
-/* ════ TODAY PASSAGES ════ */
-let todayPassages = [], curPasIdx = 0, curQList = [], curQIdx = 0, curPassageRef = '';
-let curPointsPerAnswer = 2;
-const MAX_DAILY_PASSAGES = 999; // 사실상 제한 없음 (관리자가 등록한 만큼 다 풀 수 있음)
+</script>
+<script>
+/* ════════ 오늘의 말씀 + 퀴즈 ════════ */
+let _passages = [];
+let _curIdx = 0;
+let _completed = [];
+let curQ = null, qIdx = 0, qTotal = 3, qCorrect = 0, curPointsPerAnswer = 5;
 
 async function loadTodayPassages() {
-  document.getElementById('bibleRef').textContent = '로딩 중...';
-  document.getElementById('passageText').innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...</div>';
-  document.getElementById('bibleActions').innerHTML = '';
-  document.getElementById('pNavBar').style.display = 'none';
   try {
-    const snap = await db.collection('dailyConfig').doc(todayKey()).get();
-    const dr   = await getDailyRecord();
-    const done = dr.completedPassages || [];
-    if (snap.exists && snap.data().passages && snap.data().passages.length > 0) {
-      // 하루 최대 MAX_DAILY_PASSAGES개만 노출
-      todayPassages = snap.data().passages.slice(0, MAX_DAILY_PASSAGES);
-      if (todayPassages.length > 1) { document.getElementById('pNavBar').style.display = 'flex'; renderPNav(done); }
-      curPasIdx = todayPassages.findIndex(p => !done.includes(p.ref));
-      if (curPasIdx === -1) { showAllDone(); return; }
-      loadPassage(todayPassages[curPasIdx]);
-    } else {
-      todayPassages = [];
-      loadRandomPassage();
+    const tk = todayKey();
+    const dailySnap = await db.collection('dailyConfig').doc(tk).get();
+    let cfg = null;
+    if (dailySnap.exists) cfg = dailySnap.data();
+    else {
+      const latest = await db.collection('dailyConfig').orderBy('date','desc').limit(1).get();
+      if (!latest.empty) cfg = latest.docs[0].data();
     }
+    if (!cfg || !cfg.passages || cfg.passages.length === 0) {
+      const r = getRandomPassage();
+      _passages = [{ ref: r.ref, text: r.text, questions: r.questions, isFallback: true }];
+    } else {
+      _passages = cfg.passages;
+    }
+    const dr = await getDailyRecord();
+    _completed = dr.completedPassages || [];
+    _curIdx = 0;
+    for (let i = 0; i < _passages.length; i++) {
+      if (!_completed.includes(i)) { _curIdx = i; break; }
+      if (i === _passages.length - 1) _curIdx = -1;
+    }
+    if (_curIdx === -1) { showAllDone(); return; }
+    renderPNav();
+    loadPassage(_curIdx);
   } catch (e) {
-    // Firestore 실패시 로컬 데이터로 대체
-    todayPassages = [];
     loadRandomPassage();
   }
 }
-function renderPNav(done) {
-  document.getElementById('pNavBar').innerHTML = todayPassages.map((p, i) =>
-    `<button class="p-nav-btn ${done.includes(p.ref)?'done':''} ${i===curPasIdx?'cur':''}" onclick="jumpPassage(${i})">${done.includes(p.ref)?'✅ ':''}${p.ref}</button>`
-  ).join('');
+function renderPNav() {
+  const bar = document.getElementById('pNavBar');
+  if (_passages.length <= 1 && _passages[0]?.isFallback) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  bar.innerHTML = '<span style="font-size:0.85rem;color:#888;font-weight:700">📖 구절</span>' +
+    _passages.map((p, i) => {
+      const cls = _completed.includes(i) ? 'done' : (i === _curIdx ? 'cur' : '');
+      return '<button class="p-nav-btn ' + cls + '" onclick="jumpPassage(' + i + ')">' + (i + 1) + '. ' + p.ref + (_completed.includes(i) ? ' ✓' : '') + '</button>';
+    }).join('');
 }
-async function jumpPassage(idx) {
-  const dr = await getDailyRecord();
-  if ((dr.completedPassages || []).includes(todayPassages[idx].ref)) { toast('이미 완료한 말씀이에요!'); return; }
-  curPasIdx = idx; renderPNav(dr.completedPassages || []); loadPassage(todayPassages[idx]);
+function jumpPassage(i) {
+  if (_completed.includes(i)) { toast('✅ 이미 완료한 구절!'); return; }
+  _curIdx = i;
+  renderPNav();
+  loadPassage(i);
 }
-
-async function fetchBookChapterText(book, ch, startV, endV) {
-  const bookNum = BOOK_NUM[book];
-  if (!bookNum) return null;
-  try {
-    const data = await loadKoBible();
-    const bookData = data[bookNum - 1];
-    if (bookData && bookData.chapters && bookData.chapters[ch - 1]) {
-      const allVerses = bookData.chapters[ch - 1];
-      let s = startV && startV > 0 ? startV : 1;
-      let e = endV && endV > 0 ? endV : (startV && !endV ? startV : allVerses.length);
-      s = Math.max(1, Math.min(s, allVerses.length));
-      e = Math.max(s, Math.min(e, allVerses.length));
-      const sliced = allVerses.slice(s - 1, e);
-      return sliced.map((v, i) => (s + i) + ' ' + v).join('\n');
-    }
-  } catch (err) {}
-  return null;
-}
-
-async function loadPassage(pInfo) {
+async function loadPassage(idx) {
+  const p = _passages[idx];
+  document.getElementById('bibleRef').textContent = p.ref;
+  document.getElementById('passageText').innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...</div>';
   document.getElementById('bibleActions').innerHTML = '';
-  curPointsPerAnswer = 3; // 관리자 등록 말씀: 정답당 3점
-  let passage, questions;
-  if (pInfo.customQuestions && pInfo.customQuestions.length > 0) {
-    // 관리자가 직접 설정한 문제 사용
-    const local = BIBLE_DATA.find(b => b.ref === pInfo.ref);
-    if (local) {
-      passage = local.passage;
-    } else if (pInfo.book && pInfo.chapter) {
-      document.getElementById('bibleRef').textContent = pInfo.ref;
-      document.getElementById('passageText').textContent = '📖 말씀 불러오는 중...';
-      const fetched = await fetchBookChapterText(pInfo.book, pInfo.chapter, pInfo.startVerse, pInfo.endVerse);
-      passage = fetched || `📖 ${pInfo.ref}\n\n말씀을 불러올 수 없어요. 아래 퀴즈를 풀어봐요!`;
-    } else {
-      passage = `📖 ${pInfo.ref}\n\n관리자가 설정한 말씀이에요. 아래 퀴즈를 풀어봐요!`;
-    }
-    questions = pInfo.customQuestions;
+  if (p.text) {
+    document.getElementById('passageText').textContent = p.text;
   } else {
-    // 로컬 데이터에서 ref 매칭 또는 랜덤
-    const local = BIBLE_DATA.find(b => b.ref === pInfo.ref) || getRandomPassage();
-    passage = local.passage;
-    questions = local.questions;
-    pInfo.ref = local.ref;
-  }
-  // 같은 질문 텍스트가 중복되면 1개만 사용 + 오늘 이미 답한 문제는 제외
-  const dr = await getDailyRecord();
-  const answeredToday = new Set((dr.answeredQuestions || []).map(s => (s || '').trim()));
-  const seen = new Set();
-  questions = (questions || []).filter(q => {
-    const key = (q.q || '').trim();
-    if (!key || seen.has(key) || answeredToday.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-  curPassageRef = pInfo.ref || pInfo.book + ' ' + pInfo.chapter + '장';
-  curQList = questions; curQIdx = 0;
-  document.getElementById('bibleRef').textContent = curPassageRef;
-  document.getElementById('passageText').textContent = passage;
-  if (questions.length === 0) {
-    // 이 구절의 모든 문제를 오늘 이미 풀었음 → 자동 완료 처리
-    if (todayPassages.length > 0) {
-      await setDailyField({ completedPassages: firebase.firestore.FieldValue.arrayUnion(curPassageRef) });
-      const ddr = await getDailyRecord();
-      const done = ddr.completedPassages || [];
-      const nextIdx = todayPassages.findIndex((p, i) => i > curPasIdx && !done.includes(p.ref));
-      if (nextIdx !== -1) {
-        document.getElementById('bibleActions').innerHTML = '<button class="next-p-btn" onclick="(async()=>{curPasIdx=' + nextIdx + ';renderPNav((await getDailyRecord()).completedPassages||[]);loadPassage(todayPassages[' + nextIdx + ']);})()">📖 다음 말씀: ' + todayPassages[nextIdx].ref + ' →</button>';
-      } else {
-        document.getElementById('bibleActions').innerHTML = '<div class="all-done-banner"><div style="font-size:2rem">✅</div><p style="font-size:1rem;color:#4a7a4a;margin-top:6px">오늘 이 말씀의 문제를 모두 풀었어요!</p></div>';
-      }
-    } else {
-      document.getElementById('bibleActions').innerHTML = '<div class="all-done-banner"><div style="font-size:2rem">✅</div><p style="font-size:1rem;color:#4a7a4a;margin-top:6px">오늘 이 말씀의 문제를 모두 풀었어요!</p></div>';
+    try {
+      const text = await fetchBookChapterText(p.book, p.chapter, p.startV, p.endV);
+      document.getElementById('passageText').textContent = text || p.ref + '을(를) 읽어요';
+    } catch (e) {
+      document.getElementById('passageText').textContent = p.ref + '을(를) 읽어요';
     }
-    return;
   }
-  document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
+  document.getElementById('bibleActions').innerHTML =
+    '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기</button>';
 }
-async function loadRandomPassage() {
-  curPointsPerAnswer = 2; // 랜덤 폴백 말씀: 정답당 2점
-  // 오늘 모든 문제를 풀지 않은 BIBLE_DATA 항목을 우선 탐색
-  const dr = await getDailyRecord();
-  const answeredToday = new Set((dr.answeredQuestions || []).map(s => (s || '').trim()));
-  const candidates = BIBLE_DATA.filter(item =>
-    (item.questions || []).some(q => !answeredToday.has((q.q || '').trim()))
-  );
-  const data = candidates.length > 0
-    ? candidates[Math.floor(Math.random() * candidates.length)]
-    : getRandomPassage();
-  const seen = new Set();
-  const questions = (data.questions || []).filter(q => {
-    const key = (q.q || '').trim();
-    if (!key || seen.has(key) || answeredToday.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-  curPassageRef = data.ref; curQList = questions; curQIdx = 0;
-  document.getElementById('bibleRef').textContent = data.ref;
-  document.getElementById('passageText').textContent = data.passage;
-  if (questions.length === 0) {
-    document.getElementById('bibleActions').innerHTML = '<div class="all-done-banner"><div style="font-size:2rem">✅</div><p style="font-size:1rem;color:#4a7a4a;margin-top:6px">오늘 모든 문제를 다 풀었어요!<br>내일 또 만나요 🌿</p></div>';
-    return;
-  }
-  document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기 →</button>';
+function loadRandomPassage() {
+  const r = getRandomPassage();
+  _passages = [{ ref: r.ref, text: r.text, questions: r.questions, isFallback: true }];
+  _curIdx = 0; _completed = [];
+  document.getElementById('bibleRef').textContent = r.ref;
+  document.getElementById('passageText').textContent = r.text;
+  document.getElementById('bibleActions').innerHTML = '<button class="read-done-btn" onclick="startQuiz()">📖 다 읽었어요! 퀴즈 풀기</button>';
+  renderPNav();
 }
 function showAllDone() {
-  document.getElementById('bibleRef').textContent = '완료 🎉';
-  document.getElementById('passageText').innerHTML = '';
-  document.getElementById('bibleActions').innerHTML =
-    '<div class="all-done-banner"><div style="font-size:2.5rem">🎉</div>' +
-    '<p style="font-size:1.05rem;color:#4a7a4a;margin:6px 0 10px">오늘의 말씀을 모두 풀었어요!</p>' +
-    '<button class="next-p-btn" onclick="loadRandomPassage()" style="font-size:1rem;padding:8px 18px">📖 더 풀기 (랜덤 말씀 +2점)</button></div>';
+  document.getElementById('bibleRef').textContent = '오늘 완료!';
+  document.getElementById('passageText').innerHTML = '<div style="text-align:center;padding:14px"><div style="font-size:2.6rem">🎉</div><div style="font-size:1.05rem;font-weight:700;color:#4a9a50;margin-top:8px">오늘의 모든 구절 완료!</div><div style="font-size:0.88rem;color:#aaa;margin-top:5px">내일 새로운 말씀이 나와요</div></div>';
+  document.getElementById('bibleActions').innerHTML = '';
+  renderPNav();
+}
+async function fetchBookChapterText(bookName, chapter, sv, ev) {
+  try {
+    if (!window._bibleCache) {
+      const r = await fetch('https://raw.githubusercontent.com/sionic-ai/Korean-Bible-Database/main/krv.json');
+      window._bibleCache = await r.json();
+    }
+    const data = window._bibleCache;
+    const verses = data.filter(x => x.book_name === bookName && x.chapter === chapter);
+    if (verses.length === 0) return null;
+    let filtered = verses;
+    if (sv) filtered = filtered.filter(v => v.verse >= sv);
+    if (ev) filtered = filtered.filter(v => v.verse <= ev);
+    return filtered.map(v => v.verse + '. ' + v.text).join('\n');
+  } catch (e) { return null; }
 }
 
-/* ════ QUIZ ════ */
-function startQuiz() { curQIdx = 0; renderQ(); }
+function startQuiz() {
+  const p = _passages[_curIdx];
+  curQ = (p && p.questions && p.questions.length) ? p.questions : [];
+  if (!curQ.length) { toast('❌ 퀴즈가 없어요'); return; }
+  qIdx = 0; qCorrect = 0; qTotal = curQ.length;
+  curPointsPerAnswer = (p && p.points) ? p.points : 5;
+  document.getElementById('bibleActions').innerHTML = '<div class="quiz-zone" id="quizZone"></div>';
+  renderQ();
+}
 function renderQ() {
-  const q = curQList[curQIdx];
-  document.getElementById('bibleActions').innerHTML =
-    `<div class="quiz-zone">
-      <div class="quiz-prog">문제 ${curQIdx+1} / ${curQList.length}</div>
-      <div class="quiz-q">${q.q}</div>
-      <div class="opts-grid" id="optsGrid">
-        ${q.opts.map((o,i) => `<button class="opt-btn" onclick="answerQ(${i},this)">${o}</button>`).join('')}
-      </div>
-      <div class="quiz-result" id="qRes"></div>
-    </div>`;
-}
-async function answerQ(idx, btn) {
-  const q = curQList[curQIdx];
-  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
-  document.querySelectorAll('.opt-btn')[q.ans].classList.add('correct');
-  const ok = idx === q.ans;
-  const res = document.getElementById('qRes');
-  if (ok) {
-    btn.classList.add('correct'); await addPoints(curPointsPerAnswer);
-    const r = btn.getBoundingClientRect(); particles(r.left + r.width/2, r.top, ['✨','🌟','💫','⭐'], 8);
-    res.textContent = '🎉 정답이에요! +' + curPointsPerAnswer + '점!'; res.className = 'quiz-result ok';
-  } else {
-    btn.classList.add('wrong');
-    res.textContent = '❌ 아쉬워요! 정답은 "' + q.opts[q.ans] + '"예요!'; res.className = 'quiz-result fail';
+  if (qIdx >= qTotal) {
+    const zone = document.getElementById('quizZone');
+    zone.innerHTML = '<div class="quiz-result ok">🎉 퀴즈 완료! ' + qCorrect + '/' + qTotal + ' 맞춤</div>' +
+      '<button class="next-p-btn" id="nextPassBtn">다음 구절 →</button>';
+    saveQuizRecord();
+    document.getElementById('nextPassBtn').onclick = async function () {
+      _completed.push(_curIdx);
+      await setDailyField({ completedPassages: _completed });
+      let next = -1;
+      for (let i = 0; i < _passages.length; i++) {
+        if (!_completed.includes(i)) { next = i; break; }
+      }
+      if (next === -1) showAllDone();
+      else { _curIdx = next; renderPNav(); loadPassage(next); }
+    };
+    return;
   }
-  await saveQuizRecord(q, idx, ok);
-  setTimeout(async () => {
-    const qz = document.querySelector('.quiz-zone'); if (!qz) return;
-    const isLastQ = curQIdx >= curQList.length - 1;
-    const nb = document.createElement('button');
-    if (!isLastQ) {
-      nb.className = 'next-q-btn'; nb.textContent = '다음 문제 →';
-      nb.onclick = () => { curQIdx++; renderQ(); };
-    } else {
-      if (todayPassages.length > 0) {
-        await setDailyField({ completedPassages: firebase.firestore.FieldValue.arrayUnion(curPassageRef) });
-      }
-      const dr = await getDailyRecord();
-      const done = dr.completedPassages || [];
-      const nextIdx = todayPassages.findIndex((p, i) => i > curPasIdx && !done.includes(p.ref));
-      if (todayPassages.length > 0 && nextIdx !== -1) {
-        nb.className = 'next-p-btn'; nb.textContent = '📖 다음 말씀: ' + todayPassages[nextIdx].ref + ' →';
-        nb.onclick = async () => { curPasIdx = nextIdx; renderPNav((await getDailyRecord()).completedPassages || []); loadPassage(todayPassages[nextIdx]); };
-      } else if (todayPassages.length > 0) {
-        nb.className = 'next-p-btn'; nb.textContent = '🎉 오늘 말씀 완료!'; nb.onclick = showAllDone;
-      } else {
-        nb.className = 'next-p-btn'; nb.textContent = '📖 다음 성경 읽기'; nb.onclick = loadRandomPassage;
-      }
-    }
-    qz.appendChild(nb);
-  }, 400);
+  const q = curQ[qIdx];
+  document.getElementById('quizZone').innerHTML =
+    '<div class="quiz-prog">📌 문제 ' + (qIdx + 1) + ' / ' + qTotal + ' (정답 시 +' + curPointsPerAnswer + '점)</div>' +
+    '<div class="quiz-q">' + q.q + '</div>' +
+    '<div class="opts-grid">' + q.opts.map((o, i) =>
+      '<button class="opt-btn" onclick="answerQ(' + i + ')">' + o + '</button>').join('') + '</div>' +
+    '<div class="quiz-result" id="qRes"></div>';
 }
-async function saveQuizRecord(q, userAns, ok) {
-  if (!CU) return;
+async function answerQ(i) {
+  const q = curQ[qIdx];
+  const correct = i === q.a;
+  document.querySelectorAll('.opt-btn').forEach((b, k) => {
+    b.disabled = true;
+    if (k === q.a) b.classList.add('correct');
+    else if (k === i) b.classList.add('wrong');
+  });
+  const res = document.getElementById('qRes');
+  if (correct) {
+    qCorrect++;
+    res.className = 'quiz-result ok'; res.textContent = '🎉 정답! +' + curPointsPerAnswer + '점';
+    await addPoints(curPointsPerAnswer, '퀴즈 정답');
+  } else {
+    res.className = 'quiz-result fail'; res.textContent = '😢 다음에 또 도전!';
+  }
+  await db.collection('users').doc(CU.uid).update({
+    totalQuizzes: firebase.firestore.FieldValue.increment(1),
+    correctCount: firebase.firestore.FieldValue.increment(correct ? 1 : 0)
+  });
+  UD.totalQuizzes = (UD.totalQuizzes || 0) + 1;
+  if (correct) UD.correctCount = (UD.correctCount || 0) + 1;
+  setTimeout(() => {
+    res.innerHTML = '<button class="next-q-btn" onclick="qIdx++;renderQ()">' + (qIdx + 1 < qTotal ? '다음 문제 →' : '결과 보기 →') + '</button>';
+  }, 700);
+}
+async function saveQuizRecord() {
+  const p = _passages[_curIdx];
+  if (!p || !curQ) return;
   try {
     await db.collection('quizHistory').doc(CU.uid).collection('records').add({
-      ref: curPassageRef, question: q.q, opts: q.opts, correctAns: q.ans, userAns, isCorrect: ok,
+      ref: p.ref,
+      questions: curQ,
+      score: qCorrect, total: qTotal,
+      date: todayKey(),
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
-    await db.collection('users').doc(CU.uid).update({
-      totalQuizzes: firebase.firestore.FieldValue.increment(1),
-      correctCount:  firebase.firestore.FieldValue.increment(ok ? 1 : 0)
-    });
-    UD.totalQuizzes = (UD.totalQuizzes || 0) + 1;
-    if (ok) UD.correctCount = (UD.correctCount || 0) + 1;
-    // 오늘 답한 문제 텍스트를 누적 (같은 날 반복 방지용)
-    await setDailyField({ answeredQuestions: firebase.firestore.FieldValue.arrayUnion((q.q || '').trim()) });
   } catch (e) {}
 }
 
 /* ════ RECORDING ════ */
-let mediaRec = null, recChunks = [], recStream = null, recBlob = null;
-let recTimerInt = null, recSecs = 0, recState = 'idle';
-
+let _mediaRecorder = null, _audioChunks = [], _recBlob = null, _recTimer = null, _recSeconds = 0;
 async function toggleRec() {
   const dr = await getDailyRecord();
-  if (dr.recordingCount >= 3) { toast('오늘 3회 인증 완료!'); return; }
-  if (recState === 'idle') startRec();
-  else if (recState === 'recording') stopRec();
+  if (dr.recordingCount >= 3) { toast('🎉 오늘 인증 완료!'); return; }
+  if (_mediaRecorder && _mediaRecorder.state === 'recording') stopRec();
+  else startRec();
 }
 async function startRec() {
   try {
-    recStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRec = new MediaRecorder(recStream); recChunks = [];
-    mediaRec.ondataavailable = e => { if (e.data.size > 0) recChunks.push(e.data); };
-    mediaRec.onstop = () => { recBlob = new Blob(recChunks, { type: 'audio/webm' }); showRecPreview(); };
-    mediaRec.start(100); recState = 'recording'; recSecs = 0;
-    const btn = document.getElementById('recBtn');
-    btn.className = 'rec-btn recording'; btn.textContent = '⏹️';
-    document.getElementById('recStatus').textContent = '녹음 중... (버튼을 눌러 중지)';
-    const wf = document.createElement('div'); wf.className = 'waveform';
-    wf.innerHTML = '<div class="wave-bar"></div>'.repeat(5);
-    document.getElementById('recArea').insertBefore(wf, document.getElementById('recStatus'));
-    const timerEl = document.createElement('div'); timerEl.className = 'rec-timer'; timerEl.id = 'recTimer'; timerEl.textContent = '00:00';
-    document.getElementById('recArea').insertBefore(timerEl, document.getElementById('recStatus'));
-    recTimerInt = setInterval(() => {
-      recSecs++;
-      document.getElementById('recTimer').textContent = String(Math.floor(recSecs/60)).padStart(2,'0') + ':' + String(recSecs%60).padStart(2,'0');
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    _audioChunks = []; _recSeconds = 0;
+    _mediaRecorder = new MediaRecorder(stream);
+    _mediaRecorder.ondataavailable = e => _audioChunks.push(e.data);
+    _mediaRecorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      _recBlob = new Blob(_audioChunks, { type: 'audio/webm' });
+      showRecPreview();
+    };
+    _mediaRecorder.start();
+    document.getElementById('recArea').innerHTML =
+      '<button class="rec-btn recording" onclick="toggleRec()">⏹️</button>' +
+      '<div class="rec-timer" id="recTimer">00:00</div>' +
+      '<div class="waveform"><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div></div>' +
+      '<div class="rec-status">🔴 녹음 중... 다시 누르면 멈춰요</div>';
+    _recTimer = setInterval(() => {
+      _recSeconds++;
+      const m = String(Math.floor(_recSeconds/60)).padStart(2,'0');
+      const s = String(_recSeconds%60).padStart(2,'0');
+      const t = document.getElementById('recTimer');
+      if (t) t.textContent = m + ':' + s;
     }, 1000);
-  } catch (e) { toast('🎤 마이크 권한이 필요해요!'); }
+  } catch (e) {
+    toast('🎤 마이크 권한이 필요해요');
+  }
 }
 function stopRec() {
-  if (mediaRec && mediaRec.state !== 'inactive') mediaRec.stop();
-  recStream?.getTracks().forEach(t => t.stop());
-  clearInterval(recTimerInt); recState = 'preview';
+  if (_mediaRecorder) _mediaRecorder.stop();
+  if (_recTimer) clearInterval(_recTimer);
 }
 function showRecPreview() {
-  const url = URL.createObjectURL(recBlob);
+  const url = URL.createObjectURL(_recBlob);
   document.getElementById('recArea').innerHTML =
-    `<audio class="rec-audio" controls src="${url}"></audio>
-    <div style="display:flex;gap:8px">
-      <button class="submit-rec-btn" id="submitRecBtn" onclick="submitRec()" ${recSecs<5?'disabled':''}>✅ 인증하기 (+10점)</button>
-      <button class="retry-btn" onclick="resetRec()">다시 녹음</button>
-    </div>
-    <div class="rec-status">${recSecs < 5 ? '⚠️ 5초 이상 녹음해야 해요 (현재 '+recSecs+'초)' : '✅ 제출 가능 ('+recSecs+'초)'}</div>`;
+    '<audio class="rec-audio" controls src="' + url + '"></audio>' +
+    '<div class="rec-status">⏱️ ' + _recSeconds + '초 녹음됨</div>' +
+    '<div style="display:flex;gap:7px">' +
+    '<button class="submit-rec-btn" id="submitRecBtn" onclick="submitRec()">✅ 제출하기 (+10점)</button>' +
+    '<button class="retry-btn" onclick="resetRec()">다시 녹음</button>' +
+    '</div>';
 }
 async function submitRec() {
-  const dr = await getDailyRecord();
-  if (dr.recordingCount >= 3) { toast('오늘 3회 모두 완료!'); return; }
-  if (!recBlob) { toast('녹음 파일이 없어요!'); return; }
   const btn = document.getElementById('submitRecBtn');
-  btn.disabled = true; btn.textContent = '인증 중...';
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 업로드 중...'; }
   try {
-    const n = dr.recordingCount + 1;
-    // Storage 없이 Firestore에 인증 기록만 저장
-    await setDailyField({ recordingCount: n });
-    await db.collection('recordings').add({
-      uid: CU.uid, username: UD.username,
-      duration: recSecs, count: n,
-      date: todayKey(),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    await addPoints(10);
-    toast('🎙️ 인증 완료! +10점 (오늘 ' + n + '/3회)');
-    particles(window.innerWidth/2, 300, ['🎙️','✨','🌟'], 10);
-    await updateActivityUI();
-    resetRec();
-  } catch (e) { btn.disabled = false; btn.textContent = '✅ 인증하기 (+10점)'; toast('오류: ' + e.message); }
+    const reader = new FileReader();
+    reader.onload = async function () {
+      const base64 = reader.result.split(',')[1];
+      try {
+        await db.collection('recordings').add({
+          uid: CU.uid,
+          username: UD.username,
+          realName: UD.realName || UD.username,
+          duration: _recSeconds,
+          audioBase64: base64,
+          date: todayKey(),
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        const dr = await getDailyRecord();
+        await setDailyField({ recordingCount: (dr.recordingCount || 0) + 1 });
+        await addPoints(10, '성경 읽기 인증');
+        const newCount = (dr.recordingCount || 0) + 1;
+        toast('🎙️ 인증 완료! +10점 (오늘 ' + newCount + '/3회)');
+        updateActivityUI();
+        if (newCount < 3) resetRec();
+      } catch (err) {
+        toast('⚠️ 업로드 실패: ' + err.message);
+        if (btn) { btn.disabled = false; btn.textContent = '✅ 제출하기 (+10점)'; }
+      }
+    };
+    reader.readAsDataURL(_recBlob);
+  } catch (e) {
+    toast('⚠️ 실패: ' + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = '✅ 제출하기 (+10점)'; }
+  }
 }
 function resetRec() {
-  recBlob = null; recState = 'idle'; recSecs = 0;
+  _recBlob = null; _audioChunks = []; _recSeconds = 0;
   document.getElementById('recArea').innerHTML =
     '<button class="rec-btn idle" id="recBtn" onclick="toggleRec()">🎙️</button>' +
     '<div class="rec-status" id="recStatus">버튼을 누르고 성경을 소리 내어 읽어요</div>';
 }
 
-/* ════ MEDITATION PHOTO ════ */
-let selectedPhotoFile = null;
+/* ════ MEDITATION ════ */
+let _photoBlob = null;
 function onPhotoSelected(e) {
-  const file = e.target.files[0]; if (!file) return;
-  if (!file.type.startsWith('image/')) { toast('⚠️ 이미지 파일만 가능해요'); return; }
-  selectedPhotoFile = file;
-  const preview = document.getElementById('photoPreview');
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    preview.src = ev.target.result;
+  const f = e.target.files[0];
+  if (!f) return;
+  if (f.size > 10 * 1024 * 1024) { toast('⚠️ 사진은 10MB 이하만 가능'); return; }
+  compressImage(f, (compressedBlob, dataUrl) => {
+    _photoBlob = compressedBlob;
+    document.getElementById('photoPreview').src = dataUrl;
     document.getElementById('photoLabel').style.display = 'none';
     document.getElementById('photoPreviewWrap').style.display = 'block';
-  };
-  reader.onerror = () => { toast('⚠️ 사진을 읽을 수 없어요'); resetPhoto(); };
-  reader.readAsDataURL(file);
+    document.getElementById('medStatusMsg').innerHTML = '';
+  });
 }
 function resetPhoto() {
-  selectedPhotoFile = null;
+  _photoBlob = null;
   document.getElementById('photoInput').value = '';
   document.getElementById('photoLabel').style.display = 'flex';
   document.getElementById('photoPreviewWrap').style.display = 'none';
 }
-async function submitMeditation() {
-  const dr = await getDailyRecord();
-  if (dr.meditationDone) { toast('오늘 이미 제출했어요!'); return; }
-  if (!selectedPhotoFile) { toast('사진을 선택해요!'); return; }
-  const btn = document.getElementById('submitPhotoBtn');
-  btn.disabled = true; btn.textContent = '압축 중...';
-  try {
-    // Canvas로 이미지 압축 (Storage 없이 Firestore에 저장)
-    const base64 = await compressImage(selectedPhotoFile, 600, 0.55);
-    btn.textContent = '저장 중...';
-    await db.collection('meditations').add({
-      uid: CU.uid, username: UD.username,
-      photoBase64: base64,
-      status: 'pending',
-      submittedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    await setDailyField({ meditationDone: true });
-    document.getElementById('medStatusMsg').innerHTML = '<div class="med-pending">⏳ 관리자 확인 중... 승인 시 +10점</div>';
-    document.getElementById('photoPreviewWrap').style.display = 'none';
-    document.getElementById('photoLabel').style.display = 'none';
-    toast('📷 묵상 사진 제출 완료!');
-    await updateActivityUI();
-  } catch (e) { btn.disabled = false; btn.textContent = '✅ 제출하기 (+10점)'; toast('오류: ' + e.message); }
-}
-
-// 이미지 압축 함수 (FileReader + canvas, iOS 카메라/HEIC 호환 강화)
-function compressImage(file, maxWidth, quality) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = new Image();
-      img.onload = () => {
-        try {
-          const ratio = Math.min(maxWidth / img.width, maxWidth / img.height, 1);
-          const w = Math.max(1, Math.round(img.width * ratio));
-          const h = Math.max(1, Math.round(img.height * ratio));
-          const canvas = document.createElement('canvas');
-          canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve(canvas.toDataURL('image/jpeg', quality));
-        } catch (err) {
-          reject(new Error('사진 처리 중 오류: ' + err.message));
-        }
-      };
-      img.onerror = () => reject(new Error('사진 형식을 읽을 수 없어요 (HEIC 등 지원 안 함). 설정에서 "가장 호환성 좋음(JPEG)"으로 바꿔서 찍어보세요'));
-      img.src = ev.target.result;
+function compressImage(file, cb) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 1200;
+      let w = img.width, h = img.height;
+      if (w > max || h > max) {
+        if (w > h) { h = h * max / w; w = max; }
+        else { w = w * max / h; h = max; }
+      }
+      const cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      cv.getContext('2d').drawImage(img, 0, 0, w, h);
+      cv.toBlob(blob => cb(blob, cv.toDataURL('image/jpeg', 0.7)), 'image/jpeg', 0.7);
     };
-    reader.onerror = () => reject(new Error('파일을 읽을 수 없어요'));
-    reader.readAsDataURL(file);
-  });
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
-
-/* ════ BIBLE READER ════ */
-const BIBLE = {
-  old:[{n:'창세기',ch:50},{n:'출애굽기',ch:40},{n:'레위기',ch:27},{n:'민수기',ch:36},{n:'신명기',ch:34},{n:'여호수아',ch:24},{n:'사사기',ch:21},{n:'룻기',ch:4},{n:'사무엘상',ch:31},{n:'사무엘하',ch:24},{n:'열왕기상',ch:22},{n:'열왕기하',ch:25},{n:'역대상',ch:29},{n:'역대하',ch:36},{n:'에스라',ch:10},{n:'느헤미야',ch:13},{n:'에스더',ch:10},{n:'욥기',ch:42},{n:'시편',ch:150},{n:'잠언',ch:31},{n:'전도서',ch:12},{n:'아가',ch:8},{n:'이사야',ch:66},{n:'예레미야',ch:52},{n:'예레미야애가',ch:5},{n:'에스겔',ch:48},{n:'다니엘',ch:12},{n:'호세아',ch:14},{n:'요엘',ch:3},{n:'아모스',ch:9},{n:'오바댜',ch:1},{n:'요나',ch:4},{n:'미가',ch:7},{n:'나훔',ch:3},{n:'하박국',ch:3},{n:'스바냐',ch:3},{n:'학개',ch:2},{n:'스가랴',ch:14},{n:'말라기',ch:4}],
-  new:[{n:'마태복음',ch:28},{n:'마가복음',ch:16},{n:'누가복음',ch:24},{n:'요한복음',ch:21},{n:'사도행전',ch:28},{n:'로마서',ch:16},{n:'고린도전서',ch:16},{n:'고린도후서',ch:13},{n:'갈라디아서',ch:6},{n:'에베소서',ch:6},{n:'빌립보서',ch:4},{n:'골로새서',ch:4},{n:'데살로니가전서',ch:5},{n:'데살로니가후서',ch:3},{n:'디모데전서',ch:6},{n:'디모데후서',ch:4},{n:'디도서',ch:3},{n:'빌레몬서',ch:1},{n:'히브리서',ch:13},{n:'야고보서',ch:5},{n:'베드로전서',ch:5},{n:'베드로후서',ch:3},{n:'요한일서',ch:5},{n:'요한이서',ch:1},{n:'요한삼서',ch:1},{n:'유다서',ch:1},{n:'요한계시록',ch:22}]
+async function submitMeditation() {
+  if (!_photoBlob) return;
+  const btn = document.getElementById('submitPhotoBtn');
+  btn.disabled = true; btn.textContent = '⏳ 업로드 중...';
+  try {
+    const reader = new FileReader();
+    reader.onload = async function () {
+      const base64 = reader.result.split(',')[1];
+      try {
+        await db.collection('meditations').add({
+          uid: CU.uid,
+          username: UD.username,
+          realName: UD.realName || UD.username,
+          photoBase64: base64,
+          date: todayKey(),
+          status: 'pending',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        document.getElementById('medArea').innerHTML = '<div class="med-pending">⏳ 관리자 확인 대기 중<br>승인되면 +10점!</div>';
+        toast('📷 묵상 제출! 관리자 확인 대기 중');
+      } catch (err) {
+        toast('⚠️ 업로드 실패: ' + err.message);
+        btn.disabled = false; btn.textContent = '✅ 제출하기 (+10점)';
+      }
+    };
+    reader.readAsDataURL(_photoBlob);
+  } catch (e) {
+    toast('⚠️ 실패: ' + e.message);
+    btn.disabled = false; btn.textContent = '✅ 제출하기 (+10점)';
+  }
+}
+</script>
+<script>
+/* ════════ BIBLE READER ════════ */
+const BOOKS_OLD = ['창세기','출애굽기','레위기','민수기','신명기','여호수아','사사기','룻기','사무엘상','사무엘하','열왕기상','열왕기하','역대상','역대하','에스라','느헤미야','에스더','욥기','시편','잠언','전도서','아가','이사야','예레미야','예레미야애가','에스겔','다니엘','호세아','요엘','아모스','오바댜','요나','미가','나훔','하박국','스바냐','학개','스가랴','말라기'];
+const BOOKS_NEW = ['마태복음','마가복음','누가복음','요한복음','사도행전','로마서','고린도전서','고린도후서','갈라디아서','에베소서','빌립보서','골로새서','데살로니가전서','데살로니가후서','디모데전서','디모데후서','디도서','빌레몬서','히브리서','야고보서','베드로전서','베드로후서','요한일서','요한이서','요한삼서','유다서','요한계시록'];
+const BOOK_NUM = { '창세기':50,'출애굽기':40,'레위기':27,'민수기':36,'신명기':34,'여호수아':24,'사사기':21,'룻기':4,'사무엘상':31,'사무엘하':24,'열왕기상':22,'열왕기하':25,'역대상':29,'역대하':36,'에스라':10,'느헤미야':13,'에스더':10,'욥기':42,'시편':150,'잠언':31,'전도서':12,'아가':8,'이사야':66,'예레미야':52,'예레미야애가':5,'에스겔':48,'다니엘':12,'호세아':14,'요엘':3,'아모스':9,'오바댜':1,'요나':4,'미가':7,'나훔':3,'하박국':3,'스바냐':3,'학개':2,'스가랴':14,'말라기':4,'마태복음':28,'마가복음':16,'누가복음':24,'요한복음':21,'사도행전':28,'로마서':16,'고린도전서':16,'고린도후서':13,'갈라디아서':6,'에베소서':6,'빌립보서':4,'골로새서':4,'데살로니가전서':5,'데살로니가후서':3,'디모데전서':6,'디모데후서':4,'디도서':3,'빌레몬서':1,'히브리서':13,'야고보서':5,'베드로전서':5,'베드로후서':3,'요한일서':5,'요한이서':1,'요한삼서':1,'유다서':1,'요한계시록':22 };
+const TRANSLATIONS = {
+  ko: { name: '개역한글 (한국어)', code: 'ko' },
+  kjv: { name: 'KJV (영어)', code: 'kjv' },
+  bbe: { name: 'BBE (쉬운 영어)', code: 'bbe' }
 };
-let selTes = 'old', selBk = null, selCh = 1;
-const chCache = {};
-let _verseFilterStart = null, _verseFilterEnd = null;
+let _currentTranslation = 'ko';
+let _bibleByTranslation = {};
+let curTes = 'old', selBk = null, curCh = 1, _verseFilter = null;
 
 function initTranslationDropdown() {
   const sel = document.getElementById('translationSel');
   if (!sel || sel.options.length > 0) return;
   sel.innerHTML = Object.entries(TRANSLATIONS).map(([k, v]) =>
-    '<option value="' + k + '"' + (k === _currentTranslation ? ' selected' : '') + '>' + v.label + '</option>'
+    '<option value="' + k + '"' + (k === _currentTranslation ? ' selected' : '') + '>' + v.name + '</option>'
   ).join('');
 }
-
-function changeTranslation(key) {
-  if (!TRANSLATIONS[key]) return;
-  _currentTranslation = key;
-  // 번역본 바뀌면 장 캐시 무효화
-  Object.keys(chCache).forEach(k => delete chCache[k]);
-  if (selBk !== null) fetchChapter(BIBLE[selTes][selBk].n, selCh);
+function changeTranslation(code) {
+  _currentTranslation = code;
+  if (selBk !== null) loadChapter();
 }
-
+async function loadBibleData(translation) {
+  if (_bibleByTranslation[translation]) return _bibleByTranslation[translation];
+  try {
+    if (translation === 'ko') {
+      const r = await fetch('https://raw.githubusercontent.com/sionic-ai/Korean-Bible-Database/main/krv.json');
+      _bibleByTranslation[translation] = await r.json();
+    } else {
+      const r = await fetch('https://bible-api.com/data/' + translation);
+      _bibleByTranslation[translation] = await r.json();
+    }
+    return _bibleByTranslation[translation];
+  } catch (e) {
+    return null;
+  }
+}
+function setTestament(t, btn) {
+  curTes = t;
+  document.querySelectorAll('.t-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBookGrid();
+}
+function renderBookGrid() {
+  const books = curTes === 'old' ? BOOKS_OLD : BOOKS_NEW;
+  document.getElementById('bookGrid').innerHTML = books.map(b =>
+    '<button class="book-btn ' + (selBk === b ? 'ab' : '') + '" onclick="selectBook(\'' + b + '\')">' + b + '</button>'
+  ).join('');
+}
+function selectBook(b) {
+  selBk = b; curCh = 1; _verseFilter = null;
+  document.getElementById('chNavCard').style.display = 'block';
+  document.getElementById('readerCard').style.display = 'block';
+  const total = BOOK_NUM[b] || 1;
+  const sel = document.getElementById('chSel');
+  sel.innerHTML = '';
+  for (let i = 1; i <= total; i++) sel.innerHTML += '<option value="' + i + '">' + i + '장</option>';
+  sel.value = curCh;
+  document.getElementById('chTitle').textContent = b;
+  document.getElementById('verseStart').value = '';
+  document.getElementById('verseEnd').value = '';
+  renderBookGrid();
+  loadChapter();
+  document.getElementById('readerCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function changeChapter(d) {
+  const total = BOOK_NUM[selBk] || 1;
+  let n = curCh + d;
+  if (n < 1) n = 1; if (n > total) n = total;
+  curCh = n;
+  document.getElementById('chSel').value = n;
+  loadChapter();
+}
+async function loadChapter() {
+  curCh = parseInt(document.getElementById('chSel').value);
+  document.getElementById('readerBox').innerHTML = '<div class="loading-txt">📖 ' + selBk + ' ' + curCh + '장 불러오는 중...</div>';
+  if (_currentTranslation === 'ko') {
+    const data = await loadBibleData('ko');
+    if (!data) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 성경 데이터를 불러올 수 없어요.</div>'; return; }
+    let verses = data.filter(v => v.book_name === selBk && v.chapter === curCh);
+    if (_verseFilter) verses = verses.filter(v => v.verse >= _verseFilter.start && v.verse <= _verseFilter.end);
+    if (verses.length === 0) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">📖 해당 절을 찾을 수 없어요.</div>'; return; }
+    document.getElementById('readerBox').innerHTML = verses.map(v =>
+      '<span class="verse"><span class="verse-num">' + v.verse + '.</span>' + v.text + '</span>'
+    ).join('');
+  } else {
+    try {
+      const r = await fetch('https://bible-api.com/' + encodeURIComponent(selBk) + '%20' + curCh + '?translation=' + _currentTranslation);
+      const j = await r.json();
+      if (j.error || !j.verses) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ ' + (j.error || '성경 데이터 오류') + '</div>'; return; }
+      let verses = j.verses;
+      if (_verseFilter) verses = verses.filter(v => v.verse >= _verseFilter.start && v.verse <= _verseFilter.end);
+      document.getElementById('readerBox').innerHTML = verses.map(v =>
+        '<span class="verse"><span class="verse-num">' + v.verse + '.</span>' + decodeHtml(v.text) + '</span>'
+      ).join('');
+    } catch (e) {
+      document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 영어 성경 로딩 실패</div>';
+    }
+  }
+}
 function applyVerseFilter() {
   const s = parseInt(document.getElementById('verseStart').value);
   const e = parseInt(document.getElementById('verseEnd').value);
-  _verseFilterStart = s > 0 ? s : null;
-  _verseFilterEnd = e > 0 ? e : null;
-  if (selBk !== null) {
-    const key = _currentTranslation + '|' + BIBLE[selTes][selBk].n + '_' + selCh;
-    if (chCache[key]) renderCh(chCache[key]);
-  }
+  if (!s || !e || s > e) { toast('⚠️ 유효한 절 범위를 입력해요'); return; }
+  _verseFilter = { start: s, end: e };
+  loadChapter();
 }
 function clearVerseFilter() {
-  _verseFilterStart = _verseFilterEnd = null;
+  _verseFilter = null;
   document.getElementById('verseStart').value = '';
   document.getElementById('verseEnd').value = '';
-  if (selBk !== null) {
-    const key = _currentTranslation + '|' + BIBLE[selTes][selBk].n + '_' + selCh;
-    if (chCache[key]) renderCh(chCache[key]);
-  }
+  loadChapter();
 }
-function setTestament(t, btn) { selTes=t; selBk=null; selCh=1; document.querySelectorAll('.t-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.getElementById('chNavCard').style.display='none'; document.getElementById('readerCard').style.display='none'; renderBookGrid(); }
-function renderBookGrid() { document.getElementById('bookGrid').innerHTML = BIBLE[selTes].map((b,i)=>`<button class="book-btn ${selBk===i?'ab':''}" onclick="selectBook(${i})">${b.n}</button>`).join(''); }
-function selectBook(i) { selBk=i; selCh=1; renderBookGrid(); const b=BIBLE[selTes][i]; const sel=document.getElementById('chSel'); sel.innerHTML=Array.from({length:b.ch},(_,j)=>`<option value="${j+1}">${j+1}장</option>`).join(''); sel.value=1; document.getElementById('chNavCard').style.display='block'; document.getElementById('readerCard').style.display='block'; document.getElementById('chTitle').textContent=b.n+' '+selCh+'장'; fetchChapter(b.n,1); }
-function changeChapter(d) { if(selBk===null)return; const b=BIBLE[selTes][selBk]; selCh=Math.max(1,Math.min(b.ch,selCh+d)); document.getElementById('chSel').value=selCh; loadChapter(); }
-function loadChapter() { if(selBk===null)return; selCh=parseInt(document.getElementById('chSel').value); document.getElementById('chTitle').textContent=BIBLE[selTes][selBk].n+' '+selCh+'장'; fetchChapter(BIBLE[selTes][selBk].n,selCh); }
-// getbible.net 한글 성경 데이터 (무료 공개, API 키 불필요)
-const BOOK_NUM = {
-  '창세기':1,'출애굽기':2,'레위기':3,'민수기':4,'신명기':5,'여호수아':6,'사사기':7,'룻기':8,
-  '사무엘상':9,'사무엘하':10,'열왕기상':11,'열왕기하':12,'역대상':13,'역대하':14,'에스라':15,
-  '느헤미야':16,'에스더':17,'욥기':18,'시편':19,'잠언':20,'전도서':21,'아가':22,'이사야':23,
-  '예레미야':24,'예레미야애가':25,'에스겔':26,'다니엘':27,'호세아':28,'요엘':29,'아모스':30,
-  '오바댜':31,'요나':32,'미가':33,'나훔':34,'하박국':35,'스바냐':36,'학개':37,'스가랴':38,
-  '말라기':39,'마태복음':40,'마가복음':41,'누가복음':42,'요한복음':43,'사도행전':44,'로마서':45,
-  '고린도전서':46,'고린도후서':47,'갈라디아서':48,'에베소서':49,'빌립보서':50,'골로새서':51,
-  '데살로니가전서':52,'데살로니가후서':53,'디모데전서':54,'디모데후서':55,'디도서':56,'빌레몬서':57,
-  '히브리서':58,'야고보서':59,'베드로전서':60,'베드로후서':61,'요한일서':62,'요한이서':63,
-  '요한삼서':64,'유다서':65,'요한계시록':66
-};
-
 function decodeHtml(s) {
-  if (!s) return s;
-  const ta = document.createElement('textarea');
-  ta.innerHTML = s;
-  return ta.value;
+  const t = document.createElement('textarea'); t.innerHTML = s; return t.value;
 }
 
-/* ══ 번역본 설정 — 원하면 URL 추가/변경 가능 ══
-   개역개정·쉬운성경은 한국성서공회 저작권으로 공개 URL이 없어요.
-   합법적 데이터 소스가 있으면 아래 URL을 교체해서 쓰세요.           */
-const TRANSLATIONS = {
-  'ko':     { label: '한글 (개역)', url: 'https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/ko/ko.json' },
-  'en-kjv': { label: 'English KJV', url: 'https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/en/kjv.json' },
-  'en-bbe': { label: 'English BBE', url: 'https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/en/bbe.json' }
-  // 예: 'ko-nkrv': { label: '개역개정', url: '직접-호스팅한-URL.json' },
-};
-
-let _currentTranslation = 'ko';
-const _bibleDataCache = {};    // { translationKey: data }
-const _bibleLoadingCache = {}; // { translationKey: promise }
-
-async function loadBibleData(key) {
-  if (_bibleDataCache[key]) return _bibleDataCache[key];
-  if (_bibleLoadingCache[key]) return _bibleLoadingCache[key];
-  const t = TRANSLATIONS[key];
-  if (!t) throw new Error('없는 번역본: ' + key);
-  const p = fetch(t.url)
-    .then(r => { if (!r.ok) throw new Error('다운로드 실패'); return r.json(); })
-    .then(d => {
-      d.forEach(book => {
-        if (!book.chapters) return;
-        book.chapters.forEach((ch, ci) => {
-          book.chapters[ci] = ch.map(v => decodeHtml(v));
-        });
-      });
-      _bibleDataCache[key] = d;
-      delete _bibleLoadingCache[key];
-      return d;
-    })
-    .catch(err => { delete _bibleLoadingCache[key]; throw err; });
-  _bibleLoadingCache[key] = p;
-  return p;
-}
-// 기존 함수 호환(관리자 말씀 기능이 사용): 항상 한글 데이터 반환
-async function loadKoBible() { return loadBibleData('ko'); }
-
-async function fetchChapter(book, ch) {
-  const key = _currentTranslation + '|' + book + '_' + ch;
-  if (chCache[key]) { renderCh(chCache[key]); return; }
-  const readerBox = document.getElementById('readerBox');
-  readerBox.innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...<br><small style="color:#bbb">(번역본 처음 1회 다운로드, 잠시만 기다려주세요)</small></div>';
-  const bookNum = BOOK_NUM[book];
-  if (!bookNum) { readerBox.innerHTML = '<div class="loading-txt">⚠️ 책을 찾을 수 없어요</div>'; return; }
-
-  try {
-    const data = await loadBibleData(_currentTranslation);
-    const bookData = data[bookNum - 1];
-    if (!bookData || !bookData.chapters || !bookData.chapters[ch - 1]) {
-      readerBox.innerHTML = '<div class="loading-txt">⚠️ 해당 장을 찾을 수 없어요</div>';
-      return;
-    }
-    const verseArr = bookData.chapters[ch - 1];
-    const verses = verseArr.map((text, i) => ({ v: i + 1, text: text }));
-    chCache[key] = verses;
-    renderCh(verses);
-  } catch (e) {
-    const local = BIBLE_DATA.find(b => b.ref.startsWith(book));
-    if (local) {
-      const lines = local.passage.split('\n');
-      const verses = lines.map((t, i) => ({ v: i+1, text: t }));
-      renderCh(verses);
-    } else {
-      readerBox.innerHTML =
-        '<div class="loading-txt">⚠️ 불러오기 실패<br><br>' +
-        '<small style="color:#aaa">인터넷 연결을 확인해주세요</small></div>';
-    }
-  }
-}
-function renderCh(verses) {
-  let filtered = verses;
-  if (_verseFilterStart || _verseFilterEnd) {
-    const s = _verseFilterStart || 1;
-    const e = _verseFilterEnd || verses.length;
-    filtered = verses.filter(v => v.v >= s && v.v <= e);
-    if (filtered.length === 0) filtered = verses;
-  }
-  document.getElementById('readerBox').innerHTML = filtered.map(v=>`<span class="verse"><span class="verse-num">${v.v}</span>${v.text}</span>`).join('');
-}
-
-/* ════ HISTORY ════ */
+/* ════════ HISTORY ════════ */
 async function loadHistory() {
-  const t=UD.totalQuizzes||0, c=UD.correctCount||0, r=t>0?Math.round(c/t*100):0;
-  document.getElementById('histStats').innerHTML=`
-    <div class="h-stat"><div class="h-stat-n">${t}</div><div class="h-stat-l">총 문제</div></div>
-    <div class="h-stat"><div class="h-stat-n" style="color:#4a9a50">${c}</div><div class="h-stat-l">정답</div></div>
-    <div class="h-stat"><div class="h-stat-n" style="color:#e07050">${t-c}</div><div class="h-stat-l">오답</div></div>
-    <div class="h-stat"><div class="h-stat-n" style="color:#8a5ac0">${r}%</div><div class="h-stat-l">정답률</div></div>`;
+  const list = document.getElementById('histList');
+  list.innerHTML = '<div class="empty-txt">로딩 중...</div>';
   try {
     const snap = await db.collection('quizHistory').doc(CU.uid).collection('records').orderBy('timestamp','desc').limit(50).get();
-    if (snap.empty) { document.getElementById('histList').innerHTML='<div class="empty-txt">📖 퀴즈를 풀면 여기에 기록돼요!</div>'; return; }
-    document.getElementById('histList').innerHTML = snap.docs.map(d => {
-      const r=d.data(), ts=r.timestamp?.toDate?r.timestamp.toDate():new Date();
-      const ds=ts.getFullYear()+'.'+String(ts.getMonth()+1).padStart(2,'0')+'.'+String(ts.getDate()).padStart(2,'0')+' '+String(ts.getHours()).padStart(2,'0')+':'+String(ts.getMinutes()).padStart(2,'0');
-      const ua=r.opts?.[r.userAns]||'', ca=r.opts?.[r.correctAns]||'';
-      return `<div class="hist-item ${r.isCorrect?'ok':'ng'}"><div class="h-ico">${r.isCorrect?'✅':'❌'}</div><div style="flex:1"><span class="h-ref">📖 ${r.ref}</span><div class="h-q">${r.question}</div><div class="h-ans">${r.isCorrect?`<span class="ok">✔ ${ca}</span>`:`<span class="ng">${ua}</span> → <span class="ok">정답: ${ca}</span>`}</div><div class="h-date">${ds}</div></div></div>`;
+    const stats = document.getElementById('histStats');
+    const total = UD.totalQuizzes || 0, correct = UD.correctCount || 0;
+    const rate = total > 0 ? Math.round(correct / total * 100) : 0;
+    stats.innerHTML =
+      '<div class="h-stat"><div class="h-stat-n">' + total + '</div><div class="h-stat-l">총 퀴즈</div></div>' +
+      '<div class="h-stat"><div class="h-stat-n">' + correct + '</div><div class="h-stat-l">정답</div></div>' +
+      '<div class="h-stat"><div class="h-stat-n">' + (total - correct) + '</div><div class="h-stat-l">오답</div></div>' +
+      '<div class="h-stat"><div class="h-stat-n">' + rate + '%</div><div class="h-stat-l">정답률</div></div>';
+    if (snap.empty) { list.innerHTML = '<div class="empty-txt">📖 퀴즈를 풀면 여기에 기록돼요!</div>'; return; }
+    list.innerHTML = snap.docs.map(d => {
+      const r = d.data();
+      const items = (r.questions || []).map((q, i) => {
+        const ok = i < r.score; // approximate
+        return '<div class="hist-item ' + (ok ? 'ok' : 'ng') + '">' +
+          '<div class="h-ico">' + (ok ? '✅' : '❌') + '</div>' +
+          '<div style="flex:1"><div class="h-ref">' + r.ref + '</div>' +
+          '<div class="h-q">' + q.q + '</div>' +
+          '<div class="h-ans">정답: <span class="ok">' + q.opts[q.a] + '</span></div>' +
+          '<div class="h-date">' + r.date + '</div></div></div>';
+      }).join('');
+      return '<div style="margin-bottom:6px;font-size:0.92rem;color:#888">📖 ' + r.ref + ' · ' + r.score + '/' + r.total + '점 · ' + r.date + '</div>';
     }).join('');
-  } catch (e) { document.getElementById('histList').innerHTML='<div class="empty-txt">⚠️ 실패</div>'; }
+  } catch (e) {
+    list.innerHTML = '<div class="empty-txt">⚠️ 불러오기 실패</div>';
+  }
 }
 
-/* ════ ADMIN ════ */
-function switchAdminTab(n, btn) {
-  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.a-tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('adm-'+n).classList.add('active'); btn.classList.add('active');
-  if(n==='users') loadAdminUsers();
-  if(n==='daily') initDailyConfig();
-  if(n==='meds')  loadMeditations();
-  if(n==='qr')    loadCurrentQr();
+/* ════════ ADMIN ════════ */
+function switchAdminTab(t, btn) {
+  document.querySelectorAll('.a-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('adm-' + t).classList.add('active');
+  if (t === 'users') loadAdminUsers();
+  else if (t === 'meds') loadMeditations();
+  else if (t === 'qr') loadCurrentQr();
+  else if (t === 'daily') initDailyConfig();
 }
+
 async function loadAdminUsers() {
+  const tb = document.getElementById('admTbody');
   try {
-    const snap = await db.collection('users').get();
-    document.getElementById('admTbody').innerHTML = snap.docs.map(d => {
-      const u={id:d.id,...d.data()}, p=u.pet, pe=p?COMP[p.type]?.stages[p.level||0]:'';
-      const rate=u.totalQuizzes>0?Math.round((u.correctCount||0)/u.totalQuizzes*100):0;
-      const cr=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('ko-KR'):'-';
-      return `<tr><td><b>${u.username}</b>${u.isAdmin?' 👑':''}</td><td>${p?`<span class="pet-badge">${pe} ${COMP[p.type]?.label}</span>`:'없음'}</td><td>${p?.name||'-'}</td><td>${p?'Lv.'+(p.level+1):'-'}</td><td>${p?.pts||0}점</td><td>${u.totalQuizzes||0}</td><td>${rate}%</td><td>${cr}</td><td>${u.isAdmin?'':'<button class="del-btn" onclick="delUser(\''+u.id+'\',\''+u.username+'\')">삭제</button>'}</td></tr>`;
+    const snap = await db.collection('users').orderBy('createdAt','desc').get();
+    if (snap.empty) { tb.innerHTML = '<tr><td colspan="10" class="empty-txt">회원이 없어요</td></tr>'; return; }
+    tb.innerHTML = snap.docs.map(d => {
+      const u = d.data();
+      const p = u.pet;
+      const rate = u.totalQuizzes > 0 ? Math.round((u.correctCount || 0) / u.totalQuizzes * 100) : 0;
+      const date = u.createdAt ? u.createdAt.toDate().toLocaleDateString('ko-KR') : '-';
+      const isMe = d.id === CU.uid;
+      const delBtn = (u.isAdmin || isMe) ? '<span style="color:#ccc;font-size:0.78rem">-</span>' :
+        '<button class="del-btn" onclick="delUser(\'' + d.id + '\',\'' + u.username + '\')">삭제</button>';
+      return '<tr>' +
+        '<td><b>' + u.username + '</b>' + (u.isAdmin ? ' 👑' : '') + (isMe ? ' (나)' : '') + '</td>' +
+        '<td>' + (u.realName || '-') + '</td>' +
+        '<td>' + (p ? '<span class="pet-badge">' + COMP[p.type].label + '</span>' : '-') + '</td>' +
+        '<td>' + (p ? p.name : '-') + '</td>' +
+        '<td>' + (p ? (p.level + 1) + '★' : '-') + '</td>' +
+        '<td>' + (p ? (p.pts || 0) : 0) + '</td>' +
+        '<td>' + (u.totalQuizzes || 0) + '</td>' +
+        '<td>' + rate + '%</td>' +
+        '<td style="font-size:0.78rem;color:#aaa">' + date + '</td>' +
+        '<td>' + delBtn + '</td></tr>';
     }).join('');
-  } catch (e) { document.getElementById('admTbody').innerHTML='<tr><td colspan="9" class="empty-txt">⚠️ 실패</td></tr>'; }
+  } catch (e) {
+    tb.innerHTML = '<tr><td colspan="10" class="empty-txt">⚠️ 불러오기 실패: ' + e.message + '</td></tr>';
+  }
 }
-async function delUser(uid, name) { if(!confirm('"'+name+'" 삭제?'))return; try{await db.collection('users').doc(uid).delete();toast('✅ 삭제 완료');loadAdminUsers();}catch(e){toast('삭제 실패!');} }
+async function delUser(uid, name) {
+  if (!confirm(name + '님을 삭제할까요?\n(데이터는 남고 회원 정보만 삭제)')) return;
+  try {
+    await db.collection('users').doc(uid).delete();
+    toast('🗑️ ' + name + ' 삭제됨');
+    loadAdminUsers();
+  } catch (e) { toast('⚠️ 실패: ' + e.message); }
+}
+async function resetAllUserData() {
+  if (!confirm('모든 회원의 친구·포인트·인증 기록·랭킹을 삭제할까요?\n(회원 계정과 관리자 본인 데이터는 유지)')) return;
+  if (!confirm('정말 되돌릴 수 없어요! 진행할까요?')) return;
+  const btn = document.getElementById('resetBtn');
+  btn.disabled = true; btn.textContent = '⏳ 초기화 중...';
+  try {
+    const usersSnap = await db.collection('users').get();
+    const batch = db.batch();
+    usersSnap.docs.forEach(d => {
+      if (!d.data().isAdmin) {
+        batch.update(d.ref, { pet: null, bonusPet: null, totalQuizzes: 0, correctCount: 0, church: {} });
+      }
+    });
+    await batch.commit();
+    for (const col of ['recordings','meditations','pointLog']) {
+      const b = db.batch();
+      const s = await db.collection(col).get();
+      s.docs.forEach(d => b.delete(d.ref));
+      await b.commit();
+    }
+    const b3 = db.batch();
+    const udSnap = await db.collection('userDaily').get();
+    udSnap.docs.forEach(d => b3.delete(d.ref));
+    await b3.commit();
+    toast('✅ 전체 초기화 완료');
+    loadAdminUsers();
+  } catch (e) { toast('⚠️ 실패: ' + e.message); }
+  btn.disabled = false; btn.textContent = '🔄 모든 회원 데이터 초기화';
+}
 
-/* ════ 출석 QR ════ */
+/* ════ DAILY CONFIG ════ */
+let _dpEditing = [];
+async function initDailyConfig() {
+  document.getElementById('todayLbl').textContent = '오늘: ' + todayKey();
+  renderDpBooks();
+  try {
+    const snap = await db.collection('dailyConfig').doc(todayKey()).get();
+    if (snap.exists) _dpEditing = snap.data().passages || [];
+    else _dpEditing = [];
+  } catch (e) { _dpEditing = []; }
+  renderDpList();
+}
+function renderDpBooks() {
+  const tes = document.getElementById('dpTes').value;
+  const books = tes === 'old' ? BOOKS_OLD : BOOKS_NEW;
+  document.getElementById('dpBook').innerHTML = books.map(b => '<option>' + b + '</option>').join('');
+  updateDpChap();
+  document.getElementById('dpBook').onchange = updateDpChap;
+}
+function updateDpChap() {
+  const b = document.getElementById('dpBook').value;
+  const total = BOOK_NUM[b] || 1;
+  const sel = document.getElementById('dpChap');
+  sel.innerHTML = '';
+  for (let i = 1; i <= total; i++) sel.innerHTML += '<option value="' + i + '">' + i + '장</option>';
+}
+function addDailyPassage() {
+  const book = document.getElementById('dpBook').value;
+  const chapter = parseInt(document.getElementById('dpChap').value);
+  const sv = parseInt(document.getElementById('dpStartV').value) || null;
+  const ev = parseInt(document.getElementById('dpEndV').value) || null;
+  const ref = book + ' ' + chapter + '장' + (sv ? (' ' + sv + (ev && ev !== sv ? '-' + ev : '') + '절') : '');
+  _dpEditing.push({ book, chapter, startV: sv, endV: ev, ref, questions: [] });
+  renderDpList();
+}
+function removeDp(idx) {
+  _dpEditing.splice(idx, 1);
+  renderDpList();
+}
+function renderDpList() {
+  const list = document.getElementById('dpList');
+  if (_dpEditing.length === 0) { list.innerHTML = '<div class="empty-txt">구절을 추가해요</div>'; return; }
+  list.innerHTML = _dpEditing.map((p, i) =>
+    '<div class="dp-item">' +
+    '<div class="dp-item-hdr"><span class="dp-ref-tag">' + p.ref + '</span><button class="dp-remove" onclick="removeDp(' + i + ')">✕</button></div>' +
+    '<button class="dp-toggle-btn" onclick="toggleQForm(' + i + ')">📝 퀴즈 ' + (p.questions.length) + '/3 ' + (p.questions.length === 3 ? '✓' : '') + '</button>' +
+    '<div id="qf-' + i + '" style="display:none;margin-top:6px"></div>' +
+    '</div>'
+  ).join('');
+}
+function toggleQForm(i) {
+  const qf = document.getElementById('qf-' + i);
+  if (qf.style.display === 'block') { qf.style.display = 'none'; return; }
+  qf.style.display = 'block';
+  renderQForm(i);
+}
+function renderQForm(i) {
+  const p = _dpEditing[i];
+  const qf = document.getElementById('qf-' + i);
+  let html = '';
+  for (let qi = 0; qi < 3; qi++) {
+    const q = p.questions[qi] || { q: '', opts: ['','','',''], a: 0 };
+    html += '<div class="cqf"><div style="font-size:0.85rem;color:#888;margin-bottom:3px">문제 ' + (qi+1) + '</div>' +
+      '<input class="cqf-input" placeholder="문제" value="' + (q.q || '').replace(/"/g,'&quot;') + '" onchange="updQ(' + i + ',' + qi + ',\'q\',this.value)">' +
+      '<div class="cqf-opts">' +
+      [0,1,2,3].map(oi =>
+        '<input class="cqf-input" placeholder="' + (oi+1) + '번 답" value="' + ((q.opts[oi] || '')).replace(/"/g,'&quot;') + '" onchange="updQ(' + i + ',' + qi + ',\'opt' + oi + '\',this.value)">'
+      ).join('') +
+      '</div>' +
+      '<div style="display:flex;gap:6px;align-items:center"><span style="font-size:0.85rem;color:#888">정답:</span>' +
+      '<select class="ans-sel" onchange="updQ(' + i + ',' + qi + ',\'a\',this.value)">' +
+      [0,1,2,3].map(oi => '<option value="' + oi + '"' + (q.a === oi ? ' selected' : '') + '>' + (oi+1) + '번</option>').join('') +
+      '</select></div></div>';
+  }
+  qf.innerHTML = html;
+}
+function addQ(i) { /* fallback unused */ }
+function removeQ(i, qi) { _dpEditing[i].questions.splice(qi, 1); renderQForm(i); renderDpList(); }
+function updQ(i, qi, field, v) {
+  if (!_dpEditing[i].questions[qi]) _dpEditing[i].questions[qi] = { q:'', opts:['','','',''], a:0 };
+  const q = _dpEditing[i].questions[qi];
+  if (field === 'q') q.q = v;
+  else if (field === 'a') q.a = parseInt(v);
+  else if (field.startsWith('opt')) q.opts[parseInt(field.replace('opt',''))] = v;
+}
+async function saveDailyConfig() {
+  const filtered = _dpEditing.filter(p => p.questions && p.questions.length > 0 && p.questions.every(q => q.q && q.opts.every(o => o)));
+  if (filtered.length === 0) { toast('⚠️ 모든 구절에 퀴즈 3문제씩 채워주세요'); return; }
+  try {
+    await db.collection('dailyConfig').doc(todayKey()).set({
+      date: todayKey(), passages: filtered, savedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    toast('💾 오늘의 말씀 저장 완료!');
+  } catch (e) { toast('⚠️ 실패: ' + e.message); }
+}
+
+/* ════ MEDITATION REVIEW ════ */
+async function loadMeditations() {
+  const list = document.getElementById('medsList');
+  list.innerHTML = '<div class="empty-txt">로딩 중...</div>';
+  try {
+    const snap = await db.collection('meditations').orderBy('timestamp','desc').limit(50).get();
+    if (snap.empty) { list.innerHTML = '<div class="empty-txt">제출된 묵상 사진이 없어요</div>'; return; }
+    list.innerHTML = snap.docs.map(d => {
+      const m = d.data();
+      const date = m.timestamp ? m.timestamp.toDate().toLocaleString('ko-KR') : '-';
+      const status = m.status === 'approved' ? '<span class="badge-approved">✅ 승인됨</span>' :
+                     m.status === 'rejected' ? '<span class="badge-rejected">❌ 거부됨</span>' : '';
+      const actions = m.status === 'pending' ?
+        '<div class="med-actions">' +
+        '<button class="approve-btn" onclick="approveMed(\'' + d.id + '\',\'' + m.uid + '\')">✅ 승인 (+10점)</button>' +
+        '<button class="reject-btn" onclick="rejectMed(\'' + d.id + '\')">거부</button></div>' : '';
+      return '<div class="med-item">' +
+        '<img class="med-photo" src="data:image/jpeg;base64,' + m.photoBase64 + '" onclick="document.getElementById(\'lb-img\').src=this.src;document.getElementById(\'lightbox\').classList.add(\'open\')">' +
+        '<div style="flex:1">' +
+        '<div class="med-user">👤 ' + (m.realName || m.username) + ' <span style="color:#aaa;font-size:0.78rem">@' + m.username + '</span></div>' +
+        '<div class="med-date">' + date + '</div>' +
+        status + actions +
+        '</div></div>';
+    }).join('');
+  } catch (e) {
+    list.innerHTML = '<div class="empty-txt">⚠️ 불러오기 실패</div>';
+  }
+}
+async function approveMed(medId, uid) {
+  try {
+    await db.collection('meditations').doc(medId).update({ status: 'approved', approvedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    const uSnap = await db.collection('users').doc(uid).get();
+    if (uSnap.exists) {
+      const u = uSnap.data();
+      const pet = u.pet;
+      if (pet) {
+        pet.pts = (pet.pts || 0) + 10;
+        await db.collection('users').doc(uid).update({ pet });
+        await db.collection('pointLog').add({
+          uid: uid,
+          username: u.username,
+          realName: u.realName || u.username,
+          points: 10,
+          reason: '묵상 승인',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        const med = (await db.collection('meditations').doc(medId).get()).data();
+        if (med && med.date) {
+          await db.collection('userDaily').doc(uid + '_' + med.date).set({ meditationDone: true }, { merge: true });
+        }
+      }
+    }
+    toast('✅ 묵상 승인! +10점 지급');
+    loadMeditations();
+  } catch (e) { toast('⚠️ 실패: ' + e.message); }
+}
+async function rejectMed(medId) {
+  if (!confirm('묵상 사진을 거부할까요?')) return;
+  try {
+    await db.collection('meditations').doc(medId).update({ status: 'rejected' });
+    toast('❌ 거부됨');
+    loadMeditations();
+  } catch (e) { toast('⚠️ 실패: ' + e.message); }
+}
+
+/* ════ QR ATTENDANCE (이메일/공유 가능) ════ */
 function buildQrUrl(token) {
   const base = window.location.origin + window.location.pathname;
   return base + '?attend=' + encodeURIComponent(token);
 }
 async function generateQrToday() {
-  if (!isAdmin) { toast('관리자만 가능해요'); return; }
-  const today = todayKey();
-  const secret = Math.random().toString(36).slice(2, 12) + Math.random().toString(36).slice(2, 8);
+  const date = todayKey();
+  const secret = Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 6);
   try {
-    await db.collection('attendanceTokens').doc(today).set({
-      secret, createdBy: UD.username,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    await db.collection('qrCodes').doc(date).set({
+      date, secret, createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    showQrDisplay(today, secret);
-    toast('✅ 새 QR 생성 완료');
-  } catch (e) { toast('⚠️ 생성 실패: ' + e.message); }
+    showQrDisplay(date, secret);
+    toast('✅ QR 새로 생성!');
+  } catch (e) { toast('⚠️ 실패: ' + e.message); }
 }
 async function loadCurrentQr() {
-  const today = todayKey();
+  const date = todayKey();
   try {
-    const snap = await db.collection('attendanceTokens').doc(today).get();
-    if (snap.exists && snap.data().secret) {
-      showQrDisplay(today, snap.data().secret);
+    const snap = await db.collection('qrCodes').doc(date).get();
+    if (snap.exists) {
+      const d = snap.data();
+      showQrDisplay(d.date, d.secret);
     } else {
-      document.getElementById('qrDisplay').innerHTML =
-        '<div style="text-align:center;padding:18px;color:#aaa;font-size:0.95rem">아직 오늘의 QR이 없어요. 위 버튼을 눌러 생성하세요!</div>';
+      document.getElementById('qrDisplay').innerHTML = '<div style="text-align:center;padding:18px;color:#aaa">아직 오늘 QR이 없어요. 위 버튼을 눌러 생성!</div>';
     }
   } catch (e) {
-    document.getElementById('qrDisplay').innerHTML = '<div style="color:#aaa;text-align:center;padding:14px">⚠️ 불러오기 실패</div>';
+    document.getElementById('qrDisplay').innerHTML = '<div style="text-align:center;padding:18px;color:#e07070">⚠️ 불러오기 실패</div>';
   }
 }
 function showQrDisplay(date, secret) {
   const token = date + '_' + secret;
   const url = buildQrUrl(token);
   const qrSrc = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(url);
+  const subject = encodeURIComponent('⛪ ' + date + ' 교회 출석 QR 코드');
+  const body = encodeURIComponent(
+    '오늘의 교회 출석 QR 코드입니다.\n\n' +
+    '아래 링크를 클릭하면 자동으로 출석이 기록되고 +2점이 적립돼요.\n\n' +
+    url + '\n\n' +
+    '※ 자정이 지나면 만료됩니다. 새 QR을 받으세요!'
+  );
+  const safeUrl = url.replace(/'/g, "\\'");
   document.getElementById('qrDisplay').innerHTML =
     '<div style="text-align:center;padding:14px;background:#f8fff5;border-radius:14px;border:2px solid #c8e8b0">' +
     '<img src="' + qrSrc + '" alt="QR" style="max-width:280px;width:100%;border-radius:12px;background:white;padding:8px">' +
     '<div style="font-size:1rem;font-weight:700;color:#4a9a50;margin-top:10px">📅 ' + date + ' 출석 QR</div>' +
-    '<div style="font-size:0.78rem;color:#aaa;margin-top:4px">자정 지나면 만료돼요. 새 QR 생성 필요!</div>' +
+    '<div style="font-size:0.78rem;color:#aaa;margin-top:4px">자정 지나면 만료돼요</div>' +
+    '<div class="qr-share-row">' +
+      '<a href="mailto:?subject=' + subject + '&body=' + body + '" class="qr-share-btn email">📧 이메일</a>' +
+      '<button onclick="copyQrLink(\'' + safeUrl + '\')" class="qr-share-btn copy">📋 링크 복사</button>' +
+      '<button onclick="shareQrLink(\'' + safeUrl + '\',\'' + date + '\')" class="qr-share-btn share">📤 공유</button>' +
+    '</div>' +
     '<details style="margin-top:10px;font-size:0.78rem;color:#888"><summary style="cursor:pointer">URL 보기</summary>' +
     '<div style="word-break:break-all;padding:8px;background:white;border-radius:8px;margin-top:6px">' + url + '</div></details>' +
     '</div>';
 }
-
-async function processAttendQR(token) {
-  if (!CU || !UD) return;
-  if (!UD.pet) { toast('⚠️ 친구를 먼저 골라주세요!'); return; }
-  const parts = (token || '').split('_');
-  if (parts.length !== 2) { toast('⚠️ 잘못된 출석 QR'); return; }
-  const [date, secret] = parts;
-  if (date !== todayKey()) { toast('⚠️ 만료된 QR (' + date + ')'); return; }
-  try {
-    const snap = await db.collection('attendanceTokens').doc(date).get();
-    if (!snap.exists || snap.data().secret !== secret) { toast('⚠️ 잘못된 QR이에요'); return; }
-  } catch (e) { toast('⚠️ 검증 실패'); return; }
-  const dow = new Date().getDay();
-  const isWed = dow === 3;
-  const max = isWed ? 2 : 1;
-  const church = UD.church || {};
-  const current = church[date] || 0;
-  if (current >= max) {
-    toast(isWed ? '오늘 이미 2번 출석!' : '오늘 이미 출석 완료!');
-    return;
+function copyQrLink(url) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => toast('📋 링크 복사 완료!'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = url; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('📋 링크 복사 완료!'); }
+    catch (e) { toast('⚠️ 복사 실패'); }
+    ta.remove();
   }
-  church[date] = current + 1;
-  UD.church = church;
-  UD.pet.pts = (UD.pet.pts || 0) + 2;
-  await savePet({ church: UD.church });
-  updatePtsDisplay();
-  if (typeof renderChurch === 'function') renderChurch();
-  toast('⛪ QR 출석 완료! +2점');
-  particles(window.innerWidth/2, 200, ['⛪','✨','🌟','🎉'], 12);
+}
+function shareQrLink(url, date) {
+  if (navigator.share) {
+    navigator.share({
+      title: '📅 ' + date + ' 교회 출석 QR',
+      text: '아래 링크를 누르면 출석이 자동 기록돼요!',
+      url: url
+    }).catch(() => {});
+  } else {
+    copyQrLink(url);
+  }
 }
 
 function checkAttendQR() {
   const params = new URLSearchParams(window.location.search);
   const token = params.get('attend');
   if (!token) return;
-  // URL 정리 (재실행 방지)
-  const u = new URL(window.location);
-  u.searchParams.delete('attend');
-  window.history.replaceState({}, '', u);
-  // 로그인 안 됐으면 localStorage에 저장 후 로그인 후 처리
-  localStorage.setItem('pendingAttend', token);
+  // 토큰을 localStorage에 임시 저장 (로그인 후 처리)
+  try { localStorage.setItem('pendingAttendToken', token); } catch (e) {}
+  // URL에서 ?attend= 제거
+  const newUrl = window.location.pathname;
+  history.replaceState(null, '', newUrl);
 }
 async function processStoredAttendQR() {
-  const token = localStorage.getItem('pendingAttend');
+  let token = null;
+  try { token = localStorage.getItem('pendingAttendToken'); } catch (e) {}
   if (!token) return;
-  localStorage.removeItem('pendingAttend');
+  try { localStorage.removeItem('pendingAttendToken'); } catch (e) {}
   await processAttendQR(token);
 }
-
-async function resetAllUserData() {
-  if (!isAdmin) { toast('관리자만 가능해요'); return; }
-  if (!confirm('⚠️ 관리자 포함 모든 회원의 친구·포인트·사진·기록을 전부 삭제합니다.\n회원 계정은 유지돼요.\n\n정말 진행할까요?')) return;
-  if (!confirm('되돌릴 수 없어요!\n다시 한 번 확인합니다. 계속할까요?')) return;
-  const btn = document.getElementById('resetBtn');
-  btn.disabled = true; btn.textContent = '초기화 중...';
+async function processAttendQR(token) {
+  const parts = token.split('_');
+  if (parts.length < 2) { toast('⚠️ QR 코드 형식 오류'); return; }
+  const date = parts[0];
+  const secret = parts.slice(1).join('_');
   try {
-    const BATCH = 400;
-    const deleteAll = async (col) => {
-      const snap = await db.collection(col).get();
-      for (let i = 0; i < snap.docs.length; i += BATCH) {
-        const b = db.batch();
-        snap.docs.slice(i, i + BATCH).forEach(d => b.delete(d.ref));
-        await b.commit();
-      }
-    };
-    // 1) 관련 컬렉션 전체 삭제 (관리자 데이터도 포함)
-    await deleteAll('recordings');
-    await deleteAll('meditations');
-    await deleteAll('userDaily');
-
-    // 2) 모든 사용자 quizHistory 삭제 + pet/stats 초기화 (관리자 포함)
-    const usersSnap = await db.collection('users').get();
-    for (const userDoc of usersSnap.docs) {
-      const uid = userDoc.id;
-      const qhSnap = await db.collection('quizHistory').doc(uid).collection('records').get();
-      for (let i = 0; i < qhSnap.docs.length; i += BATCH) {
-        const b = db.batch();
-        qhSnap.docs.slice(i, i + BATCH).forEach(d => b.delete(d.ref));
-        await b.commit();
-      }
-      await db.collection('users').doc(uid).update({
-        pet: null, bonusPet: null, totalQuizzes: 0, correctCount: 0, church: {}
-      });
+    const snap = await db.collection('qrCodes').doc(date).get();
+    if (!snap.exists) { toast('⚠️ 만료된 QR 코드'); return; }
+    const d = snap.data();
+    if (d.secret !== secret) { toast('⚠️ 잘못된 QR 코드'); return; }
+    if (date !== todayKey()) { toast('⚠️ 자정 지나서 만료된 QR'); return; }
+    const isWed = new Date(date + 'T12:00:00').getDay() === 3;
+    const inc = isWed ? 1 : 1;
+    const church = UD.church || {};
+    church[date] = (church[date] || 0) + inc;
+    await db.collection('users').doc(CU.uid).update({ church });
+    UD.church = church;
+    if (UD.pet) {
+      UD.pet.pts = (UD.pet.pts || 0) + 2;
+      await savePet();
+      await logPoints(2, '교회 출석 QR');
+      updatePtsDisplay();
     }
-    // 3) 현재 로그인한 관리자 로컬 상태도 즉시 반영
-    if (UD) { UD.pet = null; UD.bonusPet = null; UD.totalQuizzes = 0; UD.correctCount = 0; UD.church = {}; }
-    document.getElementById('ptsNum').textContent = '0';
-    toast('✅ 초기화 완료! 친구를 다시 골라요');
-    resetPetSelectState();
-    showScreen('select');
-  } catch (e) {
-    toast('⚠️ 실패: ' + e.message);
-  } finally {
-    btn.disabled = false; btn.textContent = '🔄 모든 회원 데이터 초기화';
-  }
+    renderChurch();
+    toast('🎉 출석 인증 완료! +2점 (' + date + ')');
+    particles(window.innerWidth/2, 200, ['🙏','✨','⛪','🎉'], 12);
+  } catch (e) { toast('⚠️ 처리 실패: ' + e.message); }
 }
 
-/* ── 오늘의 말씀 설정 ── */
-let dpList = [];
-async function initDailyConfig() {
-  document.getElementById('todayLbl').textContent = todayKey();
-  renderDpBooks();
-  dpList = [];
-  const snap = await db.collection('dailyConfig').doc(todayKey()).get();
-  if (snap.exists && snap.data().passages) dpList = [...snap.data().passages];
-  renderDpList();
+/* ════════ SCOREBOARD ════════ */
+let _rankPeriod = 'week';
+function switchRankPeriod(p, btn) {
+  _rankPeriod = p;
+  document.querySelectorAll('.rank-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadScoreboard();
 }
-function renderDpBooks() {
-  const t=document.getElementById('dpTes').value, books=BIBLE[t];
-  const bSel=document.getElementById('dpBook');
-  bSel.innerHTML = books.map((b,i)=>`<option value="${i}">${b.n}</option>`).join('');
-  bSel.onchange = updateDpChap; updateDpChap();
-}
-function updateDpChap() {
-  const t=document.getElementById('dpTes').value, bi=parseInt(document.getElementById('dpBook').value);
-  document.getElementById('dpChap').innerHTML = Array.from({length:BIBLE[t][bi].ch},(_,i)=>`<option value="${i+1}">${i+1}장</option>`).join('');
-}
-function addDailyPassage() {
-  const t=document.getElementById('dpTes').value, bi=parseInt(document.getElementById('dpBook').value), ch=parseInt(document.getElementById('dpChap').value);
-  const svRaw = document.getElementById('dpStartV').value;
-  const evRaw = document.getElementById('dpEndV').value;
-  const sv = svRaw ? parseInt(svRaw) : null;
-  const ev = evRaw ? parseInt(evRaw) : null;
-  if (sv && ev && ev < sv) { toast('끝절은 시작절보다 커야 해요!'); return; }
-  const bookName = BIBLE[t][bi].n;
-  let ref;
-  if (sv && ev) ref = bookName + ' ' + ch + ':' + sv + '-' + ev;
-  else if (sv) ref = bookName + ' ' + ch + ':' + sv;
-  else ref = bookName + ' ' + ch + '장';
-  if (dpList.find(p=>p.ref===ref)) { toast('이미 추가됐어요!'); return; }
-  const entry = {ref, book:bookName, chapter:ch, customQuestions:[]};
-  if (sv) entry.startVerse = sv;
-  if (ev) entry.endVerse = ev;
-  dpList.push(entry);
-  document.getElementById('dpStartV').value = '';
-  document.getElementById('dpEndV').value = '';
-  renderDpList();
-}
-function removeDp(i) { dpList.splice(i,1); renderDpList(); }
-function renderDpList() {
-  const el = document.getElementById('dpList');
-  if (!dpList.length) { el.innerHTML='<div style="color:#ccc;font-size:0.9rem;text-align:center;padding:12px">추가된 말씀이 없어요</div>'; return; }
-  el.innerHTML = dpList.map((p,i) => `
-    <div class="dp-item">
-      <div class="dp-item-hdr">
-        <span class="dp-ref-tag">📖 ${p.ref}</span>
-        <button class="dp-remove" onclick="removeDp(${i})">✕</button>
-      </div>
-      <div style="font-size:0.82rem;color:#aaa;margin-bottom:4px">${p.customQuestions?.length?'✅ 문제 '+p.customQuestions.length+'개 설정됨 (직접 제작)':'기본 문제 사용'}</div>
-      <button class="dp-toggle-btn" onclick="toggleQForm(${i})" id="qfbtn-${i}">❓ ${p.customQuestions?.length?'문제 수정':'문제 직접 추가'}</button>
-      <div id="qf-${i}" style="display:none"></div>
-    </div>`).join('');
-}
-function toggleQForm(i) {
-  const el=document.getElementById('qf-'+i);
-  el.style.display = el.style.display==='none' ? 'block' : 'none';
-  if (el.style.display==='block') renderQForm(i);
-}
-function renderQForm(i) {
-  const qs=dpList[i].customQuestions||[];
-  let html = qs.map((q,qi) => `
-    <div class="cqf" style="margin-bottom:6px" data-qi="${qi}" data-pi="${i}">
-      <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#7a7aaa;margin-bottom:4px">문제 ${qi+1}<button onclick="removeQ(${i},${qi})" style="background:none;border:none;color:#e07070;cursor:pointer;font-size:0.8rem">✕ 삭제</button></div>
-      <input class="cqf-input cqf-q" placeholder="질문을 입력해요" value="${q.q}" oninput="updQ(${i},${qi},'q',this.value)">
-      <div class="cqf-opts">
-        ${q.opts.map((o,oi)=>`<input class="cqf-input cqf-opt" data-oi="${oi}" placeholder="보기 ${['①','②','③','④'][oi]}" value="${o}" oninput="updQ(${i},${qi},'o${oi}',this.value)">`).join('')}
-      </div>
-      정답: <select class="ans-sel" onchange="updQ(${i},${qi},'ans',parseInt(this.value))">
-        ${[0,1,2,3].map(n=>`<option value="${n}" ${q.ans===n?'selected':''}>${['①','②','③','④'][n]}번</option>`).join('')}
-      </select>
-    </div>`).join('');
-  html += `<button onclick="addQ(${i})" style="width:100%;background:#f0f5ff;border:2px dashed #c0d0f0;border-radius:10px;padding:7px;color:#7a90d0;font-size:0.88rem">+ 문제 추가 (최대 3개)</button>`;
-  document.getElementById('qf-'+i).innerHTML = html;
-}
-function addQ(i) { if((dpList[i].customQuestions||[]).length>=3){toast('문제는 최대 3개!');return;} if(!dpList[i].customQuestions)dpList[i].customQuestions=[]; dpList[i].customQuestions.push({q:'',opts:['','','',''],ans:0}); renderQForm(i); }
-function removeQ(i,qi) { dpList[i].customQuestions.splice(qi,1); renderQForm(i); }
-function updQ(i,qi,f,v) { if(f==='q')dpList[i].customQuestions[qi].q=v; else if(f==='ans')dpList[i].customQuestions[qi].ans=v; else{const oi=parseInt(f[1]);dpList[i].customQuestions[qi].opts[oi]=v;} }
-async function saveDailyConfig() {
-  // 저장 직전 DOM에서 최신 입력값을 직접 읽어서 dpList에 반영 (IME/포커스 이슈 방어)
-  document.querySelectorAll('.cqf').forEach(el => {
-    const pi = parseInt(el.dataset.pi), qi = parseInt(el.dataset.qi);
-    if (isNaN(pi) || isNaN(qi) || !dpList[pi] || !dpList[pi].customQuestions?.[qi]) return;
-    const qInput = el.querySelector('.cqf-q');
-    if (qInput) dpList[pi].customQuestions[qi].q = qInput.value;
-    el.querySelectorAll('.cqf-opt').forEach(inp => {
-      const oi = parseInt(inp.dataset.oi);
-      if (!isNaN(oi)) dpList[pi].customQuestions[qi].opts[oi] = inp.value;
+async function loadScoreboard() {
+  const now = new Date();
+  let startDate, label;
+  if (_rankPeriod === 'week') {
+    const day = now.getDay();
+    const diff = day === 0 ? 6 : day - 1; // 월요일이 시작
+    startDate = new Date(now);
+    startDate.setDate(now.getDate() - diff);
+    startDate.setHours(0, 0, 0, 0);
+    label = '이번 주 (' + startDate.toLocaleDateString('ko-KR') + ' ~ 오늘)';
+  } else {
+    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    label = (now.getMonth() + 1) + '월';
+  }
+  document.getElementById('rankPeriodInfo').textContent = '📅 ' + label;
+  document.getElementById('rankList').innerHTML = '<div class="empty-txt">📊 불러오는 중...</div>';
+  try {
+    const snap = await db.collection('pointLog')
+      .where('timestamp', '>=', firebase.firestore.Timestamp.fromDate(startDate))
+      .get();
+    const totals = {};
+    snap.docs.forEach(d => {
+      const v = d.data();
+      if (!v.uid) return;
+      if (!totals[v.uid]) {
+        totals[v.uid] = {
+          uid: v.uid,
+          username: v.username || '?',
+          realName: v.realName || v.username || '?',
+          points: 0
+        };
+      }
+      totals[v.uid].points += v.points;
     });
-    const sel = el.querySelector('.ans-sel');
-    if (sel) dpList[pi].customQuestions[qi].ans = parseInt(sel.value);
-  });
-  for (const p of dpList) {
-    for (const q of (p.customQuestions||[])) {
-      if (!q.q || q.opts.some(o=>!o)) { toast('"'+p.ref+'" 문제 내용을 모두 채워주세요!'); return; }
-    }
+    const ranked = Object.values(totals).sort((a, b) => b.points - a.points);
+    renderRanking(ranked);
+  } catch (e) {
+    document.getElementById('rankList').innerHTML = '<div class="empty-txt">⚠️ 불러오기 실패</div>';
   }
-  await db.collection('dailyConfig').doc(todayKey()).set({ passages:dpList, setBy:UD.username, updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, {merge:true});
-  toast('💾 오늘의 말씀 저장 완료!'); particles(window.innerWidth/2,200,['📖','✨','🌟'],10);
 }
-
-/* ── 묵상 사진 확인 ── */
-async function loadMeditations() {
-  try {
-    const snap = await db.collection('meditations').orderBy('submittedAt','desc').limit(50).get();
-    if (snap.empty) { document.getElementById('medsList').innerHTML='<div class="empty-txt">제출된 묵상 사진이 없어요</div>'; return; }
-    document.getElementById('medsList').innerHTML = snap.docs.map(d => {
-      const m=d.data(), ts=m.submittedAt?.toDate?m.submittedAt.toDate():new Date();
-      const ds=ts.toLocaleDateString('ko-KR')+' '+ts.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-      return `<div class="med-item">
-        <img class="med-photo" src="${m.photoBase64||''}" alt="" onclick="if(m.photoBase64)openLb(m.photoBase64)">
-        <div style="flex:1">
-          <div class="med-user">👤 ${m.username}</div>
-          <div class="med-date">${ds}</div>
-          ${m.status==='pending'?`<div class="med-actions"><button class="approve-btn" onclick="approveMed('${d.id}','${m.uid}')">✅ 승인 (+10점)</button><button class="reject-btn" onclick="rejectMed('${d.id}')">❌ 반려</button></div>`:''}
-          ${m.status==='approved'?'<span class="badge-approved">✅ 승인됨</span>':''}
-          ${m.status==='rejected'?'<span class="badge-rejected">❌ 반려됨</span>':''}
-        </div>
-      </div>`;
+function renderRanking(ranked) {
+  const podium = document.getElementById('rankPodium');
+  const list = document.getElementById('rankList');
+  if (ranked.length === 0) {
+    podium.innerHTML = '';
+    list.innerHTML = '<div class="empty-txt">아직 점수 기록이 없어요!<br>퀴즈 풀고 인증해서 점수 쌓아요 ✨</div>';
+    return;
+  }
+  // 상위 3명 시상대 (은-금-동 순서로 가운데 1등)
+  const top3 = [ranked[1] || null, ranked[0] || null, ranked[2] || null];
+  const baseClasses = ['silver','gold','bronze'];
+  const medals = ['🥈','🥇','🥉'];
+  const placeNums = [2, 1, 3];
+  podium.innerHTML = top3.map((u, i) => {
+    if (!u) return '<div class="rank-podium-slot"></div>';
+    const isMe = u.uid === CU?.uid;
+    return '<div class="rank-podium-slot">' +
+      '<div class="rank-podium-icon">' + medals[i] + '</div>' +
+      '<div class="rank-podium-name">' + u.realName + (isMe ? ' (나)' : '') + '</div>' +
+      '<div class="rank-podium-pts">' + u.points + '점</div>' +
+      '<div class="rank-podium-base ' + baseClasses[i] + '">' + placeNums[i] + '</div>' +
+      '</div>';
+  }).join('');
+  // 4등 이하 리스트
+  const rest = ranked.slice(3);
+  if (rest.length === 0) {
+    list.innerHTML = '<div style="font-size:0.85rem;color:#aaa;text-align:center;padding:12px">🌱 4등부터는 더 도전해요!</div>';
+  } else {
+    list.innerHTML = rest.map((u, i) => {
+      const isMe = u.uid === CU?.uid;
+      return '<div class="rank-item' + (isMe ? ' me' : '') + '">' +
+        '<div class="rank-num">' + (i + 4) + '</div>' +
+        '<div class="rank-info">' +
+        '<div class="rank-name">' + u.realName + (isMe ? ' (나)' : '') + '</div>' +
+        '<div class="rank-id">@' + u.username + '</div>' +
+        '</div>' +
+        '<div class="rank-points">' + u.points + '점</div>' +
+        '</div>';
     }).join('');
-  } catch (e) { document.getElementById('medsList').innerHTML='<div class="empty-txt">⚠️ 실패</div>'; }
-}
-async function approveMed(docId, uid) {
-  await db.collection('meditations').doc(docId).update({status:'approved',reviewedAt:firebase.firestore.FieldValue.serverTimestamp()});
-  const uSnap = await db.collection('users').doc(uid).get();
-  if (uSnap.exists) { const pet=uSnap.data().pet; if(pet){pet.pts=(pet.pts||0)+10;await db.collection('users').doc(uid).update({pet});} }
-  toast('✅ 승인 완료! +10점 지급'); loadMeditations();
-}
-async function rejectMed(docId) {
-  if (!confirm('반려하시겠어요?')) return;
-  await db.collection('meditations').doc(docId).update({status:'rejected'});
-  toast('❌ 반려 완료'); loadMeditations();
-}
-function openLb(url) { document.getElementById('lb-img').src=url; document.getElementById('lightbox').classList.add('open'); }
-
-/* ════ TAB NAV ════ */
-function switchTab(n, btn) {
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+n).classList.add('active'); btn.classList.add('active');
-  if(n==='history') loadHistory();
-  if(n==='admin') { loadAdminUsers(); initDailyConfig(); }
-  if(n==='bible') { initTranslationDropdown(); if(selBk===null) renderBookGrid(); }
-}
-
-/* ════ 로컬 성경 데이터 ════ */
-const BIBLE_DATA = [
-  { ref:'창세기 1:1-5', passage:'태초에 하나님이 천지를 창조하시니라\n땅이 혼돈하고 공허하며 흑암이 깊음 위에 있고 하나님의 영은 수면 위에 운행하시니라\n하나님이 이르시되 빛이 있으라 하시니 빛이 있었고\n빛이 하나님이 보시기에 좋았더라 하나님이 빛과 어둠을 나누사\n하나님이 빛을 낮이라 부르시고 어둠을 밤이라 부르시니라 저녁이 되고 아침이 되니 이는 첫째 날이니라',
-    questions:[
-      {q:'하나님이 제일 처음 만드신 것은 무엇인가요?', opts:['①물','②빛','③땅','④하늘'], ans:1},
-      {q:'하나님은 빛을 무엇이라 불렀나요?', opts:['①아침','②저녁','③낮','④밤'], ans:2},
-      {q:'태초에 땅의 상태는 어떠했나요?', opts:['①아름다웠다','②혼돈하고 공허했다','③가득 찼다','④밝았다'], ans:1}
-    ]
-  },
-  { ref:'요한복음 3:16', passage:'하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니\n이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라\n하나님이 그 아들을 세상에 보내신 것은 세상을 심판하려 하심이 아니요\n그로 말미암아 세상이 구원을 받게 하려 하심이라',
-    questions:[
-      {q:'하나님이 세상에 주신 것은 무엇인가요?', opts:['①율법','②독생자','③선물','④성전'], ans:1},
-      {q:'하나님이 아들을 보내신 목적은 무엇인가요?', opts:['①심판하려고','②구원하려고','③가르치려고','④시험하려고'], ans:1},
-      {q:'영생을 얻으려면 어떻게 해야 하나요?', opts:['①착하게 살면','②헌금을 많이 하면','③그를 믿으면','④기도를 많이 하면'], ans:2}
-    ]
-  },
-  { ref:'시편 23:1-4', passage:'여호와는 나의 목자시니 내게 부족함이 없으리로다\n그가 나를 푸른 풀밭에 누이시며 쉴 만한 물 가로 인도하시는도다\n내 영혼을 소생시키시고 자기 이름을 위하여 의의 길로 인도하시는도다\n내가 사망의 음침한 골짜기로 다닐지라도 해를 두려워하지 않을 것은 주께서 나와 함께 하심이라',
-    questions:[
-      {q:'시편 23편에서 여호와는 무엇으로 표현되나요?', opts:['①왕','②목자','③아버지','④선생'], ans:1},
-      {q:'목자는 양을 어디로 인도하나요?', opts:['①광야로','②높은 산으로','③푸른 풀밭으로','④강 건너로'], ans:2},
-      {q:'사망의 골짜기에서도 두려워하지 않는 이유는?', opts:['①힘이 세서','②주께서 함께 하심','③혼자라서','④어둡지 않아서'], ans:1}
-    ]
-  },
-  { ref:'잠언 3:5-6', passage:'너는 마음을 다하여 여호와를 신뢰하고 네 명철을 의지하지 말라\n너는 범사에 그를 인정하라 그리하면 네 길을 지도하시리라\n스스로 지혜롭게 여기지 말며 여호와를 경외하며 악을 떠날지어다\n이것이 네 몸에 양약이 되어 네 골수를 윤택하게 하리라',
-    questions:[
-      {q:'마음을 다하여 무엇을 신뢰하라고 했나요?', opts:['①부모님','②여호와','③친구','④자기 자신'], ans:1},
-      {q:'범사에 그를 인정하면 어떻게 되나요?', opts:['①부자가 된다','②건강해진다','③길을 지도하신다','④지혜로워진다'], ans:2},
-      {q:'자기 골수를 윤택하게 하는 것은 무엇인가요?', opts:['①운동','②여호와 경외와 악을 떠남','③공부','④기도'], ans:1}
-    ]
-  },
-  { ref:'마태복음 5:3-6', passage:'심령이 가난한 자는 복이 있나니 천국이 그들의 것임이요\n애통하는 자는 복이 있나니 그들이 위로를 받을 것임이요\n온유한 자는 복이 있나니 그들이 땅을 기업으로 받을 것임이요\n의에 주리고 목마른 자는 복이 있나니 그들이 배부를 것임이요',
-    questions:[
-      {q:'천국이 그들의 것인 사람은 누구인가요?', opts:['①부자','②심령이 가난한 자','③온유한 자','④강한 자'], ans:1},
-      {q:'온유한 자는 무엇을 기업으로 받나요?', opts:['①하늘','②바다','③땅','④금'], ans:2},
-      {q:'배부를 것이라고 약속받은 사람은?', opts:['①애통하는 자','②온유한 자','③의에 주리고 목마른 자','④심령이 가난한 자'], ans:2}
-    ]
-  },
-  { ref:'로마서 8:28', passage:'우리가 알거니와 하나님을 사랑하는 자 곧 그의 뜻대로 부르심을 입은 자들에게는 모든 것이 합력하여 선을 이루느니라\n하나님이 미리 아신 자들을 또한 그 아들의 형상을 본받게 하기 위하여 미리 정하셨으니\n이는 그로 많은 형제 중에서 맏아들이 되게 하려 하심이니라\n또 미리 정하신 그들을 또한 부르시고 부르신 그들을 또한 의롭다 하시고 의롭다 하신 그들을 또한 영화롭게 하셨느니라',
-    questions:[
-      {q:'하나님을 사랑하는 자에게는 어떻게 된다고 했나요?', opts:['①모든 것이 합력하여 선을 이룬다','②부자가 된다','③병이 낫는다','④오래 산다'], ans:0},
-      {q:'하나님이 미리 아신 자들을 누구의 형상을 본받게 하셨나요?', opts:['①천사','②아들','③선지자','④사도'], ans:1},
-      {q:'부르신 자들을 어떻게 하셨나요?', opts:['①시험하셨다','②의롭다 하셨다','③벌하셨다','④잊으셨다'], ans:1}
-    ]
-  },
-  { ref:'빌립보서 4:6-7', passage:'아무것도 염려하지 말고 다만 모든 일에 기도와 간구로 너희 구할 것을 감사함으로 하나님께 아뢰라\n그리하면 모든 지각에 뛰어난 하나님의 평강이 그리스도 예수 안에서 너희 마음과 생각을 지키시리라\n끝으로 형제들아 무엇이든지 참되며 무엇이든지 경건하며 무엇이든지 옳으며 무엇이든지 정결하며\n무엇이든지 사랑받을 만하며 무엇이든지 칭찬받을 만하며 무슨 덕이 있든지 무슨 기림이 있든지 이것들을 생각하라',
-    questions:[
-      {q:'염려 대신 무엇을 하라고 했나요?', opts:['①일하라','②기도와 간구로 하나님께 아뢰라','③친구에게 말하라','④잠을 자라'], ans:1},
-      {q:'기도하면 무엇이 마음을 지키나요?', opts:['①천사','②하나님의 평강','③성령','④믿음'], ans:1},
-      {q:'생각하라고 한 것 중 맞는 것은?', opts:['①거짓된 것','②참되고 경건한 것','③세상의 즐거움','④나쁜 것'], ans:1}
-    ]
-  },
-  { ref:'요한복음 14:6', passage:'예수께서 이르시되 내가 곧 길이요 진리요 생명이니 나로 말미암지 않고는 아버지께로 올 자가 없느니라\n너희가 나를 알았더라면 내 아버지도 알았으리로다 이제부터는 너희가 그를 알았고 또 보았느니라\n빌립이 이르되 주여 아버지를 우리에게 보여 주옵소서 그리하면 족하겠나이다\n예수께서 이르시되 빌립아 내가 이렇게 오래 너희와 함께 있으되 네가 나를 알지 못하느냐',
-    questions:[
-      {q:'예수님이 "나는 ○○이요"라고 하신 세 가지는?', opts:['①빛, 소금, 사랑','②길, 진리, 생명','③왕, 선지자, 제사장','④처음, 나중, 영원'], ans:1},
-      {q:'아버지께로 올 수 있는 방법은?', opts:['①착하게 살면','②기도를 많이 하면','③예수로 말미암아','④율법을 지키면'], ans:2},
-      {q:'아버지를 보여 달라고 부탁한 제자는?', opts:['①베드로','②요한','③빌립','④도마'], ans:2}
-    ]
-  },
-  { ref:'마가복음 10:13-16', passage:'사람들이 예수께서 만져 주심을 바라고 어린 아이들을 데리고 오매 제자들이 꾸짖거늘\n예수께서 보시고 노하시어 이르시되 어린 아이들이 내게 오는 것을 용납하고 금하지 말라\n하나님의 나라가 이런 자의 것이니라\n내가 진실로 너희에게 이르노니 누구든지 하나님의 나라를 어린 아이와 같이 받들지 않는 자는 결단코 들어가지 못하리라 하시고\n그 어린 아이들을 안고 그들 위에 안수하시고 축복하시니라',
-    questions:[
-      {q:'제자들은 어린 아이들이 오는 것을 어떻게 했나요?', opts:['①환영했다','②꾸짖었다','③도왔다','④무시했다'], ans:1},
-      {q:'예수님은 어린 아이들을 보고 어떻게 하셨나요?', opts:['①외면하셨다','②안고 축복하셨다','③가르치셨다','④보내셨다'], ans:1},
-      {q:'하나님 나라에 들어가려면 어떻게 해야 하나요?', opts:['①돈이 많아야','②어린 아이와 같이 받들어야','③율법을 지켜야','④오래 기도해야'], ans:1}
-    ]
-  },
-  { ref:'이사야 40:31', passage:'오직 여호와를 앙망하는 자는 새 힘을 얻으리니 독수리가 날개치며 올라감 같을 것이요\n달음박질하여도 곤비하지 아니하겠고 걸어가도 피곤하지 아니하리로다\n너희는 알지 못하였느냐 듣지 못하였느냐\n영원하신 하나님 여호와 땅 끝을 창조하신 이는 피곤하지 않으시며 곤비하지 않으시며 명철이 한이 없으시며',
-    questions:[
-      {q:'여호와를 앙망하는 자는 무엇을 얻나요?', opts:['①돈','②명예','③새 힘','④지혜'], ans:2},
-      {q:'새 힘을 얻은 모습이 무엇과 같다고 했나요?', opts:['①사자','②독수리','③비둘기','④말'], ans:1},
-      {q:'여호와는 어떤 분이라고 했나요?', opts:['①피곤하시는 분','②피곤하지 않으신 분','③쉬시는 분','④잠자는 분'], ans:1}
-    ]
-  },
-  { ref:'에베소서 6:1-3', passage:'자녀들아 주 안에서 너희 부모에게 순종하라 이것이 옳으니라\n네 아버지와 어머니를 공경하라 이것은 약속이 있는 첫 계명이니\n이로써 네가 잘 되고 땅에서 장수하리라\n또 아비들아 너희 자녀를 노엽게 하지 말고 오직 주의 교훈과 훈계로 양육하라',
-    questions:[
-      {q:'자녀들에게 주신 첫 번째 명령은?', opts:['①공부하라','②부모에게 순종하라','③기도하라','④교회에 가라'], ans:1},
-      {q:'부모를 공경하면 어떻게 된다고 했나요?', opts:['①부자가 된다','②잘 되고 장수한다','③지혜로워진다','④친구가 많아진다'], ans:1},
-      {q:'아버지들은 자녀를 어떻게 양육해야 하나요?', opts:['①엄하게','②주의 교훈과 훈계로','③자유롭게','④풍요롭게'], ans:1}
-    ]
-  },
-  { ref:'야고보서 1:2-4', passage:'내 형제들아 너희가 여러 가지 시험을 당하거든 온전히 기쁘게 여기라\n이는 너희 믿음의 시련이 인내를 만들어 내는 줄 너희가 앎이라\n인내를 온전히 이루라 이는 너희로 온전하고 구비하여 조금도 부족함이 없게 하려 함이라\n너희 중에 누구든지 지혜가 부족하거든 모든 사람에게 후히 주시고 꾸짖지 아니하시는 하나님께 구하라',
-    questions:[
-      {q:'시험을 당할 때 어떻게 여기라고 했나요?', opts:['①슬프게','②무시하라','③온전히 기쁘게','④두려워하라'], ans:2},
-      {q:'믿음의 시련은 무엇을 만들어 내나요?', opts:['①믿음','②인내','③사랑','④기쁨'], ans:1},
-      {q:'지혜가 부족할 때 어떻게 해야 하나요?', opts:['①책을 읽어라','②친구에게 물어라','③하나님께 구하라','④스스로 생각하라'], ans:2}
-    ]
-  },
-  { ref:'요한일서 4:7-8', passage:'사랑하는 자들아 우리가 서로 사랑하자 사랑은 하나님께 속한 것이니\n사랑하는 자마다 하나님으로부터 나서 하나님을 알고\n사랑하지 아니하는 자는 하나님을 알지 못하나니 이는 하나님은 사랑이심이라\n하나님의 사랑이 우리에게 이렇게 나타난 바 되었으니 하나님이 자기의 독생자를 세상에 보내심은 그로 말미암아 우리를 살리려 하심이라',
-    questions:[
-      {q:'사랑은 어디에 속한 것인가요?', opts:['①사람','②세상','③하나님','④천사'], ans:2},
-      {q:'하나님은 무엇이라고 했나요?', opts:['①빛','②사랑','③진리','④생명'], ans:1},
-      {q:'하나님이 독생자를 보내신 이유는?', opts:['①심판하려고','②가르치려고','③우리를 살리려고','④시험하려고'], ans:2}
-    ]
-  },
-  { ref:'누가복음 15:11-20', passage:'또 이르시되 어떤 사람에게 두 아들이 있는데 그 둘째가 아버지에게 말하되\n아버지여 재산 중에서 내게 돌아올 분깃을 내게 주소서 하는지라 아버지가 그 살림을 각각 나눠 주었더니\n그 후 며칠이 안 되어 둘째 아들이 재물을 다 모아 가지고 먼 나라에 가 거기서 허랑방탕하여 그 재산을 낭비하더니\n다 없앤 후 그 나라에 크게 흉년이 들어 그가 비로소 궁핍한지라\n이에 스스로 돌이켜 이르되 내 아버지에게는 양식이 풍족한 품꾼이 얼마나 많은가 나는 여기서 굶어 죽는구나\n내가 일어나 아버지께 가서 이르기를 아버지 내가 하늘과 아버지께 죄를 지었사오니 지금부터는 아버지의 아들이라 일컬음 받기를 감당하지 못하겠나이다 하고 일어나서 아버지께로 돌아가니라',
-    questions:[
-      {q:'둘째 아들은 아버지에게 무엇을 요구했나요?', opts:['①집','②재산 분깃','③종','④밭'], ans:1},
-      {q:'둘째 아들은 재산을 어떻게 했나요?', opts:['①잘 저축했다','②남에게 줬다','③허랑방탕하여 낭비했다','④잃어버렸다'], ans:2},
-      {q:'궁핍해진 아들은 어떻게 결심했나요?', opts:['①다시 돈을 벌기로','②아버지께 돌아가기로','③친구에게 도움받기로','④다른 나라로 가기로'], ans:1}
-    ]
-  },
-  { ref:'고린도전서 13:4-7', passage:'사랑은 오래 참고 사랑은 온유하며 시기하지 아니하며\n사랑은 자랑하지 아니하며 교만하지 아니하며\n무례히 행하지 아니하며 자기의 유익을 구하지 아니하며\n성내지 아니하며 악한 것을 생각하지 아니하며\n불의를 기뻐하지 아니하며 진리와 함께 기뻐하고\n모든 것을 참으며 모든 것을 믿으며 모든 것을 바라며 모든 것을 견디느니라',
-    questions:[
-      {q:'사랑의 첫 번째 특징은 무엇인가요?', opts:['①온유함','②오래 참음','③시기하지 않음','④자랑하지 않음'], ans:1},
-      {q:'사랑은 무엇을 기뻐하나요?', opts:['①불의','②자랑','③진리','④교만'], ans:2},
-      {q:'사랑은 어떤 것을 하지 않나요?', opts:['①참는 것','②믿는 것','③교만한 것','④견디는 것'], ans:2}
-    ]
   }
-];
+}
 
+/* ════════ TAB SWITCHING (보안 강화) ════════ */
+function switchTab(n, btn) {
+  // 🔒 어드민 탭 접근 권한 체크
+  if (n === 'admin' && !isAdmin) {
+    toast('⚠️ 관리자만 들어갈 수 있어요!');
+    return;
+  }
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + n).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (n === 'history') loadHistory();
+  if (n === 'rank') loadScoreboard();
+  if (n === 'admin') { loadAdminUsers(); initDailyConfig(); }
+  if (n === 'bible') { initTranslationDropdown(); if (selBk === null) renderBookGrid(); }
+}
+
+/* ════════ FALLBACK BIBLE DATA ════════ */
+const BIBLE_DATA = [
+  { ref: '창세기 1:1', text: '태초에 하나님이 천지를 창조하시니라', questions: [
+    { q: '태초에 하나님이 무엇을 창조하셨나요?', opts: ['천지','사람','물','빛'], a: 0 },
+    { q: '이 말씀은 어느 책의 시작인가요?', opts: ['출애굽기','창세기','레위기','민수기'], a: 1 },
+    { q: '"태초"는 무슨 뜻일까요?', opts: ['중간','맨 처음','마지막','옛날'], a: 1 }
+  ]},
+  { ref: '요한복음 3:16', text: '하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니, 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라', questions: [
+    { q: '하나님이 사랑하신 대상은?', opts: ['천사','세상','동물','별'], a: 1 },
+    { q: '하나님이 누구를 주셨나요?', opts: ['독생자','천사','선지자','왕'], a: 0 },
+    { q: '믿는 자가 얻는 것은?', opts: ['돈','영생','권력','명예'], a: 1 }
+  ]},
+  { ref: '시편 23:1', text: '여호와는 나의 목자시니 내게 부족함이 없으리로다', questions: [
+    { q: '여호와는 나의 무엇이신가요?', opts: ['친구','목자','왕','선생님'], a: 1 },
+    { q: '나에게 무엇이 없다고 했나요?', opts: ['집','돈','부족함','시간'], a: 2 },
+    { q: '시편 23편을 쓴 사람은?', opts: ['솔로몬','다윗','모세','요나'], a: 1 }
+  ]},
+  { ref: '잠언 3:5', text: '너는 마음을 다하여 여호와를 신뢰하고 네 명철을 의지하지 말라', questions: [
+    { q: '무엇을 다해 여호와를 신뢰하라 했나요?', opts: ['마음','돈','시간','힘'], a: 0 },
+    { q: '의지하지 말아야 할 것은?', opts: ['친구','명철','돈','부모'], a: 1 },
+    { q: '이 말씀은 어디에 나오나요?', opts: ['시편','잠언','욥기','전도서'], a: 1 }
+  ]},
+  { ref: '마태복음 5:3', text: '심령이 가난한 자는 복이 있나니 천국이 그들의 것임이요', questions: [
+    { q: '복이 있는 자는 어떤 사람인가요?', opts: ['부자','심령이 가난한 자','지혜로운 자','용감한 자'], a: 1 },
+    { q: '그들의 것은 무엇인가요?', opts: ['지혜','천국','부','권세'], a: 1 },
+    { q: '이 말씀은 어떤 가르침의 시작인가요?', opts: ['주기도문','산상수훈','비유','계명'], a: 1 }
+  ]}
+];
 function getRandomPassage() {
   return BIBLE_DATA[Math.floor(Math.random() * BIBLE_DATA.length)];
 }
 
-/* ════ UTILS ════ */
-function particles(x,y,emojis,n){for(let i=0;i<n;i++){const p=document.createElement('div');p.className='ptcl';p.textContent=emojis[i%emojis.length];const dx=(Math.random()-.5)*160,dy=-(Math.random()*110+40);p.style.cssText=`left:${x}px;top:${y}px;--dx:${dx}px;--dy:${dy}px;animation-delay:${i*0.05}s`;document.body.appendChild(p);setTimeout(()=>p.remove(),1300);}}
-function toast(msg){const w=document.getElementById('toast-wrap');const t=document.createElement('div');t.className='toast';t.textContent=msg;w.appendChild(t);setTimeout(()=>t.remove(),2700);}
+/* ════════ UTILITIES ════════ */
+function toast(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast'; el.textContent = msg;
+  document.getElementById('toast-wrap').appendChild(el);
+  setTimeout(() => el.remove(), 2500);
+}
+function particles(x, y, emojis, count) {
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'ptcl';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    const dx = (Math.random() - 0.5) * 240;
+    const dy = -(80 + Math.random() * 200);
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+    p.style.setProperty('--dx', dx + 'px');
+    p.style.setProperty('--dy', dy + 'px');
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1100);
+  }
+}
 </script>
 </body>
 </html>
