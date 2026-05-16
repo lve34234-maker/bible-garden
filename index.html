@@ -104,6 +104,12 @@ body.dark-theme .card-title { color: var(--text-soft); }
 .pet-panel{background:var(--bg-card);border-radius:22px;padding:16px 13px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:64px;height:fit-content;z-index:1;}
 .pet-stage-wrap{width:105px;height:105px;display:flex;align-items:center;justify-content:center;background:var(--bg-pet-stage);border-radius:50%;border:3px dashed #b8e8a0;margin:5px 0;}
 .pet-emoji{font-size:3.8rem;line-height:1;animation:breath 4s ease-in-out infinite;}
+.pet-emoji.final-form { width: 95px; height: 95px; display:flex; align-items:center; justify-content:center; }
+.pet-emoji.final-form svg { width: 100%; height: 100%; }
+.mini-svg { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
+.mini-svg svg { width: 1.4em; height: 1.4em; vertical-align: middle; }
+.comm-avatar .mini-svg svg, .med-user .mini-svg svg { width: 32px; height: 32px; }
+.comm-comment-avatar .mini-svg svg { width: 22px; height: 22px; }
 @keyframes breath{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.07) rotate(2deg)}}
 body.no-effects .pet-emoji { animation: none; }
 .pet-emoji.grow{animation:petGrow 0.7s ease-out;}
@@ -496,6 +502,7 @@ body.test-mode.no-effects .test-banner { animation: none; }
       <div class="auth-err" id="lerr"></div>
     </div>
     <div id="form-signup" class="hidden">
+      <div style="background:linear-gradient(135deg,#fff8e0,#fff0c0);border:2px dashed #e0b060;border-radius:12px;padding:9px 12px;font-size:0.82rem;color:#7a5010;margin-bottom:12px;line-height:1.4;text-align:center">💡 <b>관리자로 가입하려면</b> 아이디 칸에 <code style="background:#ffe8a0;padding:1px 6px;border-radius:5px;font-weight:700">onchurch</code> 입력하세요!<br><span style="font-size:0.7rem;opacity:0.85">아이디가 onchurch면 자동으로 어드민 권한 부여 👑</span></div>
       <div class="auth-field"><label>아이디 (영문/숫자)</label><input class="auth-input" id="sid" type="text" placeholder="아이디" maxlength="20"></div>
       <div class="auth-field">
         <label>닉네임 <span style="color:#e07050;font-weight:700">⚠️ 본명을 한글로 적어주세요!</span></label>
@@ -1033,8 +1040,14 @@ async function doLogin() {
     return;
   }
   if (!idRaw || !pwRaw) { err.textContent = '아이디와 비밀번호를 입력해요!'; return; }
-  try { await auth.signInWithEmailAndPassword(idRaw + DOMAIN, pwRaw); }
-  catch { err.textContent = '아이디 또는 비밀번호가 틀렸어요!'; }
+  const btn = document.getElementById('loginBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 들어가는 중...'; }
+  try {
+    await auth.signInWithEmailAndPassword(idRaw + DOMAIN, pwRaw);
+  } catch {
+    err.textContent = '아이디 또는 비밀번호가 틀렸어요!';
+    if (btn) { btn.disabled = false; btn.textContent = '🌱 로그인'; }
+  }
 }
 async function doSignup() {
   const id = document.getElementById('sid').value.trim().toLowerCase();
@@ -1050,6 +1063,8 @@ async function doSignup() {
   if (pw !== pw2) { err.textContent = '비밀번호가 일치하지 않아요!'; return; }
   const snap = await db.collection('users').where('username', '==', id).get();
   if (!snap.empty) { err.textContent = '이미 사용 중인 아이디예요!'; return; }
+  const sBtn = document.querySelector('#form-signup .auth-submit');
+  if (sBtn) { sBtn.disabled = true; sBtn.textContent = '⏳ 가입 중...'; }
   try {
     const cred = await auth.createUserWithEmailAndPassword(id + DOMAIN, pw);
     await db.collection('users').doc(cred.user.uid).set({
@@ -1058,7 +1073,10 @@ async function doSignup() {
       pet: null, totalQuizzes: 0, correctCount: 0,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-  } catch (e) { err.textContent = '오류: ' + e.message; }
+  } catch (e) {
+    err.textContent = '오류: ' + e.message;
+    if (sBtn) { sBtn.disabled = false; sBtn.textContent = '✨ 회원가입'; }
+  }
 }
 async function doLogout() {
   await auth.signOut();
@@ -1066,9 +1084,17 @@ async function doLogout() {
   isAdmin = false;
   showScreen('auth');
 }
-async function loadUserDoc(uid) {
+async function loadUserDoc(uid, retryCount) {
+  retryCount = retryCount || 0;
   const snap = await db.collection('users').doc(uid).get();
-  if (!snap.exists) { showScreen('auth'); return; }
+  if (!snap.exists) {
+    if (retryCount < 8) {
+      await new Promise(r => setTimeout(r, 400));
+      return loadUserDoc(uid, retryCount + 1);
+    }
+    showScreen('auth');
+    return;
+  }
   UD = snap.data(); isAdmin = UD.isAdmin || false;
   document.getElementById('userChip').textContent = UD.realName || UD.username;
   const adminBtn = document.getElementById('adminNavBtn');
@@ -1114,7 +1140,14 @@ const COMP = {
   cat: { label:'고양이', stages:['🐱','😺','😸','🐈','🐈‍⬛','🦁','🐯','🐅','🐆','👑'], names:['고양이','나비','야옹이','냐옹','왕냐옹','사자','호랑이','맹호','표범','귀요미'], statuses:['그루밍 중!','간식 먹고 싶어요!','놀고 싶어요!','냥냥 행복!','전설 고양이 ✨','사자처럼 용감!','호랑이로 변신!','맹호 포효!','표범처럼 빨라요!','귀여운 고양이 👑'], stats:[['🐟','food',30,'ff'],['😸','happy',35,'fh']], actions:[{id:'feed',label:'🐟 밥주기',cls:'f',cost:2,stat:'food',add:30,grow:5},{id:'play',label:'🧶 놀아주기',cls:'h',cost:3,stat:'happy',add:35,grow:8}], growPts:[0,15,32,55,80,112,150,194,244,300] }
 };
 
-const DECAY_HOURS = 12;
+const SVG_FINAL_FORMS = {
+  plant: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g><path d="M50 88 Q48 70 50 55" stroke="#3a7a3a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M50 78 Q35 72 30 58" stroke="#3a7a3a" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M50 78 Q65 72 70 58" stroke="#3a7a3a" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="32" cy="62" rx="6" ry="3" fill="#5aa050" transform="rotate(-30 32 62)"/><ellipse cx="68" cy="62" rx="6" ry="3" fill="#5aa050" transform="rotate(30 68 62)"/><g transform="translate(28,40)"><circle r="11" fill="#ffb8c0"/><circle r="8" fill="#ff8090"/><circle r="5" fill="#e0506a"/><circle r="2.5" fill="#aa2030"/></g><g transform="translate(72,42)"><circle r="11" fill="#ffe070"/><circle r="8" fill="#ffc030"/><circle r="5" fill="#e09010"/><circle r="2.5" fill="#a06000"/></g><g transform="translate(50,28)"><circle r="13" fill="#ffd0e0"/><circle r="10" fill="#ff90b0"/><circle r="7" fill="#e05080"/><circle r="3.5" fill="#a02050"/><circle r="1.5" fill="#fff0a0"/></g><circle cx="38" cy="22" r="1.8" fill="#ffe070"/><circle cx="65" cy="20" r="2" fill="#ffe070"/><circle cx="20" cy="35" r="1.5" fill="#ffe070"/><circle cx="82" cy="35" r="1.5" fill="#ffe070"/><text x="50" y="96" text-anchor="middle" font-size="9" fill="#aa6020">✨</text></g></svg>',
+  tree: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g><rect x="42" y="60" width="16" height="32" rx="6" fill="#8a5530"/><path d="M44 70 Q42 78 44 86" stroke="#6a3520" stroke-width="1" fill="none"/><path d="M56 72 Q58 80 56 88" stroke="#6a3520" stroke-width="1" fill="none"/><ellipse cx="30" cy="40" rx="14" ry="11" fill="#a8d890"/><ellipse cx="70" cy="40" rx="14" ry="11" fill="#88c878"/><ellipse cx="50" cy="28" rx="18" ry="14" fill="#7ac070"/><ellipse cx="35" cy="52" rx="10" ry="8" fill="#90c880"/><ellipse cx="65" cy="52" rx="10" ry="8" fill="#98d088"/><circle cx="22" cy="35" r="3" fill="#ff9ad0"/><circle cx="78" cy="34" r="3" fill="#ffc870"/><circle cx="50" cy="18" r="3" fill="#a0d8ff"/><circle cx="38" cy="48" r="2.5" fill="#ffeb70"/><circle cx="62" cy="46" r="2.5" fill="#ff90a0"/><circle cx="50" cy="42" r="2" fill="#fff" opacity="0.8"/><circle cx="42" cy="48" r="3" fill="#fff"/><circle cx="58" cy="48" r="3" fill="#fff"/><circle cx="42" cy="48" r="1.8" fill="#2a3a2a"/><circle cx="58" cy="48" r="1.8" fill="#2a3a2a"/><circle cx="43" cy="47" r="0.7" fill="#fff"/><circle cx="59" cy="47" r="0.7" fill="#fff"/><path d="M44 54 Q50 58 56 54" stroke="#3a2010" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="36" cy="54" r="2" fill="#ffaaaa" opacity="0.7"/><circle cx="64" cy="54" r="2" fill="#ffaaaa" opacity="0.7"/><text x="15" y="20" font-size="7" fill="#ffd060">⭐</text><text x="80" y="22" font-size="7" fill="#ffd060">⭐</text><text x="50" y="78" text-anchor="middle" font-size="8" fill="#5a3520">✨</text></g></svg>',
+  dog: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g><path d="M28 50 L20 75 L40 70 Z" fill="#e04040"/><path d="M72 50 L80 75 L60 70 Z" fill="#e04040"/><path d="M28 50 Q50 45 72 50 L70 80 Q50 85 30 80 Z" fill="#cc2020"/><path d="M30 78 Q50 82 70 78" stroke="#a01010" stroke-width="0.8" fill="none"/><ellipse cx="50" cy="55" rx="20" ry="18" fill="#f0c878"/><ellipse cx="50" cy="50" rx="18" ry="14" fill="#f8d090"/><path d="M32 35 L25 22 L38 32 Z" fill="#d8a060"/><path d="M68 35 L75 22 L62 32 Z" fill="#d8a060"/><path d="M34 36 L29 26 L38 33 Z" fill="#f0b878"/><path d="M66 36 L71 26 L62 33 Z" fill="#f0b878"/><ellipse cx="42" cy="48" rx="3.5" ry="4" fill="#fff"/><ellipse cx="58" cy="48" rx="3.5" ry="4" fill="#fff"/><circle cx="42" cy="49" r="2.5" fill="#2a1a10"/><circle cx="58" cy="49" r="2.5" fill="#2a1a10"/><circle cx="43" cy="48" r="1" fill="#fff"/><circle cx="59" cy="48" r="1" fill="#fff"/><ellipse cx="50" cy="58" rx="3" ry="2.5" fill="#2a1a10"/><path d="M50 60 L50 64 Q47 67 44 65 M50 64 Q53 67 56 65" stroke="#2a1a10" stroke-width="1.2" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="68" rx="3" ry="1.5" fill="#ff6090"/><circle cx="38" cy="56" r="2" fill="#ff9090" opacity="0.5"/><circle cx="62" cy="56" r="2" fill="#ff9090" opacity="0.5"/><polygon points="50,72 53,80 50,78 47,80" fill="#ffd700" stroke="#aa7700" stroke-width="0.5"/><polygon points="50,73 51.5,77 50,76 48.5,77" fill="#fff5a0"/><text x="20" y="38" font-size="8" fill="#ffd060">⭐</text><text x="78" y="38" font-size="8" fill="#ffd060">⭐</text></g></svg>',
+  cat: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g><path d="M28 30 L25 18 L38 28 Z" fill="#a08060"/><path d="M72 30 L75 18 L62 28 Z" fill="#a08060"/><path d="M30 30 L28 22 L36 28 Z" fill="#ffb0c8"/><path d="M70 30 L72 22 L64 28 Z" fill="#ffb0c8"/><ellipse cx="50" cy="55" rx="22" ry="20" fill="#b89070"/><path d="M30 50 L35 45 M30 55 L36 53 M30 60 L36 60 M70 50 L65 45 M70 55 L64 53 M70 60 L64 60" stroke="#5a3520" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/><path d="M40 38 Q45 42 50 38 Q55 42 60 38" stroke="#5a3520" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.4"/><ellipse cx="42" cy="50" rx="4" ry="5" fill="#fff"/><ellipse cx="58" cy="50" rx="4" ry="5" fill="#fff"/><ellipse cx="42" cy="51" rx="2" ry="3.5" fill="#5aa050"/><ellipse cx="58" cy="51" rx="2" ry="3.5" fill="#5aa050"/><ellipse cx="42" cy="51" rx="0.8" ry="3" fill="#1a3010"/><ellipse cx="58" cy="51" rx="0.8" ry="3" fill="#1a3010"/><circle cx="43" cy="49" r="0.8" fill="#fff"/><circle cx="59" cy="49" r="0.8" fill="#fff"/><path d="M50 58 L47 61 L50 63 L53 61 Z" fill="#ff8090"/><path d="M45 65 Q50 68 55 65" stroke="#3a2010" stroke-width="1.2" fill="none" stroke-linecap="round"/><line x1="50" y1="63" x2="50" y2="66" stroke="#3a2010" stroke-width="1"/><line x1="32" y1="56" x2="22" y2="55" stroke="#3a2010" stroke-width="0.6"/><line x1="32" y1="59" x2="22" y2="60" stroke="#3a2010" stroke-width="0.6"/><line x1="68" y1="56" x2="78" y2="55" stroke="#3a2010" stroke-width="0.6"/><line x1="68" y1="59" x2="78" y2="60" stroke="#3a2010" stroke-width="0.6"/><path d="M28 22 L36 8 L44 22 L52 6 L60 22 L68 8 L76 22 Z" fill="#ffd700" stroke="#aa7700" stroke-width="1"/><circle cx="36" cy="14" r="2" fill="#ff5060"/><circle cx="52" cy="12" r="2.5" fill="#5080ff"/><circle cx="68" cy="14" r="2" fill="#50d050"/><rect x="28" y="22" width="48" height="3" fill="#ffd700" stroke="#aa7700" stroke-width="0.5"/><circle cx="38" cy="55" r="2" fill="#ff9090" opacity="0.5"/><circle cx="62" cy="55" r="2" fill="#ff9090" opacity="0.5"/></g></svg>'
+};
+
+
 const DECAY_AMOUNT = 5;
 function applyTimeDecay() {
   const now = Date.now();
@@ -1145,9 +1178,21 @@ function renderPet() {
   const p = UD.pet; if (!p) return;
   const c = COMP[p.type], lv = p.level;
   const ee = document.getElementById('petEmoji');
-  const ne = c.stages[lv];
-  if (ee.textContent !== ne) {
-    ee.textContent = ne;
+  const isFinal = lv === c.stages.length - 1;
+  const newContent = isFinal ? SVG_FINAL_FORMS[p.type] : c.stages[lv];
+  const checkKey = isFinal ? 'svg-' + p.type : c.stages[lv];
+  if (ee.dataset.cur !== checkKey) {
+    if (isFinal) {
+      ee.innerHTML = SVG_FINAL_FORMS[p.type];
+      ee.style.fontSize = '0';
+      ee.classList.add('final-form');
+    } else {
+      ee.innerHTML = '';
+      ee.textContent = c.stages[lv];
+      ee.style.fontSize = '';
+      ee.classList.remove('final-form');
+    }
+    ee.dataset.cur = checkKey;
     ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow');
   }
   document.getElementById('petNameD').textContent = p.name;
@@ -1193,6 +1238,9 @@ async function adminSetLevel(lv) {
 }
 function petIcon(pet) {
   const c = COMP[pet.type];
+  if (pet.level === c.stages.length - 1 && SVG_FINAL_FORMS[pet.type]) {
+    return '<span class="mini-svg">' + SVG_FINAL_FORMS[pet.type] + '</span>';
+  }
   return c.stages[pet.level];
 }
 function renderPetSwitcher() {
@@ -1855,7 +1903,7 @@ async function postCommunity() {
       uid: CU.uid,
       username: UD.username,
       realName: UD.realName || UD.username,
-      petIcon: UD.pet ? COMP[UD.pet.type].stages[UD.pet.level] : '👤',
+      petIcon: UD.pet ? petIcon(UD.pet) : '👤',
       content,
       photoBase64,
       date: todayKey(),
@@ -2023,7 +2071,7 @@ async function addComment(postId) {
       uid: CU.uid,
       username: UD.username,
       realName: UD.realName || UD.username,
-      petIcon: UD.pet ? COMP[UD.pet.type].stages[UD.pet.level] : '👤',
+      petIcon: UD.pet ? petIcon(UD.pet) : '👤',
       content: text,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
