@@ -822,25 +822,51 @@ const COMP = {
 
 /* ════ PET ════ */
 function loadPetState() {
+  const p = UD.pet; if (!p) return;
+  const c = COMP[p.type]; if (!c) return;
+  // stats 없으면 초기화 (구버전 데이터 호환)
+  if (!p.stats) {
+    p.stats = {};
+    c.stats.forEach(r => { p.stats[r[1]] = r[2]; });
+    savePet();
+  }
   renderPet(); buildCareBtns();
-  document.getElementById('ptsNum').textContent = UD.pet?.pts || 0;
+  document.getElementById('ptsNum').textContent = p.pts || 0;
   setInterval(() => {
     if (!UD.pet) return;
-    COMP[UD.pet.type].stats.forEach(r => { UD.pet.stats[r[1]] = Math.max(0, (UD.pet.stats[r[1]] || 0) - 1.5); });
+    const comp = COMP[UD.pet.type]; if (!comp) return;
+    if (!UD.pet.stats) UD.pet.stats = {};
+    comp.stats.forEach(r => { UD.pet.stats[r[1]] = Math.max(0, (UD.pet.stats[r[1]] || 0) - 1.5); });
     renderPet();
   }, 10000);
 }
 
 function renderPet() {
   const p = UD.pet; if (!p) return;
-  const c = COMP[p.type], lv = p.level;
-  const ee = document.getElementById('petEmoji'), ne = c.stages[lv];
-  if (ee.textContent !== ne) { ee.textContent = ne; ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow'); }
-  document.getElementById('petNameD').textContent   = p.name;
-  document.getElementById('petTypeD').textContent   = c.label;
-  document.getElementById('petStatusD').textContent = c.statuses[lv];
-  document.getElementById('lvRow').innerHTML = c.stages.map((_,i) => `<span class="lv-star ${i<=lv?'on':''}">⭐</span>`).join('');
-  document.getElementById('statsBox').innerHTML = c.stats.map(([ico,k,,fill]) =>
+  const c = COMP[p.type]; if (!c) return;
+  const lv = p.level || 0;
+  // stats 없으면 초기화
+  if (!p.stats) {
+    p.stats = {};
+    c.stats.forEach(r => { p.stats[r[1]] = r[2]; });
+  }
+  const ee = document.getElementById('petEmoji');
+  if (!ee) return;
+  const ne = c.stages[lv];
+  if (ee.textContent !== ne) {
+    ee.textContent = ne;
+    ee.classList.remove('grow'); void ee.offsetWidth; ee.classList.add('grow');
+  }
+  const nameEl = document.getElementById('petNameD');
+  const typeEl = document.getElementById('petTypeD');
+  const statusEl = document.getElementById('petStatusD');
+  const lvEl = document.getElementById('lvRow');
+  const statsEl = document.getElementById('statsBox');
+  if (nameEl) nameEl.textContent = p.name;
+  if (typeEl) typeEl.textContent = c.label;
+  if (statusEl) statusEl.textContent = c.statuses[lv];
+  if (lvEl) lvEl.innerHTML = c.stages.map((_,i) => `<span class="lv-star ${i<=lv?'on':''}">⭐</span>`).join('');
+  if (statsEl) statsEl.innerHTML = c.stats.map(([ico,k,,fill]) =>
     `<div class="sg"><span class="si">${ico}</span><div class="st"><div class="sf ${fill}" style="width:${Math.min(100,p.stats[k]||0)}%"></div></div></div>`
   ).join('');
 }
@@ -853,7 +879,8 @@ function buildCareBtns() {
 }
 function updateCareBtns() {
   if (!UD.pet) return;
-  COMP[UD.pet.type].actions.forEach(a => {
+  const c = COMP[UD.pet.type]; if (!c) return;
+  c.actions.forEach(a => {
     const b = document.getElementById('cb-' + a.id);
     if (b) b.disabled = (UD.pet.pts || 0) < a.cost;
   });
