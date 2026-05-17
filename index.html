@@ -40,6 +40,22 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .social-btn.google{border-color:#e0e0e0;}
 .social-btn.google:hover{background:#fafafa;border-color:#d0d0d0;}
 .social-icon{width:22px;height:22px;flex-shrink:0;}
+/* USERNAME SETUP */
+#screen-setup{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 16px;gap:18px;}
+.setup-card{background:white;border-radius:28px;padding:28px 24px;box-shadow:0 12px 32px rgba(0,0,0,0.1);width:100%;max-width:370px;}
+.setup-title{font-size:1.6rem;font-weight:700;color:#4a9a50;text-align:center;margin-bottom:4px;}
+.setup-sub{font-size:1rem;color:#aaa;text-align:center;margin-bottom:20px;}
+.setup-field{margin-bottom:14px;}
+.setup-field label{display:block;font-size:1rem;color:#777;margin-bottom:4px;}
+.setup-input{width:100%;border:2.5px solid #e0e8d0;border-radius:14px;padding:10px 14px;font-size:1.15rem;color:#333;outline:none;background:#fafafa;transition:border-color 0.2s;}
+.setup-input:focus{border-color:#4a9a50;background:white;}
+.setup-hint{font-size:0.8rem;color:#bbb;margin-top:4px;}
+.setup-check{font-size:0.82rem;margin-top:4px;min-height:16px;}
+.setup-check.ok{color:#4a9a50;}.setup-check.ng{color:#e05050;}
+.setup-submit{width:100%;background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:50px;padding:13px;font-size:1.2rem;font-weight:700;box-shadow:0 5px 16px rgba(74,154,80,0.4);transition:all 0.2s;margin-top:4px;}
+.setup-submit:hover{transform:translateY(-2px);}
+.setup-submit:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+
 /* PET SELECT */
 #screen-select{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 16px;gap:16px;}
 .sel-title{font-size:2.4rem;font-weight:700;color:#4a9a50;text-shadow:3px 3px 0 white;text-align:center;}
@@ -309,6 +325,28 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
   </div>
 </div>
 
+<!-- USERNAME SETUP (구글 로그인 후 닉네임 설정) -->
+<div id="screen-setup" class="hidden">
+  <div style="font-size:3rem">👤</div>
+  <div class="setup-card">
+    <div class="setup-title">프로필 설정</div>
+    <div class="setup-sub">닉네임과 아이디를 정해줘요!</div>
+    <div class="setup-field">
+      <label>닉네임 (표시 이름)</label>
+      <input class="setup-input" id="setupNickname" type="text" maxlength="15" placeholder="닉네임 입력" oninput="checkSetup()">
+      <div class="setup-hint">친구들에게 보이는 이름이에요</div>
+    </div>
+    <div class="setup-field">
+      <label>아이디 (영문/숫자)</label>
+      <input class="setup-input" id="setupUsername" type="text" maxlength="20" placeholder="아이디 입력" oninput="checkSetupUsername()">
+      <div class="setup-check" id="usernameCheck"></div>
+      <div class="setup-hint">로그인에 쓰는 고유 아이디예요</div>
+    </div>
+    <div class="auth-err" id="setupErr"></div>
+    <button class="setup-submit" id="setupSubmit" onclick="saveProfile()" disabled>✅ 완료!</button>
+  </div>
+</div>
+
 <!-- PET SELECT -->
 <div id="screen-select" class="hidden">
   <div class="sel-title">🌿 성경 정원 🌿</div>
@@ -519,6 +557,7 @@ window.addEventListener('load', function () {
   db      = firebase.firestore();
 
   /* ── Auth 상태 감지 ── */
+  handleRedirectResult(); // 구글 로그인 리다이렉트 결과 처리
   auth.onAuthStateChanged(async function (user) {
     if (user) {
       CU = user;
@@ -537,7 +576,7 @@ function hideSplash() {
   setTimeout(() => s.style.display = 'none', 500);
 }
 function showScreen(n) {
-  ['auth','select','main'].forEach(s =>
+  ['auth','select','setup','main'].forEach(s =>
     document.getElementById('screen-' + s).classList.toggle('hidden', s !== n)
   );
 }
@@ -581,19 +620,88 @@ async function doSignup() {
 }
 async function doLogout() { await auth.signOut(); showScreen('auth'); }
 
+/* ════ PROFILE SETUP ════ */
+let usernameOk = false;
+
+function checkSetup() {
+  const nick = document.getElementById('setupNickname').value.trim();
+  const btn = document.getElementById('setupSubmit');
+  btn.disabled = !(nick.length >= 1 && usernameOk);
+}
+
+let usernameCheckTimer = null;
+function checkSetupUsername() {
+  const val = document.getElementById('setupUsername').value.trim().toLowerCase();
+  const check = document.getElementById('usernameCheck');
+  usernameOk = false;
+  checkSetup();
+  if (!val) { check.textContent = ''; return; }
+  if (!/^[a-z0-9_]{2,20}$/.test(val)) {
+    check.textContent = '❌ 영문 소문자, 숫자, 밑줄만 2~20자!';
+    check.className = 'setup-check ng'; return;
+  }
+  check.textContent = '⏳ 확인 중...'; check.className = 'setup-check';
+  clearTimeout(usernameCheckTimer);
+  usernameCheckTimer = setTimeout(async () => {
+    const dup = await db.collection('users').where('username', '==', val).get();
+    if (!dup.empty) {
+      check.textContent = '❌ 이미 사용 중인 아이디예요!';
+      check.className = 'setup-check ng';
+      usernameOk = false;
+    } else {
+      check.textContent = '✅ 사용 가능한 아이디예요!';
+      check.className = 'setup-check ok';
+      usernameOk = true;
+    }
+    checkSetup();
+  }, 600);
+}
+
+async function saveProfile() {
+  const nick = document.getElementById('setupNickname').value.trim();
+  const uname = document.getElementById('setupUsername').value.trim().toLowerCase();
+  const err = document.getElementById('setupErr');
+  if (!nick || !uname || !usernameOk) return;
+  const btn = document.getElementById('setupSubmit');
+  btn.disabled = true; btn.textContent = '저장 중...';
+  try {
+    await db.collection('users').doc(CU.uid).set({
+      username: uname,
+      nickname: nick,
+      email: CU.email || '',
+      isAdmin: uname === ADMIN_ID,
+      pet: null, totalQuizzes: 0, correctCount: 0,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+    await loadUserDoc(CU.uid);
+  } catch (e) {
+    err.textContent = '오류: ' + e.message;
+    btn.disabled = false; btn.textContent = '✅ 완료!';
+  }
+}
+
 async function doGoogleLogin() {
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    const result = await auth.signInWithPopup(provider);
+    // popup 대신 redirect 사용 (GitHub Pages COOP 에러 방지)
+    await auth.signInWithRedirect(provider);
+  } catch (e) {
+    document.getElementById('lerr').textContent = '구글 로그인 실패: ' + e.message;
+  }
+}
+
+// 리다이렉트 결과 처리 (페이지 로드 시 자동 실행)
+async function handleRedirectResult() {
+  try {
+    const result = await auth.getRedirectResult();
+    if (!result.user) return;
     const user = result.user;
-    // Firestore에 유저 없으면 새로 만들기
     const snap = await db.collection('users').doc(user.uid).get();
     if (!snap.exists) {
-      // 구글 이름으로 username 만들기 (소문자, 공백→_)
-      let uname = (user.displayName || 'user').toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'').slice(0,20) || 'user' + Date.now().toString().slice(-4);
-      // 중복 체크
-      const dup = await db.collection('users').where('username','==',uname).get();
-      if (!dup.empty) uname = uname + Math.floor(Math.random()*100);
+      let uname = (user.displayName || 'user').toLowerCase()
+        .replace(/[^a-z0-9]/g, '_').slice(0, 20) || 'user' + Date.now().toString().slice(-4);
+      const dup = await db.collection('users').where('username', '==', uname).get();
+      if (!dup.empty) uname = uname + Math.floor(Math.random() * 100);
       await db.collection('users').doc(user.uid).set({
         username: uname,
         email: user.email || '',
@@ -603,18 +711,24 @@ async function doGoogleLogin() {
       });
     }
   } catch (e) {
-    if (e.code !== 'auth/popup-closed-by-user') {
-      document.getElementById('lerr').textContent = '구글 로그인 실패: ' + e.message;
-    }
+    console.log('redirect result error:', e.message);
   }
 }
 
 
 async function loadUserDoc(uid) {
   const snap = await db.collection('users').doc(uid).get();
-  if (!snap.exists) { showScreen('auth'); return; }
-  UD = snap.data(); isAdmin = UD.isAdmin || false;
-  document.getElementById('userChip').textContent = UD.username;
+  if (!snap.exists) {
+    // 구글 로그인으로 새 유저 → 프로필 설정 화면
+    showScreen('setup'); return;
+  }
+  UD = snap.data();
+  // username 없으면 프로필 설정
+  if (!UD.username || UD.username.startsWith('user')) {
+    showScreen('setup'); return;
+  }
+  isAdmin = UD.isAdmin || false;
+  document.getElementById('userChip').textContent = UD.nickname || UD.username;
   if (isAdmin) document.getElementById('adminNavBtn').classList.remove('hidden');
   if (!UD.pet) { showScreen('select'); }
   else { showScreen('main'); loadPetState(); initGarden(); }
@@ -1134,7 +1248,7 @@ async function loadAdminUsers() {
       const u={id:d.id,...d.data()}, p=u.pet, pe=p?COMP[p.type]?.stages[p.level||0]:'';
       const rate=u.totalQuizzes>0?Math.round((u.correctCount||0)/u.totalQuizzes*100):0;
       const cr=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('ko-KR'):'-';
-      return `<tr><td><b>${u.username}</b>${u.isAdmin?' 👑':''}</td><td>${p?`<span class="pet-badge">${pe} ${COMP[p.type]?.label}</span>`:'없음'}</td><td>${p?.name||'-'}</td><td>${p?'Lv.'+(p.level+1):'-'}</td><td>${p?.pts||0}점</td><td>${u.totalQuizzes||0}</td><td>${rate}%</td><td>${cr}</td><td>${u.isAdmin?'':'<button class="del-btn" onclick="delUser(\''+u.id+'\',\''+u.username+'\')">삭제</button>'}</td></tr>`;
+      return `<tr><td><b>${u.nickname||u.username}</b> <span style='font-size:0.75rem;color:#aaa'>@${u.username}</span>${u.isAdmin?' 👑':''}</td><td>${p?`<span class="pet-badge">${pe} ${COMP[p.type]?.label}</span>`:'없음'}</td><td>${p?.name||'-'}</td><td>${p?'Lv.'+(p.level+1):'-'}</td><td>${p?.pts||0}점</td><td>${u.totalQuizzes||0}</td><td>${rate}%</td><td>${cr}</td><td>${u.isAdmin?'':'<button class="del-btn" onclick="delUser(\''+u.id+'\',\''+u.username+'\')">삭제</button>'}</td></tr>`;
     }).join('');
   } catch (e) { document.getElementById('admTbody').innerHTML='<tr><td colspan="9" class="empty-txt">⚠️ 실패</td></tr>'; }
 }
