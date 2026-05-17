@@ -294,6 +294,9 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .comment-input{flex:1;border:1.5px solid #e0e8d0;border-radius:20px;padding:7px 12px;font-size:0.88rem;outline:none;background:white;}
 .comment-send{background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;flex-shrink:0;transition:all 0.2s;}
 .comm-write-preview{width:100%;border-radius:10px;max-height:120px;object-fit:cover;margin-top:6px;}
+/* SETTINGS QR */
+#qrVideo{max-height:280px;object-fit:cover;}
+
 /* CHAT */
 .chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 160px);background:white;border-radius:22px;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,0.07);}
 .chat-header{padding:12px 16px;background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;display:flex;align-items:center;gap:8px;flex-shrink:0;}
@@ -495,6 +498,26 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
         </div>
       </div>
     </div>
+
+    <!-- 커뮤니티 (정원 탭 안) -->
+    <div class="card" style="margin-top:0">
+      <div class="card-title">🌿 오늘의 나눔</div>
+      <div class="comm-write-box">
+        <textarea class="comm-textarea" id="commText" placeholder="말씀 묵상, 기도 제목, 감사한 일을 나눠요 (500자)" maxlength="500"></textarea>
+        <img id="commWritePreview" class="comm-write-preview" style="display:none" src="" alt="">
+        <div class="comm-write-footer">
+          <label class="comm-photo-label" for="commPhotoInput">📷 사진 추가</label>
+          <input type="file" id="commPhotoInput" accept="image/*" style="display:none" onchange="onCommPhotoSelected(event)">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span id="commCharCount" style="font-size:0.78rem;color:#ccc">0/500</span>
+            <button class="comm-submit-btn" id="commSubmitBtn" onclick="submitPost()">📝 올리기 (+10점)</button>
+          </div>
+        </div>
+      </div>
+      <div id="postList" class="post-list">
+        <div class="empty-txt">📝 첫 번째 나눔을 올려봐요!</div>
+      </div>
+    </div>
   </div>
 
   <!-- 성경 탭 -->
@@ -520,28 +543,6 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     </div>
   </div>
 
-  <!-- 커뮤니티 탭 -->
-  <div class="tab-content" id="tab-community">
-    <div class="comm-card">
-      <div class="card-title">✍️ 오늘의 나눔</div>
-      <div class="comm-write-box">
-        <textarea class="comm-textarea" id="commText" placeholder="말씀 묵상, 기도 제목, 감사한 일을 나눠요 (500자)" maxlength="500"></textarea>
-        <img id="commWritePreview" class="comm-write-preview" style="display:none" src="" alt="">
-        <div class="comm-write-footer">
-          <label class="comm-photo-label" for="commPhotoInput">📷 사진 추가</label>
-          <input type="file" id="commPhotoInput" accept="image/*" style="display:none" onchange="onCommPhotoSelected(event)">
-          <div style="display:flex;align-items:center;gap:6px">
-            <span id="commCharCount" style="font-size:0.78rem;color:#ccc">0/500</span>
-            <button class="comm-submit-btn" id="commSubmitBtn" onclick="submitPost()">📝 올리기 (+10점)</button>
-          </div>
-        </div>
-      </div>
-      <div id="postList" class="post-list">
-        <div class="empty-txt">📝 첫 번째 나눔을 올려봐요!</div>
-      </div>
-      <div id="commLoading" style="text-align:center;padding:16px;color:#ccc;display:none">불러오는 중...</div>
-    </div>
-  </div>
 
   <!-- 기록 탭 -->
   <div class="tab-content" id="tab-history">
@@ -559,7 +560,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     <div class="admin-subtabs">
       <button class="a-tab active" onclick="switchAdminTab('users',this)">👥 회원</button>
       <button class="a-tab" onclick="switchAdminTab('daily',this)">📅 오늘말씀</button>
-      <button class="a-tab" onclick="switchAdminTab('meds',this)">📷 묵상확인</button>
+
     </div>
     <div class="admin-section active" id="adm-users">
       <div class="a-table-wrap">
@@ -581,12 +582,14 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
         </div>
         <div id="dpList"></div>
         <button class="save-dp-btn" onclick="saveDailyConfig()">💾 오늘의 말씀 저장하기</button>
+        <div style="margin-top:16px;padding-top:14px;border-top:1.5px solid #f0f0f0">
+          <div class="card-title" style="margin-bottom:8px">📱 오늘 출석 QR 생성</div>
+          <button onclick="genAttendanceQR()" style="width:100%;background:linear-gradient(135deg,#a0c8ff,#6898ee);color:white;border:none;border-radius:50px;padding:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:10px">📱 QR 코드 생성</button>
+          <div id="attendanceQR" style="display:flex;justify-content:center;padding:10px"></div>
+        </div>
       </div>
     </div>
-    <div class="admin-section" id="adm-meds">
-      <div style="font-size:1.1rem;font-weight:700;color:#5a6a4a;margin-bottom:10px">📷 묵상 사진 확인</div>
-      <div id="medsList"><div class="empty-txt">제출된 묵상 사진이 없어요</div></div>
-    </div>
+
   </div>
 
     <!-- 채팅 탭 -->
@@ -608,6 +611,45 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     </div>
   </div>
 
+  <!-- 설정 탭 -->
+  <div class="tab-content" id="tab-settings">
+    <div class="card">
+      <div class="card-title">👤 마이페이지</div>
+      <div id="myPageInfo" style="display:flex;flex-direction:column;gap:6px;font-size:1rem;color:#555"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">✏️ 닉네임 변경</div>
+      <div style="display:flex;gap:8px">
+        <input id="newNickname" class="auth-input" type="text" placeholder="새 닉네임 입력" maxlength="15" style="flex:1">
+        <button onclick="changeNickname()" style="background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:14px;padding:10px 16px;font-size:1rem;font-weight:700;cursor:pointer">변경</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔒 비밀번호 변경</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <input id="curPw" class="auth-input" type="password" placeholder="현재 비밀번호">
+        <input id="newPw" class="auth-input" type="password" placeholder="새 비밀번호 (6자 이상)">
+        <input id="newPw2" class="auth-input" type="password" placeholder="새 비밀번호 확인">
+        <button onclick="changePassword()" style="background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:50px;padding:11px;font-size:1rem;font-weight:700;cursor:pointer">비밀번호 변경</button>
+        <div id="pwChangeErr" style="color:#e05050;font-size:0.88rem;text-align:center;min-height:16px"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📱 QR 출석 체크</div>
+      <div style="font-size:0.88rem;color:#aaa;margin-bottom:10px">관리자가 제공한 QR 코드를 스캔하면 출석이 기록돼요</div>
+      <div id="qrScanResult" style="text-align:center;padding:10px;font-size:1rem;color:#4a9a50;display:none"></div>
+      <button onclick="startQRScan()" style="width:100%;background:linear-gradient(135deg,#a0c8ff,#6898ee);color:white;border:none;border-radius:50px;padding:11px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(100,150,240,0.4)">📷 QR 코드 스캔</button>
+      <div id="qrScanWrap" style="display:none;margin-top:12px">
+        <video id="qrVideo" style="width:100%;border-radius:14px;background:#000"></video>
+        <button onclick="stopQRScan()" style="width:100%;margin-top:8px;background:#f5f5f5;border:1.5px solid #ddd;border-radius:50px;padding:9px;font-size:0.95rem;color:#888;cursor:pointer">✕ 닫기</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🗑️ 계정 관리</div>
+      <button onclick="doLogout()" style="width:100%;background:#fff0f0;border:2px solid #f0c0c0;border-radius:50px;padding:11px;font-size:1rem;color:#d05050;cursor:pointer;font-family:'Gaegu',cursive">로그아웃</button>
+    </div>
+  </div>
+
   <!-- 명예의 전당 탭 -->
   <div class="tab-content" id="tab-hall">
     <div style="font-size:1.3rem;font-weight:700;color:#3a3a5a;padding:0 0 10px;display:flex;align-items:center;gap:6px">🏆 명예의 전당</div>
@@ -622,10 +664,10 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="switchTab('garden',this)"><span class="ni">🌿</span><span>정원</span></button>
     <button class="nav-btn" onclick="switchTab('bible',this)"><span class="ni">📖</span><span>성경</span></button>
-    <button class="nav-btn" onclick="switchTab('community',this)"><span class="ni">🌿</span><span>커뮤니티</span></button>
     <button class="nav-btn" onclick="switchTab('history',this)"><span class="ni">📝</span><span>기록</span></button>
     <button class="nav-btn" onclick="switchTab('chat',this)"><span class="ni">💬</span><span>채팅</span></button>
     <button class="nav-btn" onclick="switchTab('hall',this)"><span class="ni">🏆</span><span>명예의전당</span></button>
+    <button class="nav-btn" onclick="switchTab('settings',this)"><span class="ni">⚙️</span><span>설정</span></button>
     <button class="nav-btn hidden" id="adminNavBtn" onclick="switchTab('admin',this)"><span class="ni">👑</span><span>어드민</span></button>
   </nav>
 </div>
@@ -1003,6 +1045,7 @@ async function setDailyField(updates) {
 async function initGarden() {
   updateActivityUI();
   loadTodayPassages();
+  loadPosts();
 }
 async function updateActivityUI() {
   const dr = await getDailyRecord();
@@ -1386,7 +1429,7 @@ function switchAdminTab(n, btn) {
   document.getElementById('adm-'+n).classList.add('active'); btn.classList.add('active');
   if(n==='users') loadAdminUsers();
   if(n==='daily') initDailyConfig();
-  if(n==='meds')  loadMeditations();
+  if(n==='posts') loadAdminPosts();
 }
 async function loadAdminUsers() {
   try {
@@ -1522,6 +1565,7 @@ function switchTab(n, btn) {
   if(n==='hall') loadHall();
   if(n==='chat') initChat();
   if(n==='community') initCommunity();
+  if(n==='settings') loadSettingsPage();
 }
 
 /* ════ 로컬 성경 데이터 ════ */
@@ -2143,6 +2187,190 @@ async function handleAdminCommand(cmd) {
   }
 
   toast('❓ 알 수 없는 명령어예요. /help 로 확인해요!');
+}
+
+/* ════ SETTINGS ════ */
+async function loadSettingsPage() {
+  if (!UD || !CU) return;
+  const p = UD.pet;
+  const joined = UD.createdAt?.toDate ? UD.createdAt.toDate().toLocaleDateString('ko-KR') : '-';
+  document.getElementById('myPageInfo').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <div style="width:50px;height:50px;border-radius:50%;background:#e8f5e0;display:flex;align-items:center;justify-content:center;font-size:1.8rem">${p?COMP[p.type]?.stages[p.level||0]:'🌱'}</div>
+      <div>
+        <div style="font-size:1.2rem;font-weight:700;color:#3a5a3a">${UD.nickname||UD.username}</div>
+        <div style="font-size:0.82rem;color:#aaa">@${UD.username}</div>
+      </div>
+    </div>
+    <div style="background:#f8f8f8;border-radius:14px;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#4a9a50">${p?.pts||0}</div><div style="font-size:0.78rem;color:#aaa">포인트</div></div>
+      <div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#4a9a50">Lv.${(p?.level||0)+1}</div><div style="font-size:0.78rem;color:#aaa">레벨</div></div>
+      <div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#8a5ac0">${UD.totalQuizzes||0}</div><div style="font-size:0.78rem;color:#aaa">총 퀴즈</div></div>
+      <div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#c07050">${UD.totalQuizzes>0?Math.round((UD.correctCount||0)/UD.totalQuizzes*100):0}%</div><div style="font-size:0.78rem;color:#aaa">정답률</div></div>
+    </div>
+    <div style="font-size:0.82rem;color:#ccc;text-align:center;margin-top:4px">가입일: ${joined}</div>`;
+  document.getElementById('newNickname').value = UD.nickname || '';
+}
+
+async function changeNickname() {
+  const nick = document.getElementById('newNickname').value.trim();
+  if (!nick) { toast('닉네임을 입력해요!'); return; }
+  try {
+    await db.collection('users').doc(CU.uid).update({ nickname: nick });
+    UD.nickname = nick;
+    document.getElementById('userChip').textContent = nick;
+    toast('✅ 닉네임이 변경됐어요!');
+  } catch(e) { toast('오류: ' + e.message); }
+}
+
+async function changePassword() {
+  const cur = document.getElementById('curPw').value;
+  const nw  = document.getElementById('newPw').value;
+  const nw2 = document.getElementById('newPw2').value;
+  const err = document.getElementById('pwChangeErr');
+  if (!cur||!nw||!nw2) { err.textContent='모두 입력해요!'; return; }
+  if (nw.length < 6) { err.textContent='새 비밀번호는 6자 이상!'; return; }
+  if (nw !== nw2) { err.textContent='새 비밀번호가 일치하지 않아요!'; return; }
+  try {
+    const cred = firebase.auth.EmailAuthProvider.credential(CU.email, cur);
+    await CU.reauthenticateWithCredential(cred);
+    await CU.updatePassword(nw);
+    await db.collection('users').doc(CU.uid).update({ pwHint: nw });
+    err.textContent = ''; toast('✅ 비밀번호 변경 완료!');
+    document.getElementById('curPw').value = '';
+    document.getElementById('newPw').value = '';
+    document.getElementById('newPw2').value = '';
+  } catch(e) {
+    if (e.code === 'auth/wrong-password') err.textContent = '현재 비밀번호가 틀렸어요!';
+    else err.textContent = '오류: ' + e.message;
+  }
+}
+
+/* ════ QR 출석 ════ */
+let qrStream = null;
+let qrInterval = null;
+
+async function startQRScan() {
+  try {
+    qrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:'environment' } });
+    const video = document.getElementById('qrVideo');
+    video.srcObject = qrStream;
+    video.play();
+    document.getElementById('qrScanWrap').style.display = 'block';
+    toast('📷 QR 코드에 카메라를 가져다 대요!');
+    // jsQR 라이브러리 동적 로드
+    if (!window.jsQR) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+      script.onload = () => startQRDecode();
+      document.head.appendChild(script);
+    } else { startQRDecode(); }
+  } catch(e) { toast('📷 카메라 권한이 필요해요!'); }
+}
+
+function startQRDecode() {
+  const video = document.getElementById('qrVideo');
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  qrInterval = setInterval(() => {
+    if (video.readyState !== video.HAVE_ENOUGH_DATA) return;
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = window.jsQR(img.data, img.width, img.height);
+    if (code && code.data) {
+      clearInterval(qrInterval);
+      stopQRScan();
+      processQR(code.data);
+    }
+  }, 300);
+}
+
+function stopQRScan() {
+  clearInterval(qrInterval);
+  if (qrStream) { qrStream.getTracks().forEach(t => t.stop()); qrStream = null; }
+  document.getElementById('qrScanWrap').style.display = 'none';
+}
+
+async function processQR(data) {
+  try {
+    const parsed = JSON.parse(data);
+    if (parsed.type !== 'attendance' || !parsed.date) { toast('❌ 유효하지 않은 QR이에요!'); return; }
+    const today = todayKey();
+    if (parsed.date !== today) { toast('❌ 오늘 QR이 아니에요!'); return; }
+    const dr = await getDailyRecord();
+    if (dr.qrAttended) { toast('✅ 오늘 이미 출석했어요!'); return; }
+    await setDailyField({ qrAttended: true });
+    await addPoints(10);
+    // 출석 기록
+    await db.collection('attendance').add({
+      uid: CU.uid, username: UD.username, nickname: UD.nickname||UD.username,
+      date: today, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    document.getElementById('qrScanResult').style.display = 'block';
+    document.getElementById('qrScanResult').textContent = '✅ 출석 완료! +10점';
+    toast('✅ 출석 체크 완료! +10점 🎉');
+    particles(window.innerWidth/2, 300, ['✅','🎉','✨','🌟'], 12);
+  } catch(e) { toast('❌ QR 오류: 올바른 QR이 아니에요!'); }
+}
+
+/* ════ ADMIN - 커뮤니티 관리 + 출석 QR 생성 ════ */
+async function loadAdminPosts() {
+  const list = document.getElementById('adminPostsList');
+  if (!list) return;
+  try {
+    const snap = await db.collection('community').orderBy('createdAt','desc').limit(50).get();
+    if (snap.empty) { list.innerHTML = '<div class="empty-txt">게시물이 없어요</div>'; return; }
+    list.innerHTML = snap.docs.map(d => {
+      const p = d.data();
+      const ts = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('ko-KR') : '-';
+      return `<div style="background:white;border-radius:14px;padding:12px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <span style="font-weight:700;color:#3a3a5a">${p.nickname||p.username}</span>
+          <span style="font-size:0.75rem;color:#ccc">${ts}</span>
+        </div>
+        <div style="font-size:0.92rem;color:#555;margin-bottom:6px">${(p.text||'').slice(0,100)}${(p.text||'').length>100?'...':''}</div>
+        ${p.photoBase64?'<div style="font-size:0.78rem;color:#88a8ee;margin-bottom:4px">📷 사진 있음</div>':''}
+        <div style="font-size:0.78rem;color:#aaa">❤️ ${p.likeCount||0} 💬 ${p.commentCount||0}</div>
+        <button onclick="adminDeletePost('${d.id}')" class="del-btn" style="margin-top:6px">🗑️ 삭제</button>
+      </div>`;
+    }).join('');
+  } catch(e) { list.innerHTML = '<div class="empty-txt">⚠️ 실패</div>'; }
+}
+
+async function adminDeletePost(postId) {
+  if (!confirm('게시물을 삭제할까요?')) return;
+  try {
+    const comments = await db.collection('community').doc(postId).collection('comments').get();
+    const batch = db.batch();
+    comments.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+    await db.collection('community').doc(postId).delete();
+    toast('✅ 삭제됨'); loadAdminPosts();
+  } catch(e) { toast('실패: ' + e.message); }
+}
+
+// 어드민: 오늘 출석 QR 생성
+function genAttendanceQR() {
+  const data = JSON.stringify({ type:'attendance', date:todayKey() });
+  const qrDiv = document.getElementById('attendanceQR');
+  if (!qrDiv) return;
+  qrDiv.innerHTML = '';
+  if (!window.QRCode) {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+    s.onload = () => {
+      QRCode.toCanvas(document.createElement('canvas'), data, {width:220}, (err, canvas) => {
+        if (!err) { qrDiv.appendChild(canvas); }
+      });
+    };
+    document.head.appendChild(s);
+  } else {
+    QRCode.toCanvas(document.createElement('canvas'), data, {width:220}, (err, canvas) => {
+      if (!err) { qrDiv.appendChild(canvas); }
+    });
+  }
+  toast('📋 QR 생성 완료!');
 }
 
 /* ════ UTILS ════ */
