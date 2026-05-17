@@ -639,8 +639,6 @@ async function createPet() {
   if (!name || !selType) return;
   const stats = {};
   COMP[selType].stats.forEach(r => { stats[r[1]] = r[2]; });
-  const stats = {};
-  COMP[selType].stats.forEach(r => { stats[r[1]] = r[2]; });
   const pet = { type: selType, name, level: 0, growScore: 0, stats, pts: 0 };
   await db.collection('users').doc(CU.uid).update({ pet });
   UD.pet = pet;
