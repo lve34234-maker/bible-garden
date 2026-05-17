@@ -1737,7 +1737,7 @@ async function handleAdminCommand(cmd) {
   const command = parts[0].toLowerCase();
 
   if (command === 'help') {
-    toast('📋 명령어: /deleteall /resetpoints /announce [내용] /kickuser [아이디] /givepoints [아이디] [점수]');
+    toast('📋 /deleteall /resetpoints /deleteusers /announce [내용] /kickuser [아이디] /givepoints [아이디] [점수] /clearquiz');
     return;
   }
 
@@ -1791,6 +1791,17 @@ async function handleAdminCommand(cmd) {
     const pet = udata.pet;
     if (pet) { pet.pts = (pet.pts||0) + pts; await db.collection('users').doc(snap.docs[0].id).update({pet}); }
     toast('✅ ' + uname + '에게 ' + pts + '점 지급 완료'); return;
+  }
+
+  if (command === 'deleteusers') {
+    if (!confirm('⚠️ 관리자 제외 모든 회원을 삭제할까요?')) return;
+    const snap = await db.collection('users').get();
+    const batch = db.batch();
+    snap.docs.forEach(d => {
+      if (!d.data().isAdmin) batch.delete(d.ref);
+    });
+    await batch.commit();
+    toast('✅ 모든 회원 삭제 완료 (관리자 제외)'); return;
   }
 
   if (command === 'clearquiz') {
