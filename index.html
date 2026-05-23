@@ -4,10 +4,48 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🌿 성경 정원</title>
-<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400;700&family=Jua&family=Do+Hyeon&family=Sunflower:wght@300;500;700&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Gaegu',cursive;background:#e8f5ff;min-height:100vh;overflow-x:hidden;background-image:radial-gradient(circle at 10% 20%,#ffecd2 0%,transparent 50%),radial-gradient(circle at 90% 80%,#d4f5c8 0%,transparent 50%);}
+:root {
+  --bg: #e8f5ff;
+  --bg2: radial-gradient(circle at 10% 20%,#ffecd2 0%,transparent 50%),radial-gradient(circle at 90% 80%,#d4f5c8 0%,transparent 50%);
+  --card-bg: white;
+  --card-border: rgba(255,255,255,0.9);
+  --text: #333333;
+  --text-soft: #777777;
+  --text-mute: #aaaaaa;
+  --input-bg: #fafafa;
+  --input-border: #e0e8d0;
+  --header-bg: rgba(232,245,255,0.92);
+  --nav-bg: white;
+  --nav-border: #e8f0e0;
+  --passage-bg: linear-gradient(135deg,#fffef8,#f8f4ec);
+  --passage-border: #f0e8d0;
+  --passage-text: #4a3a2a;
+  --chat-bg: #f8faf8;
+  --comm-box: #fafafa;
+}
+body.dark {
+  --bg: #1a1e2e;
+  --bg2: radial-gradient(circle at 10% 20%,#2a1f3a 0%,transparent 50%),radial-gradient(circle at 90% 80%,#1a2e1f 0%,transparent 50%);
+  --card-bg: #242838;
+  --card-border: rgba(255,255,255,0.07);
+  --text: #e8e8f0;
+  --text-soft: #9898b0;
+  --text-mute: #6060788;
+  --input-bg: #1e2232;
+  --input-border: #3a3e52;
+  --header-bg: rgba(26,30,46,0.95);
+  --nav-bg: #1e2232;
+  --nav-border: #2e3248;
+  --passage-bg: linear-gradient(135deg,#2a2820,#221e18);
+  --passage-border: #3a3428;
+  --passage-text: #d8c8a8;
+  --chat-bg: #1e2232;
+  --comm-box: #1e2232;
+}
+body{font-family:'Gaegu',cursive;background:var(--bg);min-height:100vh;overflow-x:hidden;background-image:var(--bg2);transition:background 0.3s,color 0.3s;}
 button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-family:'Gaegu',cursive;}
 .hidden{display:none!important;}
 .clouds{position:fixed;top:0;left:0;width:100%;pointer-events:none;z-index:0;}
@@ -22,12 +60,12 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 #screen-auth{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;}
 .auth-logo h1{font-size:2.6rem;font-weight:700;color:#4a9a50;text-shadow:3px 3px 0 white;letter-spacing:2px;text-align:center;}
 .auth-logo p{font-size:1.1rem;color:#7aaa70;text-align:center;margin:4px 0 20px;}
-.auth-card{background:white;border-radius:28px;padding:26px 22px;box-shadow:0 12px 32px rgba(0,0,0,0.1);width:100%;max-width:370px;}
+.auth-card{background:var(--card-bg);border-radius:28px;padding:26px 22px;box-shadow:0 12px 32px rgba(0,0,0,0.1);width:100%;max-width:370px;}
 .auth-tabs{display:flex;background:#f5f5f5;border-radius:14px;padding:4px;margin-bottom:18px;}
 .auth-tab{flex:1;padding:8px;border:none;background:transparent;font-size:1.1rem;font-weight:700;color:#aaa;border-radius:10px;transition:all 0.2s;}
 .auth-tab.active{background:white;color:#4a9a50;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
 .auth-field{margin-bottom:12px;}.auth-field label{display:block;font-size:1rem;color:#777;margin-bottom:4px;}
-.auth-input{width:100%;border:2.5px solid #e0e8d0;border-radius:14px;padding:10px 14px;font-size:1.15rem;color:#333;outline:none;background:#fafafa;transition:border-color 0.2s;}
+.auth-input{width:100%;border:2.5px solid var(--input-border);border-radius:14px;padding:10px 14px;font-size:1.15rem;color:var(--text);outline:none;background:var(--input-bg);transition:border-color 0.2s;}
 .auth-input:focus{border-color:#4a9a50;background:white;}
 .auth-submit{width:100%;background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:50px;padding:12px;font-size:1.2rem;font-weight:700;box-shadow:0 5px 16px rgba(74,154,80,0.4);transition:all 0.2s;margin-top:4px;}
 .auth-submit:hover{transform:translateY(-2px);}
@@ -72,7 +110,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .start-btn:disabled{opacity:0.4;cursor:not-allowed;}
 /* MAIN */
 #screen-main{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;max-width:960px;margin:0 auto;width:100%;}
-.app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 6px;position:sticky;top:0;z-index:50;background:rgba(232,245,255,0.92);backdrop-filter:blur(8px);}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 6px;position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-filter:blur(8px);}
 .app-logo{font-size:1.45rem;font-weight:700;color:#4a9a50;}
 .header-right{display:flex;align-items:center;gap:8px;}
 .pts-pill{background:white;border-radius:50px;padding:4px 13px;font-size:1rem;font-weight:700;color:#4a9a50;border:2.5px solid #b8e8a0;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
@@ -81,16 +119,16 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .user-chip{font-size:0.85rem;color:#aaa;}
 .logout-btn{background:white;border:2px solid #f0d0d0;border-radius:50px;padding:4px 11px;font-size:0.88rem;color:#d07070;transition:all 0.2s;}
 .logout-btn:hover{background:#fff0f0;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:white;border-top:2px solid #e8f0e0;display:flex;box-shadow:0 -4px 16px rgba(0,0,0,0.07);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--nav-bg);border-top:2px solid var(--nav-border);display:flex;box-shadow:0 -4px 16px rgba(0,0,0,0.07);}
 .nav-btn{flex:1;padding:9px 4px 7px;border:none;background:transparent;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:0.75rem;color:#bbb;transition:all 0.2s;}
 .nav-btn .ni{font-size:1.35rem;}.nav-btn.active{color:#4a9a50;}.nav-btn.active .ni{transform:scale(1.15);}
 .tab-content{padding:10px 10px 90px;display:none;}.tab-content.active{display:block;}
-.card{background:white;border-radius:22px;padding:16px;box-shadow:0 5px 18px rgba(0,0,0,0.07);margin-bottom:12px;}
+.card{background:var(--card-bg);border-radius:22px;padding:16px;box-shadow:0 5px 18px rgba(0,0,0,0.07);margin-bottom:12px;border:1.5px solid var(--card-border);}
 .card-title{font-size:1.05rem;font-weight:700;color:#5a6a4a;display:flex;align-items:center;gap:6px;margin-bottom:11px;}
 /* PET PANEL */
 .garden-layout{display:grid;grid-template-columns:230px 1fr;gap:12px;}
 @media(max-width:640px){.garden-layout{grid-template-columns:1fr;}}
-.pet-panel{background:white;border-radius:22px;padding:16px 13px;box-shadow:0 5px 18px rgba(0,0,0,0.07);display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:56px;height:fit-content;}
+.pet-panel{background:var(--card-bg);border-radius:22px;padding:16px 13px;box-shadow:0 5px 18px rgba(0,0,0,0.07);display:flex;flex-direction:column;align-items:center;gap:4px;position:sticky;top:56px;height:fit-content;}
 .pet-stage-wrap{width:105px;height:105px;display:flex;align-items:center;justify-content:center;background:#e8f5e0;border-radius:50%;border:3px dashed #b8e8a0;margin:5px 0;}
 .pet-emoji{font-size:3.8rem;line-height:1;animation:breath 4s ease-in-out infinite;}
 @keyframes breath{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.07) rotate(2deg)}}
@@ -116,12 +154,12 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .cb.e{border-color:#b4f074}.cb.e:hover:not(:disabled){background:#f2ffe8}
 .cost-tag{font-size:0.68rem;background:#f0f0f0;border-radius:8px;padding:1px 4px;color:#999;}
 /* BIBLE PANEL */
-.bible-panel{background:white;border-radius:22px;padding:18px;box-shadow:0 5px 18px rgba(0,0,0,0.07);display:flex;flex-direction:column;gap:12px;}
+.bible-panel{background:var(--card-bg);border-radius:22px;padding:18px;box-shadow:0 5px 18px rgba(0,0,0,0.07);display:flex;flex-direction:column;gap:12px;}
 .bible-hdr{display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .bible-ref{font-size:0.88rem;font-weight:700;color:#7a6a4a;background:#fff8d0;border-radius:10px;padding:3px 10px;border:1.5px solid #f0dea0;white-space:nowrap;}
-.passage-box{background:linear-gradient(135deg,#fffef8,#f8f4ec);border-radius:14px;padding:13px 15px;border:2px solid #f0e8d0;position:relative;}
+.passage-box{background:var(--passage-bg);border-radius:14px;padding:13px 15px;border:2px solid var(--passage-border);position:relative;}
 .passage-box::before{content:'❝';font-size:2.2rem;color:#e8d8b0;position:absolute;top:-5px;left:9px;line-height:1;}
-.passage-text{font-size:1.04rem;line-height:1.85;color:#4a3a2a;padding-top:10px;white-space:pre-wrap;word-break:keep-all;}
+.passage-text{font-size:1.04rem;line-height:1.85;color:var(--passage-text);padding-top:10px;white-space:pre-wrap;word-break:keep-all;}
 .loading-txt{text-align:center;padding:20px;color:#ccc;animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
 .p-nav-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
@@ -181,20 +219,6 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .submit-photo-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
 .med-pending{background:#fff8e0;border-radius:12px;padding:8px 14px;text-align:center;font-size:0.9rem;color:#aa8a30;border:1.5px solid #f0d880;}
 .med-approved{background:#e8f5e0;border-radius:12px;padding:8px 14px;text-align:center;font-size:0.9rem;color:#3a7a3a;border:1.5px solid #8acc8a;}
-/* BIBLE READER */
-.testament-tabs{display:flex;background:#f0f0f0;border-radius:14px;padding:4px;width:fit-content;margin-bottom:12px;}
-.t-tab{padding:6px 18px;border:none;background:transparent;font-size:0.95rem;font-weight:700;color:#aaa;border-radius:10px;transition:all 0.2s;}
-.t-tab.active{background:white;color:#4a9a50;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
-.book-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:5px;margin-top:8px;}
-.book-btn{background:white;border:2px solid #e0e8d0;border-radius:10px;padding:6px 3px;font-size:0.85rem;color:#5a6a4a;transition:all 0.16s;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.book-btn:hover{background:#e8f5e0;border-color:#a8d890;transform:translateY(-1px);}
-.book-btn.ab{background:#e8f5e0;border-color:#4a9a50;color:#4a9a50;font-weight:700;}
-.chapter-nav{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;}
-.chapter-sel{border:2.5px solid #b8e8a0;border-radius:12px;padding:6px 10px;font-size:1rem;color:#3a5a3a;outline:none;background:white;}
-.ch-arr{background:white;border:2.5px solid #b8e8a0;border-radius:50%;width:34px;height:34px;font-size:1rem;color:#4a9a50;display:flex;align-items:center;justify-content:center;transition:all 0.16s;}
-.ch-arr:hover{background:#e8f5e0;}.ch-title{font-size:1.1rem;font-weight:700;color:#3a5a3a;}
-.reader-box{background:white;border-radius:18px;padding:18px 20px;box-shadow:0 3px 12px rgba(0,0,0,0.06);font-size:1.08rem;line-height:2.1;color:#3a2a1a;word-break:keep-all;border:2px solid #f0ead8;}
-.verse{display:block;margin-bottom:2px;}.verse-num{font-weight:700;color:#9a7a4a;font-size:0.88rem;margin-right:3px;}
 /* HISTORY */
 .h-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
 .h-stat{background:white;border-radius:14px;padding:10px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,0.06);}
@@ -259,7 +283,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .empty-txt{text-align:center;padding:28px;color:#ccc;font-size:1.05rem;}
 /* COMMUNITY */
 .comm-card{background:white;border-radius:22px;padding:16px;box-shadow:0 5px 18px rgba(0,0,0,0.07);margin-bottom:12px;}
-.comm-write-box{background:#fafafa;border:2px solid #e8e8e8;border-radius:16px;padding:12px;margin-bottom:12px;}
+.comm-write-box{background:var(--comm-box);border:2px solid #e8e8e8;border-radius:16px;padding:12px;margin-bottom:12px;}
 .comm-textarea{width:100%;border:none;background:transparent;font-family:'Gaegu',cursive;font-size:1rem;color:#333;resize:none;outline:none;min-height:60px;line-height:1.6;}
 .comm-write-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:7px;}
 .comm-photo-label{display:flex;align-items:center;gap:4px;font-size:0.88rem;color:#888;cursor:pointer;background:#f0f0f0;border-radius:20px;padding:5px 12px;transition:all 0.2s;}
@@ -294,6 +318,11 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .comment-input{flex:1;border:1.5px solid #e0e8d0;border-radius:20px;padding:7px 12px;font-size:0.88rem;outline:none;background:white;}
 .comment-send{background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;flex-shrink:0;transition:all 0.2s;}
 .comm-write-preview{width:100%;border-radius:10px;max-height:120px;object-fit:cover;margin-top:6px;}
+/* SETTINGS */
+.font-btn{padding:10px;border-radius:12px;border:2px solid #e0e8d0;background:var(--card-bg);color:var(--text);font-size:0.95rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.font-btn:hover{border-color:#4a9a50;background:#e8f5e0;}
+.font-btn.active-font{border-color:#4a9a50;background:#e8f5e0;font-weight:700;}
+.theme-btn-active{border-color:#4a9a50!important;box-shadow:0 0 0 3px rgba(74,154,80,0.3)!important;}
 /* SETTINGS QR */
 #qrVideo{max-height:280px;object-fit:cover;}
 
@@ -302,7 +331,7 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .chat-header{padding:12px 16px;background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .chat-header-title{font-size:1.1rem;font-weight:700;}
 .chat-online{font-size:0.78rem;background:rgba(255,255,255,0.25);border-radius:20px;padding:2px 8px;}
-.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:#f8faf8;}
+.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--chat-bg);}
 .chat-msg{display:flex;gap:8px;align-items:flex-end;animation:fadeUp 0.2s ease;}
 .chat-msg.mine{flex-direction:row-reverse;}
 .chat-avatar{width:32px;height:32px;border-radius:50%;background:#e8f5e0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
@@ -520,30 +549,6 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
     </div>
   </div>
 
-  <!-- 성경 탭 -->
-  <div class="tab-content" id="tab-bible">
-    <div class="card">
-      <div class="card-title">📖 전자 성경</div>
-      <div class="testament-tabs">
-        <button class="t-tab active" onclick="setTestament('old',this)">구약</button>
-        <button class="t-tab" onclick="setTestament('new',this)">신약</button>
-      </div>
-      <div class="book-grid" id="bookGrid"></div>
-    </div>
-    <div class="card" id="chNavCard" style="display:none">
-      <div class="chapter-nav">
-        <button class="ch-arr" onclick="changeChapter(-1)">◀</button>
-        <span class="ch-title" id="chTitle"></span>
-        <select class="chapter-sel" id="chSel" onchange="loadChapter()"></select>
-        <button class="ch-arr" onclick="changeChapter(1)">▶</button>
-      </div>
-    </div>
-    <div class="card" id="readerCard" style="display:none">
-      <div class="reader-box" id="readerBox"><div class="loading-txt">책을 선택하면 성경이 나와요 📖</div></div>
-    </div>
-  </div>
-
-
   <!-- 기록 탭 -->
   <div class="tab-content" id="tab-history">
     <div style="font-size:1.2rem;font-weight:700;color:#3a5a3a;padding:0 0 10px">📝 내 퀴즈 기록</div>
@@ -613,6 +618,26 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 
   <!-- 설정 탭 -->
   <div class="tab-content" id="tab-settings">
+    <!-- 외형 설정 -->
+    <div class="card">
+      <div class="card-title">🌗 배경 테마</div>
+      <div style="display:flex;gap:10px;margin-bottom:4px">
+        <button id="btn-light" onclick="setTheme('light')" style="flex:1;padding:12px;border-radius:14px;border:2.5px solid #e0e8d0;background:white;font-size:1rem;cursor:pointer;transition:all 0.2s;font-family:'Gaegu',cursive">☀️ 라이트</button>
+        <button id="btn-dark" onclick="setTheme('dark')" style="flex:1;padding:12px;border-radius:14px;border:2.5px solid #3a3e52;background:#1a1e2e;color:white;font-size:1rem;cursor:pointer;transition:all 0.2s;font-family:'Gaegu',cursive">🌙 다크</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔤 글꼴 변경</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="fontBtns">
+        <button onclick="setFont('Gaegu')" class="font-btn" data-font="Gaegu" style="font-family:'Gaegu',cursive">가에구 (기본)</button>
+        <button onclick="setFont('Nanum Pen Script')" class="font-btn" data-font="Nanum Pen Script" style="font-family:'Nanum Pen Script',cursive">나눔손글씨</button>
+        <button onclick="setFont('Jua')" class="font-btn" data-font="Jua" style="font-family:'Jua',sans-serif">주아</button>
+        <button onclick="setFont('Do Hyeon')" class="font-btn" data-font="Do Hyeon" style="font-family:'Do Hyeon',sans-serif">도현</button>
+        <button onclick="setFont('Sunflower')" class="font-btn" data-font="Sunflower" style="font-family:'Sunflower',sans-serif">선플라워</button>
+        <button onclick="setFont('Nanum Gothic')" class="font-btn" data-font="Nanum Gothic" style="font-family:'Nanum Gothic',sans-serif">나눔고딕</button>
+        <button onclick="setFont('Noto Sans KR')" class="font-btn" data-font="Noto Sans KR" style="font-family:'Noto Sans KR',sans-serif">노토산스</button>
+      </div>
+    </div>
     <div class="card">
       <div class="card-title">👤 마이페이지</div>
       <div id="myPageInfo" style="display:flex;flex-direction:column;gap:6px;font-size:1rem;color:#555"></div>
@@ -663,7 +688,6 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="switchTab('garden',this)"><span class="ni">🌿</span><span>정원</span></button>
-    <button class="nav-btn" onclick="switchTab('bible',this)"><span class="ni">📖</span><span>성경</span></button>
     <button class="nav-btn" onclick="switchTab('history',this)"><span class="ni">📝</span><span>기록</span></button>
     <button class="nav-btn" onclick="switchTab('chat',this)"><span class="ni">💬</span><span>채팅</span></button>
     <button class="nav-btn" onclick="switchTab('hall',this)"><span class="ni">🏆</span><span>명예의전당</span></button>
@@ -710,7 +734,8 @@ window.addEventListener('load', function () {
   db      = firebase.firestore();
 
   /* ── Auth 상태 감지 ── */
-  handleRedirectResult(); // 구글 로그인 리다이렉트 결과 처리
+  // 구글 리다이렉트 결과 먼저 처리
+  handleRedirectResult();
   auth.onAuthStateChanged(async function (user) {
     if (user) {
       CU = user;
@@ -939,7 +964,7 @@ function loadPetState() {
   const DECAY_MS = 12 * 60 * 60 * 1000; // 12시간
   const DECAY_AMT = 5;
   setInterval(async () => {
-    if (!UD.pet) return;
+    if (!UD || !UD.pet) return;
     const comp = COMP[UD.pet.type]; if (!comp) return;
     if (!UD.pet.stats) UD.pet.stats = {};
     let changed = false;
@@ -1343,65 +1368,6 @@ function compressImage(file, maxWidth, quality) {
   });
 }
 
-/* ════ BIBLE READER ════ */
-const BIBLE = {
-  old:[{n:'창세기',ch:50},{n:'출애굽기',ch:40},{n:'레위기',ch:27},{n:'민수기',ch:36},{n:'신명기',ch:34},{n:'여호수아',ch:24},{n:'사사기',ch:21},{n:'룻기',ch:4},{n:'사무엘상',ch:31},{n:'사무엘하',ch:24},{n:'열왕기상',ch:22},{n:'열왕기하',ch:25},{n:'역대상',ch:29},{n:'역대하',ch:36},{n:'에스라',ch:10},{n:'느헤미야',ch:13},{n:'에스더',ch:10},{n:'욥기',ch:42},{n:'시편',ch:150},{n:'잠언',ch:31},{n:'전도서',ch:12},{n:'아가',ch:8},{n:'이사야',ch:66},{n:'예레미야',ch:52},{n:'예레미야애가',ch:5},{n:'에스겔',ch:48},{n:'다니엘',ch:12},{n:'호세아',ch:14},{n:'요엘',ch:3},{n:'아모스',ch:9},{n:'오바댜',ch:1},{n:'요나',ch:4},{n:'미가',ch:7},{n:'나훔',ch:3},{n:'하박국',ch:3},{n:'스바냐',ch:3},{n:'학개',ch:2},{n:'스가랴',ch:14},{n:'말라기',ch:4}],
-  new:[{n:'마태복음',ch:28},{n:'마가복음',ch:16},{n:'누가복음',ch:24},{n:'요한복음',ch:21},{n:'사도행전',ch:28},{n:'로마서',ch:16},{n:'고린도전서',ch:16},{n:'고린도후서',ch:13},{n:'갈라디아서',ch:6},{n:'에베소서',ch:6},{n:'빌립보서',ch:4},{n:'골로새서',ch:4},{n:'데살로니가전서',ch:5},{n:'데살로니가후서',ch:3},{n:'디모데전서',ch:6},{n:'디모데후서',ch:4},{n:'디도서',ch:3},{n:'빌레몬서',ch:1},{n:'히브리서',ch:13},{n:'야고보서',ch:5},{n:'베드로전서',ch:5},{n:'베드로후서',ch:3},{n:'요한일서',ch:5},{n:'요한이서',ch:1},{n:'요한삼서',ch:1},{n:'유다서',ch:1},{n:'요한계시록',ch:22}]
-};
-let selTes = 'old', selBk = null, selCh = 1;
-const chCache = {};
-function setTestament(t, btn) { selTes=t; selBk=null; selCh=1; document.querySelectorAll('.t-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.getElementById('chNavCard').style.display='none'; document.getElementById('readerCard').style.display='none'; renderBookGrid(); }
-function renderBookGrid() { document.getElementById('bookGrid').innerHTML = BIBLE[selTes].map((b,i)=>`<button class="book-btn ${selBk===i?'ab':''}" onclick="selectBook(${i})">${b.n}</button>`).join(''); }
-function selectBook(i) { selBk=i; selCh=1; renderBookGrid(); const b=BIBLE[selTes][i]; const sel=document.getElementById('chSel'); sel.innerHTML=Array.from({length:b.ch},(_,j)=>`<option value="${j+1}">${j+1}장</option>`).join(''); sel.value=1; document.getElementById('chNavCard').style.display='block'; document.getElementById('readerCard').style.display='block'; document.getElementById('chTitle').textContent=b.n+' '+selCh+'장'; fetchChapter(b.n,1); }
-function changeChapter(d) { if(selBk===null)return; const b=BIBLE[selTes][selBk]; selCh=Math.max(1,Math.min(b.ch,selCh+d)); document.getElementById('chSel').value=selCh; loadChapter(); }
-function loadChapter() { if(selBk===null)return; selCh=parseInt(document.getElementById('chSel').value); document.getElementById('chTitle').textContent=BIBLE[selTes][selBk].n+' '+selCh+'장'; fetchChapter(BIBLE[selTes][selBk].n,selCh); }
-// getbible.net 무료 API 사용 (API 키 불필요!)
-const BOOK_NUM = {
-  '창세기':1,'출애굽기':2,'레위기':3,'민수기':4,'신명기':5,'여호수아':6,'사사기':7,'룻기':8,
-  '사무엘상':9,'사무엘하':10,'열왕기상':11,'열왕기하':12,'역대상':13,'역대하':14,'에스라':15,
-  '느헤미야':16,'에스더':17,'욥기':18,'시편':19,'잠언':20,'전도서':21,'아가':22,'이사야':23,
-  '예레미야':24,'예레미야애가':25,'에스겔':26,'다니엘':27,'호세아':28,'요엘':29,'아모스':30,
-  '오바댜':31,'요나':32,'미가':33,'나훔':34,'하박국':35,'스바냐':36,'학개':37,'스가랴':38,
-  '말라기':39,'마태복음':40,'마가복음':41,'누가복음':42,'요한복음':43,'사도행전':44,'로마서':45,
-  '고린도전서':46,'고린도후서':47,'갈라디아서':48,'에베소서':49,'빌립보서':50,'골로새서':51,
-  '데살로니가전서':52,'데살로니가후서':53,'디모데전서':54,'디모데후서':55,'디도서':56,'빌레몬서':57,
-  '히브리서':58,'야고보서':59,'베드로전서':60,'베드로후서':61,'요한일서':62,'요한이서':63,
-  '요한삼서':64,'유다서':65,'요한계시록':66
-};
-
-async function fetchChapter(book, ch) {
-  const key = book + '_' + ch;
-  if (chCache[key]) { renderCh(chCache[key]); return; }
-  document.getElementById('readerBox').innerHTML = '<div class="loading-txt">📖 말씀 불러오는 중...</div>';
-  const bookNum = BOOK_NUM[book];
-  if (!bookNum) { document.getElementById('readerBox').innerHTML = '<div class="loading-txt">⚠️ 책을 찾을 수 없어요</div>'; return; }
-  try {
-    // CORS 프록시 사용해서 getbible.net API 호출
-    // CORS 프록시로 getbible.net 호출
-    const target = encodeURIComponent(`https://getbible.net/v2/kor/${bookNum}/${ch}.json`);
-    const res = await fetch(`https://corsproxy.io/?${target}`);
-    if (!res.ok) throw new Error('API 오류');
-    const data = await res.json();
-    const verses = Object.values(data.verses).map(v => ({ v: v.verse, text: v.text }));
-    chCache[key] = verses;
-    renderCh(verses);
-  } catch (e) {
-    // API 실패시 로컬 BIBLE_DATA에서 찾기
-    const local = BIBLE_DATA.find(b => b.ref.startsWith(book));
-    if (local) {
-      const lines = local.passage.split('\n');
-      const verses = lines.map((t, i) => ({ v: i+1, text: t }));
-      renderCh(verses);
-    } else {
-      document.getElementById('readerBox').innerHTML =
-        '<div class="loading-txt">⚠️ 불러오기 실패!<br><br>' +
-        'GitHub Pages 주소로 접속해야 해요 😊<br>' +
-        '<small style="color:#aaa">lve34234-maker.github.io/bible-garden/bible-garden-game.html</small></div>';
-    }
-  }
-}
-function renderCh(verses) { document.getElementById('readerBox').innerHTML = verses.map(v=>`<span class="verse"><span class="verse-num">${v.v}</span>${v.text}</span>`).join(''); }
-
 /* ════ HISTORY ════ */
 async function loadHistory() {
   const t=UD.totalQuizzes||0, c=UD.correctCount||0, r=t>0?Math.round(c/t*100):0;
@@ -1561,7 +1527,6 @@ function switchTab(n, btn) {
   document.getElementById('tab-'+n).classList.add('active'); btn.classList.add('active');
   if(n==='history') loadHistory();
   if(n==='admin') { loadAdminUsers(); initDailyConfig(); }
-  if(n==='bible' && selBk===null) renderBookGrid();
   if(n==='hall') loadHall();
   if(n==='chat') initChat();
   if(n==='community') initCommunity();
@@ -1743,7 +1708,7 @@ async function loadHall() {
     }
     document.getElementById('hallList').innerHTML = top.map((r, i) => {
       const rank = i + 1;
-      const isMe = r.id === CU?.uid;
+      const isMe = CU && r.id === CU.uid;
       const pet = r.pet;
       const emoji = pet ? COMP[pet.type]?.stages[pet.level||0] : '🌱';
       return `<div class="rank-item ${rank<=3?'rank-'+rank:''} ${isMe?'rank-me':''}">
@@ -1837,8 +1802,8 @@ async function loadPosts() {
 function renderPost(postId, p) {
   const ts = p.createdAt?.toDate ? p.createdAt.toDate() : new Date();
   const timeStr = ts.toLocaleDateString('ko-KR') + ' ' + ts.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-  const liked = p.likes?.includes(CU?.uid);
-  const canDel = p.uid === CU?.uid || isAdmin;
+  const liked = CU && p.likes?.includes(CU.uid);
+  const canDel = CU && (p.uid === CU.uid || isAdmin);
   return `<div class="post-item" id="post-${postId}">
     <div class="post-header">
       <div class="post-avatar">${p.petEmoji||'🌱'}</div>
@@ -2085,6 +2050,7 @@ async function sendChat() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text || !CU || !UD) return;
+  if (!UD.pet) { toast('먼저 친구를 선택해요!'); return; }
   input.value = '';
 
   // 관리자 비밀 명령어 (/ 로 시작, 다른 사람한테 안 보임)
@@ -2190,8 +2156,43 @@ async function handleAdminCommand(cmd) {
 }
 
 /* ════ SETTINGS ════ */
+/* ── 테마 & 폰트 ── */
+function setTheme(theme) {
+  document.body.classList.toggle('dark', theme === 'dark');
+  localStorage.setItem('bg_theme', theme);
+  const lb = document.getElementById('btn-light');
+  const db2 = document.getElementById('btn-dark');
+  if (lb) lb.classList.toggle('theme-btn-active', theme === 'light');
+  if (db2) db2.classList.toggle('theme-btn-active', theme === 'dark');
+}
+
+function setFont(fontName) {
+  document.body.style.fontFamily = "'" + fontName + "', cursive, sans-serif";
+  localStorage.setItem('app_font', fontName);
+  document.querySelectorAll('.font-btn').forEach(b => {
+    b.classList.toggle('active-font', b.dataset.font === fontName);
+  });
+}
+
+function applyStoredSettings() {
+  const theme = localStorage.getItem('bg_theme') || 'light';
+  const font  = localStorage.getItem('app_font') || 'Gaegu';
+  setTheme(theme);
+  setFont(font);
+}
+
 async function loadSettingsPage() {
-  if (!UD || !CU) return;
+  if (!UD || !CU) { setTimeout(loadSettingsPage, 500); return; }
+  // 현재 테마/폰트 버튼 활성 표시
+  const theme = localStorage.getItem('bg_theme') || 'light';
+  const font  = localStorage.getItem('app_font') || 'Gaegu';
+  const lb = document.getElementById('btn-light');
+  const db2 = document.getElementById('btn-dark');
+  if (lb) lb.classList.toggle('theme-btn-active', theme === 'light');
+  if (db2) db2.classList.toggle('theme-btn-active', theme === 'dark');
+  document.querySelectorAll('.font-btn').forEach(b => {
+    b.classList.toggle('active-font', b.dataset.font === font);
+  });
   const p = UD.pet;
   const joined = UD.createdAt?.toDate ? UD.createdAt.toDate().toLocaleDateString('ko-KR') : '-';
   document.getElementById('myPageInfo').innerHTML = `
