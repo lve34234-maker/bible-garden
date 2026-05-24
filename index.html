@@ -136,7 +136,9 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 @keyframes petGrow{0%{transform:scale(0.4) rotate(-15deg)}60%{transform:scale(1.2) rotate(4deg)}100%{transform:scale(1) rotate(0deg)}}
 .pet-name-d{font-size:1.25rem;font-weight:700;color:#3a5a3a;}.pet-type-d{font-size:0.82rem;color:#ccc;}
 .pet-status-d{font-size:0.9rem;color:#7aaa70;text-align:center;}
-.lv-row{display:flex;gap:3px;}.lv-star{font-size:0.85rem;opacity:0.2;transition:0.3s;}.lv-star.on{opacity:1;}
+.lv-row{display:flex;gap:3px;}
+.lv-star{font-size:1rem;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);filter:grayscale(1) opacity(0.25);}
+.lv-star.on{filter:none;}
 .stats-box{width:100%;margin:4px 0;}
 .sg{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:0.82rem;}
 .si{width:18px;text-align:center;}.st{flex:1;height:9px;background:#efefef;border-radius:5px;overflow:hidden;}
@@ -356,6 +358,8 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 .pw-hidden{color:#aaa;letter-spacing:2px;}
 
 /* HALL OF FAME */
+.hall-period-btn{background:transparent;border:none;border-radius:50px;font-family:'Gaegu',cursive;font-size:0.85rem;color:#aaa;cursor:pointer;transition:all 0.2s;}
+.hall-period-btn.active{background:white;color:#4a9a50;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
 .hall-tabs{display:flex;background:#f8f0ff;border-radius:14px;padding:4px;margin-bottom:14px;}
 .hall-tab{flex:1;padding:8px;border:none;background:transparent;font-size:1rem;font-weight:700;color:#ccc;border-radius:10px;transition:all 0.2s;}
 .hall-tab.active{background:white;color:#8a50c0;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
@@ -398,7 +402,17 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
       <div class="auth-field"><label>비밀번호</label><input class="auth-input" id="lpw" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')doLogin()"></div>
       <button class="auth-submit" onclick="doLogin()">🌱 로그인</button>
       <div class="auth-err" id="lerr"></div>
-      <button onclick="sendPasswordReset()" style="background:none;border:none;color:#aaa;font-size:0.88rem;margin-top:4px;cursor:pointer;font-family:'Gaegu',cursive;width:100%">🔑 비밀번호를 잊었어요</button>
+      <button onclick="showPasswordReset()" style="background:none;border:none;color:#aaa;font-size:0.88rem;margin-top:4px;cursor:pointer;font-family:'Gaegu',cursive;width:100%">🔑 비밀번호를 잊었어요</button>
+      <div id="pwResetSection" style="display:none;margin-top:12px;background:#f8f8f8;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:0.95rem;color:#555;text-align:center">등록된 이메일로 인증코드를 보내드려요</div>
+        <input class="auth-input" id="resetIdInput" type="text" placeholder="아이디 입력">
+        <button onclick="sendResetCode()" style="background:linear-gradient(135deg,#ffd880,#ffb830);color:#6a4a10;border:none;border-radius:50px;padding:10px;font-size:1rem;font-weight:700;cursor:pointer">📧 인증코드 발송</button>
+        <div id="codeInputWrap" style="display:none;flex-direction:column;gap:7px">
+          <input class="auth-input" id="resetCodeInput" type="text" placeholder="인증코드 6자리 입력" maxlength="6">
+          <button onclick="verifyResetCode()" style="background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:50px;padding:10px;font-size:1rem;font-weight:700;cursor:pointer">✅ 확인</button>
+        </div>
+        <div id="resetMsg" style="font-size:0.85rem;text-align:center;min-height:16px"></div>
+      </div>
     </div>
     <div id="form-signup" class="hidden">
       <div class="auth-field"><label>아이디 (영문/숫자)</label><input class="auth-input" id="sid" type="text" placeholder="아이디" maxlength="20"></div>
@@ -499,35 +513,6 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
         <div id="bibleActions"></div>
       </div>
     </div>
-    <div class="activity-row">
-      <div class="card">
-        <div class="card-title">🎙️ 성경 읽기 인증</div>
-        <div id="recBadge" class="daily-badge">오늘 0 / 3회 · 0점</div>
-        <div class="rec-area" id="recArea">
-          <button class="rec-btn idle" id="recBtn" onclick="toggleRec()">🎙️</button>
-          <div class="rec-status" id="recStatus">버튼을 누르고 성경을 소리 내어 읽어요</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">📷 묵상 인증</div>
-        <div id="medBadge" class="daily-badge">오늘 0 / 1회 · 0점</div>
-        <div class="meditation-area" id="medArea">
-          <label class="photo-upload-label" for="photoInput" id="photoLabel">
-            <span style="font-size:2rem">📸</span><span>묵상 노트 사진을 찍어요</span>
-          </label>
-          <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="onPhotoSelected(event)">
-          <div id="photoPreviewWrap" style="display:none;width:100%">
-            <img id="photoPreview" class="photo-preview" src="" alt="">
-            <div style="display:flex;gap:7px;margin-top:8px">
-              <button class="submit-photo-btn" id="submitPhotoBtn" onclick="submitMeditation()">✅ 제출하기 (+10점)</button>
-              <button class="retry-btn" onclick="resetPhoto()">다시 선택</button>
-            </div>
-          </div>
-          <div id="medStatusMsg"></div>
-        </div>
-      </div>
-    </div>
-
     <!-- 커뮤니티 (정원 탭 안) -->
     <div class="card" style="margin-top:0">
       <div class="card-title">🌿 오늘의 나눔</div>
@@ -597,99 +582,51 @@ button{font-family:'Gaegu',cursive;cursor:pointer;}input,select,textarea{font-fa
 
   </div>
 
-    <!-- 채팅 탭 -->
-  <div class="tab-content" id="tab-chat">
-    <div class="chat-wrap" id="chatWrap">
-      <div class="chat-header">
-        <span style="font-size:1.4rem">💬</span>
-        <span class="chat-header-title">성경 정원 채팅</span>
-        <span class="chat-online" id="chatOnline">● 접속 중</span>
-      </div>
-      <div class="chat-messages" id="chatMessages">
-        <div style="text-align:center;color:#ccc;padding:30px;font-size:0.95rem">💬 첫 번째 메시지를 보내봐요!</div>
-      </div>
-      <div class="chat-input-row">
-        <input class="chat-input" id="chatInput" type="text" placeholder="메시지 입력..." maxlength="200"
-               onkeydown="if(event.key==='Enter')sendChat()">
-        <button class="chat-send-btn" onclick="sendChat()">➤</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 설정 탭 -->
-  <div class="tab-content" id="tab-settings">
-    <!-- 외형 설정 -->
+    <!-- 커뮤니티 탭 -->
+  <div class="tab-content" id="tab-community">
     <div class="card">
-      <div class="card-title">🌗 배경 테마</div>
-      <div style="display:flex;gap:10px;margin-bottom:4px">
-        <button id="btn-light" onclick="setTheme('light')" style="flex:1;padding:12px;border-radius:14px;border:2.5px solid #e0e8d0;background:white;font-size:1rem;cursor:pointer;transition:all 0.2s;font-family:'Gaegu',cursive">☀️ 라이트</button>
-        <button id="btn-dark" onclick="setTheme('dark')" style="flex:1;padding:12px;border-radius:14px;border:2.5px solid #3a3e52;background:#1a1e2e;color:white;font-size:1rem;cursor:pointer;transition:all 0.2s;font-family:'Gaegu',cursive">🌙 다크</button>
+      <div class="card-title">🌿 오늘의 나눔</div>
+      <div class="comm-write-box">
+        <textarea class="comm-textarea" id="commText" placeholder="말씀 묵상, 기도 제목, 감사한 일을 나눠요 (500자)" maxlength="500"></textarea>
+        <img id="commWritePreview" class="comm-write-preview" style="display:none" src="" alt="">
+        <div class="comm-write-footer">
+          <label class="comm-photo-label" for="commPhotoInput">📷 사진 추가</label>
+          <input type="file" id="commPhotoInput" accept="image/*" style="display:none" onchange="onCommPhotoSelected(event)">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span id="commCharCount" style="font-size:0.78rem;color:#ccc">0/500</span>
+            <button class="comm-submit-btn" id="commSubmitBtn" onclick="submitPost()">📝 올리기 (+10점)</button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🔤 글꼴 변경</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="fontBtns">
-        <button onclick="setFont('Gaegu')" class="font-btn" data-font="Gaegu" style="font-family:'Gaegu',cursive">가에구 (기본)</button>
-        <button onclick="setFont('Nanum Pen Script')" class="font-btn" data-font="Nanum Pen Script" style="font-family:'Nanum Pen Script',cursive">나눔손글씨</button>
-        <button onclick="setFont('Jua')" class="font-btn" data-font="Jua" style="font-family:'Jua',sans-serif">주아</button>
-        <button onclick="setFont('Do Hyeon')" class="font-btn" data-font="Do Hyeon" style="font-family:'Do Hyeon',sans-serif">도현</button>
-        <button onclick="setFont('Sunflower')" class="font-btn" data-font="Sunflower" style="font-family:'Sunflower',sans-serif">선플라워</button>
-        <button onclick="setFont('Nanum Gothic')" class="font-btn" data-font="Nanum Gothic" style="font-family:'Nanum Gothic',sans-serif">나눔고딕</button>
-        <button onclick="setFont('Noto Sans KR')" class="font-btn" data-font="Noto Sans KR" style="font-family:'Noto Sans KR',sans-serif">노토산스</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">👤 마이페이지</div>
-      <div id="myPageInfo" style="display:flex;flex-direction:column;gap:6px;font-size:1rem;color:#555"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">✏️ 닉네임 변경</div>
-      <div style="display:flex;gap:8px">
-        <input id="newNickname" class="auth-input" type="text" placeholder="새 닉네임 입력" maxlength="15" style="flex:1">
-        <button onclick="changeNickname()" style="background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:14px;padding:10px 16px;font-size:1rem;font-weight:700;cursor:pointer">변경</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🔒 비밀번호 변경</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <input id="curPw" class="auth-input" type="password" placeholder="현재 비밀번호">
-        <input id="newPw" class="auth-input" type="password" placeholder="새 비밀번호 (6자 이상)">
-        <input id="newPw2" class="auth-input" type="password" placeholder="새 비밀번호 확인">
-        <button onclick="changePassword()" style="background:linear-gradient(135deg,#6cc86a,#4a9a50);color:white;border:none;border-radius:50px;padding:11px;font-size:1rem;font-weight:700;cursor:pointer">비밀번호 변경</button>
-        <div id="pwChangeErr" style="color:#e05050;font-size:0.88rem;text-align:center;min-height:16px"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">📱 QR 출석 체크</div>
-      <div style="font-size:0.88rem;color:#aaa;margin-bottom:10px">관리자가 제공한 QR 코드를 스캔하면 출석이 기록돼요</div>
-      <div id="qrScanResult" style="text-align:center;padding:10px;font-size:1rem;color:#4a9a50;display:none"></div>
-      <button onclick="startQRScan()" style="width:100%;background:linear-gradient(135deg,#a0c8ff,#6898ee);color:white;border:none;border-radius:50px;padding:11px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(100,150,240,0.4)">📷 QR 코드 스캔</button>
-      <div id="qrScanWrap" style="display:none;margin-top:12px">
-        <video id="qrVideo" style="width:100%;border-radius:14px;background:#000"></video>
-        <button onclick="stopQRScan()" style="width:100%;margin-top:8px;background:#f5f5f5;border:1.5px solid #ddd;border-radius:50px;padding:9px;font-size:0.95rem;color:#888;cursor:pointer">✕ 닫기</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🗑️ 계정 관리</div>
-      <button onclick="doLogout()" style="width:100%;background:#fff0f0;border:2px solid #f0c0c0;border-radius:50px;padding:11px;font-size:1rem;color:#d05050;cursor:pointer;font-family:'Gaegu',cursive">로그아웃</button>
+      <div id="postList" class="post-list"><div class="empty-txt">📝 첫 번째 나눔을 올려봐요!</div></div>
     </div>
   </div>
 
   <!-- 명예의 전당 탭 -->
   <div class="tab-content" id="tab-hall">
-    <div style="font-size:1.3rem;font-weight:700;color:#3a3a5a;padding:0 0 10px;display:flex;align-items:center;gap:6px">🏆 명예의 전당</div>
-    <div class="hall-tabs">
-      <button class="hall-tab active" id="htab-month" onclick="switchHallTab('month',this)">📅 월간</button>
-      <button class="hall-tab" id="htab-year" onclick="switchHallTab('year',this)">🗓️ 연간</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 0 12px">
+      <div style="font-size:1.3rem;font-weight:700;color:var(--text)">명예의 전당</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:0.82rem;color:var(--text-mute)" id="hallPeriodLabel"></span>
+        <div style="display:flex;background:#f0f0f0;border-radius:50px;padding:3px;">
+          <button class="hall-period-btn active" id="hpbtn-month" onclick="setHallPeriod('month',this)" style="padding:5px 12px;font-size:0.82rem">📅 월간</button>
+          <button class="hall-period-btn" id="hpbtn-year" onclick="setHallPeriod('year',this)" style="padding:5px 12px;font-size:0.82rem">🗓️ 연간</button>
+        </div>
+      </div>
     </div>
-    <div class="hall-period" id="hallPeriodLabel"></div>
+    <!-- 랭킹 타입 토글 -->
+    <div style="display:flex;justify-content:center;margin-bottom:14px">
+      <button id="hallTypeBtn" onclick="cycleHallType()" style="background:white;border:2px solid #e8e8e8;border-radius:50px;padding:8px 22px;font-size:1.2rem;cursor:pointer;transition:all 0.2s;box-shadow:0 3px 10px rgba(0,0,0,0.08)">
+        🔥 연속 정답
+      </button>
+    </div>
     <div id="hallList"><div class="hall-loading">🏆 순위 불러오는 중...</div></div>
   </div>
 
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="switchTab('garden',this)"><span class="ni">🌿</span><span>정원</span></button>
     <button class="nav-btn" onclick="switchTab('history',this)"><span class="ni">📝</span><span>기록</span></button>
-    <button class="nav-btn" onclick="switchTab('chat',this)"><span class="ni">💬</span><span>채팅</span></button>
+    <button class="nav-btn" onclick="switchTab('community',this)"><span class="ni">🌿</span><span>커뮤니티</span></button>
     <button class="nav-btn" onclick="switchTab('hall',this)"><span class="ni">🏆</span><span>명예의전당</span></button>
     <button class="nav-btn" onclick="switchTab('settings',this)"><span class="ni">⚙️</span><span>설정</span></button>
     <button class="nav-btn hidden" id="adminNavBtn" onclick="switchTab('admin',this)"><span class="ni">👑</span><span>어드민</span></button>
@@ -884,10 +821,15 @@ async function handleRedirectResult() {
       await db.collection('users').doc(user.uid).set({
         username: uname,
         email: user.email || '',
+        email2: user.email || '',  // 구글 이메일 자동 등록
         isAdmin: false,
         pet: null, totalQuizzes: 0, correctCount: 0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+    }
+    // 기존 유저인데 email2 없으면 구글 이메일로 자동 등록
+    if (snap.exists && !snap.data().email2 && user.email) {
+      await db.collection('users').doc(user.uid).update({ email2: user.email });
     }
   } catch (e) {
     console.log('redirect result error:', e.message);
@@ -908,6 +850,8 @@ async function loadUserDoc(uid) {
   }
   isAdmin = UD.isAdmin || false;
   document.getElementById('userChip').textContent = UD.nickname || UD.username;
+  // Firestore 저장된 테마/폰트 적용
+  applyStoredSettings(UD.prefTheme, UD.prefFont);
   if (isAdmin) document.getElementById('adminNavBtn').classList.remove('hidden');
   if (!UD.pet) { showScreen('select'); }
   else { showScreen('main'); loadPetState(); initGarden(); }
@@ -1001,7 +945,14 @@ function renderPet() {
   if (nameEl) nameEl.textContent = p.name;
   if (typeEl) typeEl.textContent = c.label;
   if (statusEl) statusEl.textContent = c.statuses[lv];
-  if (lvEl) lvEl.innerHTML = c.stages.map((_,i) => `<span class="lv-star ${i<=lv?'on':''}">⭐</span>`).join('');
+  // 별 색상: 레벨에 따라 순서대로 색 변경
+  const starColors = ['#50c060','#3090ee','#9050e0','#ff8820','#e0204a'];
+  if (lvEl) lvEl.innerHTML = Array.from({length:5}, (_,i) => {
+    const filled = i < lv;  // lv개만 색상 채워짐 (현재 레벨 전까지)
+    const color = filled ? (starColors[i] || '#e0204a') : '';
+    const style = filled ? `color:${color};text-shadow:0 0 8px ${color}60;` : '';
+    return `<span class="lv-star ${filled?'on':''}" style="${style}">⭐</span>`;
+  }).join('');
   if (statsEl) statsEl.innerHTML = c.stats.map(([ico,k,,fill]) =>
     `<div class="sg"><span class="si">${ico}</span><div class="st"><div class="sf ${fill}" style="width:${Math.min(100,p.stats[k]||0)}%"></div></div></div>`
   ).join('');
@@ -1080,10 +1031,8 @@ async function updateActivityUI() {
   const medBadge = document.getElementById('medBadge');
   medBadge.textContent = '오늘 ' + (dr.meditationDone ? 1 : 0) + ' / 1회 · ' + (dr.meditationDone ? 10 : 0) + '점';
   medBadge.className = 'daily-badge' + (dr.meditationDone ? ' full' : '');
-  if (dr.recordingCount >= 3)
-    document.getElementById('recArea').innerHTML = '<div class="rec-status" style="color:#4a9a50">🎉 오늘 녹음 인증 완료! 내일 또 해요!</div>';
-  if (dr.meditationDone)
-    document.getElementById('medArea').innerHTML = '<div class="med-approved">✅ 오늘 묵상 인증 완료!</div>';
+
+
 }
 
 /* ════ TODAY PASSAGES ════ */
@@ -1528,8 +1477,8 @@ function switchTab(n, btn) {
   if(n==='history') loadHistory();
   if(n==='admin') { loadAdminUsers(); initDailyConfig(); }
   if(n==='hall') loadHall();
-  if(n==='chat') initChat();
-  if(n==='community') initCommunity();
+  if(n==='community') { initCommunity(); loadPosts(); }
+  if(n==='community') { initCommunity(); loadPosts(); }
   if(n==='settings') loadSettingsPage();
 }
 
@@ -1653,78 +1602,97 @@ async function callClaude(prompt) {
 }
 
 /* ════ HALL OF FAME ════ */
-let curHallTab = 'month';
+let hallPeriod = 'month';
+let hallType   = 'streak';
+const HALL_TYPES = [
+  { id:'streak', icon:'🔥', label:'연속 정답' },
+  { id:'star',   icon:'⭐', label:'별 점수' },
+  { id:'pts',    icon:'💎', label:'총 점수' },
+];
 
-function monthKey()  { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
-function yearKey()   { return String(new Date().getFullYear()); }
+function monthKey() { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function yearKey()  { return String(new Date().getFullYear()); }
 
-function switchHallTab(tab, btn) {
-  curHallTab = tab;
-  document.querySelectorAll('.hall-tab').forEach(b => b.classList.remove('active'));
+function setHallPeriod(p, btn) {
+  hallPeriod = p;
+  document.querySelectorAll('.hall-period-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   loadHall();
 }
 
+function cycleHallType() {
+  const idx = HALL_TYPES.findIndex(t => t.id === hallType);
+  hallType = HALL_TYPES[(idx+1) % HALL_TYPES.length].id;
+  const t = HALL_TYPES.find(x => x.id === hallType);
+  const btn = document.getElementById('hallTypeBtn');
+  if (btn) { btn.textContent = t.icon + ' ' + t.label; }
+  loadHall();
+}
+
 async function loadHall() {
-  document.getElementById('hallList').innerHTML = '<div class="hall-loading">🏆 순위 불러오는 중...</div>';
-  const isMonth = curHallTab === 'month';
+  const list = document.getElementById('hallList');
+  if (!list) return;
+  list.innerHTML = '<div class="hall-loading">🏆 불러오는 중...</div>';
   const now = new Date();
-  if (isMonth) {
-    document.getElementById('hallPeriodLabel').textContent =
-      now.getFullYear() + '년 ' + (now.getMonth()+1) + '월 퀴즈 정답 순위';
-  } else {
-    document.getElementById('hallPeriodLabel').textContent =
-      now.getFullYear() + '년 연간 퀴즈 정답 순위';
-  }
+  const periodLabel = hallPeriod==='month'
+    ? now.getFullYear()+'년 '+(now.getMonth()+1)+'월'
+    : now.getFullYear()+'년 연간';
+  const typeLabel = HALL_TYPES.find(t=>t.id===hallType)?.label||'';
+  const lbl = document.getElementById('hallPeriodLabel');
+  if (lbl) lbl.textContent = periodLabel + ' · ' + typeLabel;
   try {
     const snap = await db.collection('users').get();
-    const users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    // 각 유저의 기간별 퀴즈 기록 가져오기
-    const rankings = await Promise.all(users.map(async u => {
-      try {
-        let query = db.collection('quizHistory').doc(u.id).collection('records')
-          .where('isCorrect', '==', true);
-        // 기간 필터
-        const startDate = isMonth
-          ? new Date(now.getFullYear(), now.getMonth(), 1)
-          : new Date(now.getFullYear(), 0, 1);
-        query = query.where('timestamp', '>=', startDate);
-        const snap = await query.get();
-        return {
-          id: u.id,
-          username: u.username,
-          pet: u.pet,
-          correct: snap.size,
-          pts: u.pet?.pts || 0
-        };
-      } catch { return { id: u.id, username: u.username, pet: u.pet, correct: 0, pts: 0 }; }
-    }));
-    // 정답 수 기준 정렬
-    rankings.sort((a, b) => b.correct - a.correct || b.pts - a.pts);
-    const top = rankings.filter(r => r.correct > 0);
-    if (top.length === 0) {
-      document.getElementById('hallList').innerHTML = '<div class="empty-txt">🏆 아직 순위가 없어요!<br>퀴즈를 풀어서 1위가 돼봐요!</div>';
-      return;
+    const users = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const startDate = hallPeriod==='month'
+      ? new Date(now.getFullYear(), now.getMonth(), 1)
+      : new Date(now.getFullYear(), 0, 1);
+    let rankings = [];
+    if (hallType === 'pts') {
+      rankings = users.map(u => ({ id:u.id, nickname:u.nickname||u.username, pet:u.pet, score:u.pet?.pts||0, sub:(u.pet?.pts||0)+'점' }));
+    } else if (hallType === 'star') {
+      rankings = users.map(u => {
+        const lv = u.pet?.level||0; const score = lv*20;
+        return { id:u.id, nickname:u.nickname||u.username, pet:u.pet, score, sub:'Lv.'+(lv+1)+' ('+score+'점)' };
+      });
+    } else {
+      rankings = await Promise.all(users.map(async u => {
+        try {
+          const q = db.collection('quizHistory').doc(u.id).collection('records')
+            .where('isCorrect','==',true).where('timestamp','>=',startDate);
+          const s = await q.get();
+          const recs = s.docs.map(d=>d.data()).sort((a,b)=>(a.timestamp?.seconds||0)-(b.timestamp?.seconds||0));
+          let streak=0, maxStreak=0, prev='';
+          for (const r of recs) {
+            const day = r.timestamp?.toDate?r.timestamp.toDate().toLocaleDateString():'';
+            if (day && day===prev) streak++;
+            else if (day) { streak=1; prev=day; }
+            maxStreak = Math.max(maxStreak, streak);
+          }
+          return { id:u.id, nickname:u.nickname||u.username, pet:u.pet, score:maxStreak, sub:maxStreak+'일 연속' };
+        } catch { return {id:u.id, nickname:u.nickname||u.username, pet:u.pet, score:0, sub:'0일'}; }
+      }));
     }
-    document.getElementById('hallList').innerHTML = top.map((r, i) => {
-      const rank = i + 1;
-      const isMe = CU && r.id === CU.uid;
-      const pet = r.pet;
-      const emoji = pet ? COMP[pet.type]?.stages[pet.level||0] : '🌱';
+    rankings.sort((a,b)=>b.score-a.score);
+    const top = rankings.filter(r=>r.score>0).slice(0,20);
+    if (!top.length) { list.innerHTML='<div class="empty-txt">🏆 아직 순위가 없어요!</div>'; return; }
+    const t = HALL_TYPES.find(x=>x.id===hallType);
+    list.innerHTML = top.map((r,i) => {
+      const rank=i+1, isMe=CU&&r.id===CU.uid;
+      const pet=r.pet, emoji=pet?COMP[pet.type]?.stages[pet.level||0]||'🌱':'🌱';
       return `<div class="rank-item ${rank<=3?'rank-'+rank:''} ${isMe?'rank-me':''}">
         <div class="rank-num ${rank>3?'normal':''}">${rank>3?rank:''}</div>
         <div class="rank-body">
-          <div class="rank-name">${r.username} ${isMe?'<span style="font-size:0.75rem;color:#6898ee">(나)</span>':''}</div>
-          <div class="rank-pet">${emoji} ${pet?pet.name+' · '+COMP[pet.type]?.label:''}</div>
+          <div class="rank-name">${escHtml(r.nickname)}${isMe?' <span style="font-size:0.72rem;color:#6898ee">(나)</span>':''}</div>
+          <div class="rank-pet">${emoji} ${pet?escHtml(pet.name)+' · '+(COMP[pet.type]?.label||''):''}</div>
         </div>
         <div class="rank-score">
-          <div class="rank-pts">${r.correct}문제</div>
-          <div class="rank-pts-label">정답 · ${r.pts}점</div>
+          <div class="rank-pts">${t.icon} ${r.score}</div>
+          <div class="rank-pts-label">${r.sub}</div>
         </div>
       </div>`;
     }).join('');
-  } catch (e) {
-    document.getElementById('hallList').innerHTML = '<div class="empty-txt">⚠️ 불러오기 실패</div>';
+  } catch(e) {
+    list.innerHTML='<div class="empty-txt">⚠️ 불러오기 실패</div>';
   }
 }
 
@@ -1961,27 +1929,63 @@ function compressImageForComm(file) {
 }
 
 /* ════ PASSWORD RESET ════ */
-async function sendPasswordReset() {
-  const id = document.getElementById('lid').value.trim().toLowerCase();
-  const err = document.getElementById('lerr');
-  if (!id) { err.textContent = '아이디를 먼저 입력해요!'; return; }
-  try {
-    const snap = await db.collection('users').where('username','==',id).get();
-    if (snap.empty) { err.textContent = '존재하지 않는 아이디예요!'; err.style.color='#e05050'; return; }
-    const email = id + DOMAIN;
-    await auth.sendPasswordResetEmail(email);
-    err.textContent = '✅ 관리자에게 문의해요! (이메일 방식 불가)';
-    err.style.color = '#4a9a50';
-    // 관리자에게 알림
-    await db.collection('notifications').add({
-      type: 'pwReset', username: id,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  } catch (e) {
-    // 이메일 없으면 관리자 문의 안내
-    err.textContent = '비밀번호를 잊으셨나요? 관리자(@onchurch)에게 채팅으로 문의해요!';
-    err.style.color = '#8a6a20';
+let resetCode = '';
+let resetUserId = '';
+
+function showPasswordReset() {
+  const sec = document.getElementById('pwResetSection');
+  if (!sec) return;
+  sec.style.display = sec.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendResetCode() {
+  const id = document.getElementById('resetIdInput').value.trim().toLowerCase();
+  const msg = document.getElementById('resetMsg');
+  if (!id) { msg.textContent='아이디를 입력해요!'; msg.style.color='#e05050'; return; }
+  const snap = await db.collection('users').where('username','==',id).get();
+  if (snap.empty) { msg.textContent='존재하지 않는 아이디예요!'; msg.style.color='#e05050'; return; }
+  const udata = snap.docs[0].data();
+  if (!udata.email2) { msg.textContent='등록된 이메일이 없어요! 관리자에게 문의해요.'; msg.style.color='#e07050'; return; }
+  // 6자리 코드 생성 후 Firestore에 저장 (실제 이메일 발송은 Firebase Extension or EmailJS 필요)
+  resetCode = String(Math.floor(100000 + Math.random()*900000));
+  resetUserId = snap.docs[0].id;
+  await db.collection('resetCodes').doc(resetUserId).set({
+    code: resetCode, email: udata.email2, username: id,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  msg.textContent='✅ 인증코드: ' + resetCode + ' (관리자에게 문의하거나 위 코드를 입력해요)';
+  msg.style.color='#4a9a50';
+  document.getElementById('codeInputWrap').style.display = 'flex';
+}
+
+async function verifyResetCode() {
+  const entered = document.getElementById('resetCodeInput').value.trim();
+  const msg = document.getElementById('resetMsg');
+  if (!entered) { msg.textContent='코드를 입력해요!'; return; }
+  if (!resetUserId) { msg.textContent='먼저 코드를 발송해요!'; return; }
+  const snap = await db.collection('resetCodes').doc(resetUserId).get();
+  if (!snap.exists || snap.data().code !== entered) {
+    msg.textContent='❌ 코드가 틀렸어요!'; msg.style.color='#e05050'; return;
   }
+  // 임시 비밀번호 발급
+  const tempPw = 'temp' + Math.random().toString(36).slice(2,8);
+  await db.collection('users').doc(resetUserId).update({ pwHint: tempPw });
+  await db.collection('resetCodes').doc(resetUserId).delete();
+  msg.textContent = '✅ 임시 비밀번호: ' + tempPw + ' (로그인 후 꼭 변경해요!)';
+  msg.style.color = '#4a9a50';
+}
+
+/* ════ EMAIL REGISTER ════ */
+async function registerEmail() {
+  const email = document.getElementById('regEmail')?.value.trim();
+  const status = document.getElementById('emailRegStatus');
+  if (!email || !email.includes('@')) { status.textContent='올바른 이메일을 입력해요!'; status.style.color='#e05050'; return; }
+  if (!CU) return;
+  try {
+    await db.collection('users').doc(CU.uid).update({ email2: email });
+    UD.email2 = email;
+    status.textContent = '✅ 이메일 등록 완료!'; status.style.color = '#4a9a50';
+  } catch(e) { status.textContent='오류: '+e.message; status.style.color='#e05050'; }
 }
 
 /* ════ CHAT ════ */
@@ -2164,6 +2168,8 @@ function setTheme(theme) {
   const db2 = document.getElementById('btn-dark');
   if (lb) lb.classList.toggle('theme-btn-active', theme === 'light');
   if (db2) db2.classList.toggle('theme-btn-active', theme === 'dark');
+  // Firestore에도 저장
+  if (CU && db) db.collection('users').doc(CU.uid).update({ prefTheme: theme }).catch(()=>{});
 }
 
 function setFont(fontName) {
@@ -2172,13 +2178,24 @@ function setFont(fontName) {
   document.querySelectorAll('.font-btn').forEach(b => {
     b.classList.toggle('active-font', b.dataset.font === fontName);
   });
+  // Firestore에도 저장
+  if (CU && db) db.collection('users').doc(CU.uid).update({ prefFont: fontName }).catch(()=>{});
 }
 
-function applyStoredSettings() {
-  const theme = localStorage.getItem('bg_theme') || 'light';
-  const font  = localStorage.getItem('app_font') || 'Gaegu';
-  setTheme(theme);
-  setFont(font);
+function applyStoredSettings(prefTheme, prefFont) {
+  const theme = prefTheme || localStorage.getItem('bg_theme') || 'light';
+  const font  = prefFont  || localStorage.getItem('app_font')  || 'Gaegu';
+  document.body.classList.toggle('dark', theme === 'dark');
+  document.body.style.fontFamily = "'" + font + "', cursive, sans-serif";
+  localStorage.setItem('bg_theme', theme);
+  localStorage.setItem('app_font', font);
+  const lb = document.getElementById('btn-light');
+  const db2 = document.getElementById('btn-dark');
+  if (lb) lb.classList.toggle('theme-btn-active', theme === 'light');
+  if (db2) db2.classList.toggle('theme-btn-active', theme === 'dark');
+  document.querySelectorAll('.font-btn').forEach(b => {
+    b.classList.toggle('active-font', b.dataset.font === font);
+  });
 }
 
 async function loadSettingsPage() {
@@ -2209,8 +2226,11 @@ async function loadSettingsPage() {
       <div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#8a5ac0">${UD.totalQuizzes||0}</div><div style="font-size:0.78rem;color:#aaa">총 퀴즈</div></div>
       <div style="text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#c07050">${UD.totalQuizzes>0?Math.round((UD.correctCount||0)/UD.totalQuizzes*100):0}%</div><div style="font-size:0.78rem;color:#aaa">정답률</div></div>
     </div>
-    <div style="font-size:0.82rem;color:#ccc;text-align:center;margin-top:4px">가입일: ${joined}</div>`;
+    <div style="font-size:0.82rem;color:#ccc;text-align:center;margin-top:4px">가입일: ${joined}</div>
+    ${UD.email2?'<div style="font-size:0.82rem;color:#7aaa70;text-align:center;margin-top:2px">📧 '+UD.email2+'</div>':''}`;
   document.getElementById('newNickname').value = UD.nickname || '';
+  const regEl = document.getElementById('regEmail');
+  if (regEl && UD.email2) regEl.value = UD.email2;
 }
 
 async function changeNickname() {
